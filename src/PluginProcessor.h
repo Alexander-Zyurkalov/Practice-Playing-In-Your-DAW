@@ -15,6 +15,11 @@ public:
     {
         return this->numerator != numberator || this->denominator != denominator;
     }
+    void set(int numerator, int denominator)
+    {
+        this->numerator = numerator;
+        this->denominator = denominator;
+    }
 private:
     int numerator;
     int denominator;

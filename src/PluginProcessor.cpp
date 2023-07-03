@@ -158,7 +158,12 @@ void AudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
         juce::Optional<juce::AudioPlayHead::PositionInfo> positionInfo = playHead->getPosition();
         if (timeSignature.changed(positionInfo->getTimeSignature()->numerator, positionInfo->getTimeSignature()->denominator))
         {
-            std::cout << "Changed\n";
+            {
+                std::unique_lock<std::mutex> lock(timeSignatureMutex);
+                std::cout << "Time signature changed\n";
+                timeSignature.set(positionInfo->getTimeSignature()->numerator,
+                                  positionInfo->getTimeSignature()->denominator);
+            }
             sendChangeMessage();
         }
     }
