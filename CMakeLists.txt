@@ -16,6 +16,7 @@ juce_add_plugin(PracticePlayingInDAW
 target_sources(PracticePlayingInDAW PRIVATE
         src/PluginProcessor.cpp
         src/PluginEditor.cpp
+        src/gui/NoteGrid.cpp
 )
 
 target_compile_definitions(PracticePlayingInDAW
