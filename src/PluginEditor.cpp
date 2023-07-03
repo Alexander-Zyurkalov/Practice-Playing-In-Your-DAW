@@ -9,6 +9,7 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor (AudioPluginAud
     juce::ignoreUnused (processorRef);
     setSize (400, 300);
     setResizable(true, true);
+    processorRef.addChangeListener(this);
     addAndMakeVisible(noteGrid);
 }
 
