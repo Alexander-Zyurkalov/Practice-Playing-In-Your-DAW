@@ -8,6 +8,7 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor (AudioPluginAud
 {
     juce::ignoreUnused (processorRef);
     setSize (400, 300);
+    setResizable(true, true);
     addAndMakeVisible(noteGrid);
 }
 
@@ -24,4 +25,9 @@ void AudioPluginAudioProcessorEditor::paint (juce::Graphics& g)
 void AudioPluginAudioProcessorEditor::resized()
 {
     noteGrid.setBounds (getLocalBounds());
+}
+
+void AudioPluginAudioProcessorEditor::changeListenerCallback(juce::ChangeBroadcaster *source) {
+    noteGrid.timeSignature = processorRef.getTimeSignature();
+    repaint();
 }

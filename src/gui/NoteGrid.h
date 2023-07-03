@@ -6,6 +6,8 @@
 #define PRACTICEPLAYINGINDAW_NOTEGRID_H
 
 #include "juce_gui_basics/juce_gui_basics.h"
+#include "../PluginProcessor.h"
+
 class NoteGrid : public juce::Component
 {
 public:
@@ -15,7 +17,9 @@ public:
     void paint(juce::Graphics& g) override;
     void resized() override;
 
+    TimeSignature timeSignature;
 private:
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(NoteGrid)
 };
 

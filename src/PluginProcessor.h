@@ -2,8 +2,26 @@
 
 #include <juce_audio_processors/juce_audio_processors.h>
 
+class TimeSignature
+{
+public:
+    TimeSignature(int numerator=4, int denominator=4) :
+        numerator{numerator}, denominator{denominator}
+    {}
+
+    int getNumerator() const { return numerator; }
+    int getDenominator() const { return denominator; }
+    bool changed(int numberator, int denominator)
+    {
+        return this->numerator != numberator || this->denominator != denominator;
+    }
+private:
+    int numerator;
+    int denominator;
+};
+
 //==============================================================================
-class AudioPluginAudioProcessor  : public juce::AudioProcessor
+class AudioPluginAudioProcessor  : public juce::AudioProcessor, public juce::ChangeBroadcaster
 {
 public:
     //==============================================================================
@@ -42,7 +60,11 @@ public:
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
 
+    TimeSignature getTimeSignature() ;
+
 private:
+    TimeSignature timeSignature;
+    std::mutex timeSignatureMutex;
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AudioPluginAudioProcessor)
 };

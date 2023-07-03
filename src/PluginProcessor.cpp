@@ -151,6 +151,17 @@ void AudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
         juce::ignoreUnused (channelData);
         // ..do something to the data...
     }
+
+    // Get the current position information from the host
+    if (auto* playHead = getPlayHead())
+    {
+        juce::Optional<juce::AudioPlayHead::PositionInfo> positionInfo = playHead->getPosition();
+        if (timeSignature.changed(positionInfo->getTimeSignature()->numerator, positionInfo->getTimeSignature()->denominator))
+        {
+            std::cout << "Changed\n";
+            sendChangeMessage();
+        }
+    }
 }
 
 //==============================================================================
@@ -185,4 +196,11 @@ void AudioPluginAudioProcessor::setStateInformation (const void* data, int sizeI
 juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
     return new AudioPluginAudioProcessor();
+}
+
+
+TimeSignature AudioPluginAudioProcessor::getTimeSignature()
+{
+    std::lock_guard<std::mutex> lock{timeSignatureMutex};
+    return timeSignature;
 }

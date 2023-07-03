@@ -23,14 +23,12 @@ void NoteGrid::paint (juce::Graphics& g)
     g.setColour (juce::Colours::grey);
 
     auto bounds = getLocalBounds();
-    int totalQuarterNotesInSong = 8;
-    double pixelsPerQuarterNote = bounds.getWidth() / totalQuarterNotesInSong;
+    double pixelsPerQuarterNote = bounds.getWidth() / timeSignature.getNumerator();
 
-    int totalBarsInSong = 4;
+    int totalBarsInSong = 10;
     for (int bar = 0; bar < totalBarsInSong; ++bar)
     {
-        // Assume a 4/4 time signature, so a bar has 4 beats
-        for (int beat = 0; beat < 4; ++beat)
+        for (int beat = 0; beat < timeSignature.getDenominator(); ++beat)
         {
             // Calculate the x position for this beat
             int beatPosition = static_cast<int>((bar * 4 + beat) * pixelsPerQuarterNote);
