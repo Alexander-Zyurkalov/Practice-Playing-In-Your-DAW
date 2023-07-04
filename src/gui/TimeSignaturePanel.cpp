@@ -25,6 +25,13 @@ TimeSignaturePanel::TimeSignaturePanel()
     numBarsBox.setRange(1, 64, 1);
     numBarsBox.setValue(4);
     numBarsBox.onValueChange = [this] { numBarsChanged(); };
+
+    if (!juce::JUCEApplicationBase::isStandaloneApp())
+    {
+        timeSigNumeratorBox.setEnabled(false);
+        timeSigDenominatorBox.setEnabled(false);
+        numBarsBox.setEnabled(false);
+    }
 }
 
 void TimeSignaturePanel::resized()
