@@ -32,10 +32,12 @@ void AudioPluginAudioProcessorEditor::resized()
 
     juce::Grid grid;
 
-    grid.templateRows    = { Track(juce::Grid::Px(20)), Track(Fr(1)) };
+    grid.templateRows    = { Track(juce::Grid::Px(30)), Track(Fr(1)) };
     grid.templateColumns = { Track(Fr(1)) };
 
-    grid.items = { juce::GridItem(timeSigPanel), juce::GridItem(viewport) };
+    grid.items = {
+            juce::GridItem(timeSigPanel).withMargin(juce::GridItem::Margin{10, 0,0,0}),
+            juce::GridItem(viewport).withMargin(juce::GridItem::Margin{10, 0, 0 ,0}) };
 
     grid.performLayout(getLocalBounds());
 }
