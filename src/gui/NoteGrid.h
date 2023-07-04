@@ -18,8 +18,14 @@ public:
     void paint(juce::Graphics& g) override;
     void resized() override;
 
-    TimeSignature timeSignature;
+    void updateTimeSignature(TimeSignature timeSig)
+    {
+        this->timeSignature = timeSig;
+        repaint();
+    }
 private:
+
+    TimeSignature timeSignature;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(NoteGrid)
 };

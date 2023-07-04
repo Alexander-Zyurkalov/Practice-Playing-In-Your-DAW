@@ -4,12 +4,14 @@
 
 #include "TimeSignaturePanel.h"
 
-TimeSignaturePanel::TimeSignaturePanel()
+TimeSignaturePanel::TimeSignaturePanel(NoteGrid& nGrid) :
+        noteGrid{nGrid}
 {
     addAndMakeVisible(timeSigNumeratorBox);
     timeSigNumeratorBox.setRange(1, 64, 1);
     timeSigNumeratorBox.setValue(4);
     timeSigNumeratorBox.onValueChange = [this] { timeSignatureChanged(); };
+
 
     addAndMakeVisible(timeSigDenominatorBox);
     timeSigDenominatorBox.addItem("1", 1);
@@ -54,7 +56,21 @@ void TimeSignaturePanel::resized()
 
 void TimeSignaturePanel::timeSignatureChanged()
 {
-    // Do something when the time signature is changed
+    int denominator;
+    switch (timeSigDenominatorBox.getSelectedId()) {
+        case 0: denominator = 1; break;
+        case 1: denominator = 2; break;
+        case 2: denominator = 4; break;
+        case 3: denominator = 8; break;
+        case 4: denominator = 16; break;
+        case 5: denominator = 32; break;
+        case 6: denominator = 64; break;
+        default: denominator = 4; break;
+    }
+    TimeSignature newTimeSignature{
+            static_cast<int>(timeSigNumeratorBox.getValue()),
+            denominator};
+    noteGrid.updateTimeSignature(newTimeSignature);
 }
 
 void TimeSignaturePanel::numBarsChanged()

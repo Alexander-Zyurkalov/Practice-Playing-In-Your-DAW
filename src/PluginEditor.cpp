@@ -4,7 +4,7 @@
 
 //==============================================================================
 AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor (AudioPluginAudioProcessor& p)
-    : AudioProcessorEditor (&p), processorRef (p)
+    : AudioProcessorEditor (&p), processorRef (p), timeSigPanel(noteGrid)
 {
     juce::ignoreUnused (processorRef);
     setSize (1200, 600);
@@ -41,6 +41,5 @@ void AudioPluginAudioProcessorEditor::resized()
 
 
 void AudioPluginAudioProcessorEditor::changeListenerCallback(juce::ChangeBroadcaster *source) {
-    noteGrid.timeSignature = processorRef.getTimeSignature();
-    noteGrid.repaint();
+    noteGrid.updateTimeSignature(processorRef.getTimeSignature());
 }

@@ -5,11 +5,12 @@
 #define PRACTICEPLAYINGINDAW_TIMESIGNATUREPANEL_H
 
 #include <juce_gui_basics/juce_gui_basics.h>
+#include "NoteGrid.h"
 
 class TimeSignaturePanel : public juce::Component
 {
 public:
-    TimeSignaturePanel();
+    TimeSignaturePanel(NoteGrid& nGrid);
 
     void resized() override;
 
@@ -24,6 +25,7 @@ private:
     juce::Slider timeSigNumeratorBox;
     juce::ComboBox timeSigDenominatorBox;
     juce::Slider numBarsBox;
+    NoteGrid& noteGrid;
 };
 
 #endif //PRACTICEPLAYINGINDAW_TIMESIGNATUREPANEL_H
