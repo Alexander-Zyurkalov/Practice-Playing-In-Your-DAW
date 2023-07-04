@@ -21,6 +21,7 @@ private:
     AudioPluginAudioProcessor& processorRef;
     NoteGrid noteGrid;
     TimeSignaturePanel timeSigPanel;
+    juce::Viewport viewport;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AudioPluginAudioProcessorEditor)
 };

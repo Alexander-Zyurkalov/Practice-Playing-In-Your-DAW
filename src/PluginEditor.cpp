@@ -10,7 +10,8 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor (AudioPluginAud
     setSize (1200, 600);
     setResizable(true, true);
     processorRef.addChangeListener(this);
-    addAndMakeVisible(noteGrid);
+    viewport.setViewedComponent(&noteGrid, false);
+    addAndMakeVisible(viewport);
     addAndMakeVisible(timeSigPanel);
 }
 
@@ -34,7 +35,7 @@ void AudioPluginAudioProcessorEditor::resized()
     grid.templateRows    = { Track(juce::Grid::Px(20)), Track(Fr(1)) };
     grid.templateColumns = { Track(Fr(1)) };
 
-    grid.items = { juce::GridItem(timeSigPanel), juce::GridItem(noteGrid) };
+    grid.items = { juce::GridItem(timeSigPanel), juce::GridItem(viewport) };
 
     grid.performLayout(getLocalBounds());
 }

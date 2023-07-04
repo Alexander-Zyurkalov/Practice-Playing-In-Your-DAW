@@ -21,6 +21,7 @@ TimeSignaturePanel::TimeSignaturePanel(NoteGrid& nGrid) :
     timeSigDenominatorBox.addItem("16", 5);
     timeSigDenominatorBox.addItem("32", 6);
     timeSigDenominatorBox.addItem("64", 7);
+    timeSigDenominatorBox.setSelectedId(3);
     timeSigDenominatorBox.onChange = [this] { timeSignatureChanged(); };
 
     addAndMakeVisible(numBarsBox);

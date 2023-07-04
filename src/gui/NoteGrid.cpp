@@ -6,7 +6,7 @@
 
 NoteGrid::NoteGrid()
 {
-    // Constructor: Initialize your component here
+    this->setSize(1400, 1200);
 }
 
 NoteGrid::~NoteGrid()
@@ -16,6 +16,14 @@ NoteGrid::~NoteGrid()
 
 void NoteGrid::paint (juce::Graphics& g)
 {
+    int totalBarsInSong = 10;
+    int pixelsPerQuarterNote = 100;
+    double OneFirstBeatWidth = pixelsPerQuarterNote * 4;
+    double beatWidth = OneFirstBeatWidth / timeSignature.getDenominator();
+    double barWidth = beatWidth * timeSignature.getNumerator();
+    double noteGridWidth = barWidth * totalBarsInSong;
+    setSize(static_cast<int>(noteGridWidth), 1200);
+
     // Set a background color
     g.fillAll (juce::Colours::black);
 
@@ -23,15 +31,13 @@ void NoteGrid::paint (juce::Graphics& g)
     g.setColour (juce::Colours::grey);
 
     auto bounds = getLocalBounds();
-    double pixelsPerQuarterNote = bounds.getWidth() / timeSignature.getNumerator();
 
-    int totalBarsInSong = 10;
     for (int bar = 0; bar < totalBarsInSong; ++bar)
     {
-        for (int beat = 0; beat < timeSignature.getDenominator(); ++beat)
+        for (int beat = 0; beat < timeSignature.getNumerator(); ++beat)
         {
             // Calculate the x position for this beat
-            int beatPosition = static_cast<int>((bar * 4 + beat) * pixelsPerQuarterNote);
+            int beatPosition = static_cast<int>(beatWidth * beat + bar * barWidth);
 
             // Draw a line at this x position
             g.drawLine (beatPosition, 0, beatPosition, bounds.getHeight(), 1.0f);
