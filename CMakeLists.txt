@@ -18,6 +18,7 @@ target_sources(PracticePlayingInDAW PRIVATE
         src/PluginProcessor.cpp
         src/PluginEditor.cpp
         src/gui/NoteGrid.cpp
+        src/gui/TimeSignaturePanel.cpp
 )
 
 target_compile_definitions(PracticePlayingInDAW

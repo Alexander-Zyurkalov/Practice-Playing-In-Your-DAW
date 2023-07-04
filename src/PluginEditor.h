@@ -2,6 +2,7 @@
 
 #include "PluginProcessor.h"
 #include "gui/NoteGrid.h"
+#include "gui/TimeSignaturePanel.h"
 
 //==============================================================================
 class AudioPluginAudioProcessorEditor  : public juce::AudioProcessorEditor, public juce::ChangeListener
@@ -19,6 +20,7 @@ public:
 private:
     AudioPluginAudioProcessor& processorRef;
     NoteGrid noteGrid;
+    TimeSignaturePanel timeSigPanel;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AudioPluginAudioProcessorEditor)
 };

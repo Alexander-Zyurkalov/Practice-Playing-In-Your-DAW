@@ -11,6 +11,7 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor (AudioPluginAud
     setResizable(true, true);
     processorRef.addChangeListener(this);
     addAndMakeVisible(noteGrid);
+    addAndMakeVisible(timeSigPanel);
 }
 
 AudioPluginAudioProcessorEditor::~AudioPluginAudioProcessorEditor()
@@ -25,10 +26,21 @@ void AudioPluginAudioProcessorEditor::paint (juce::Graphics& g)
 
 void AudioPluginAudioProcessorEditor::resized()
 {
-    noteGrid.setBounds (getLocalBounds());
+    using Track = juce::Grid::TrackInfo;
+    using Fr = juce::Grid::Fr;
+
+    juce::Grid grid;
+
+    grid.templateRows    = { Track(juce::Grid::Px(50)), Track(Fr(1)) };
+    grid.templateColumns = { Track(Fr(1)) };
+
+    grid.items = { juce::GridItem(timeSigPanel), juce::GridItem(noteGrid) };
+
+    grid.performLayout(getLocalBounds());
 }
+
 
 void AudioPluginAudioProcessorEditor::changeListenerCallback(juce::ChangeBroadcaster *source) {
     noteGrid.timeSignature = processorRef.getTimeSignature();
-    repaint();
+    noteGrid.repaint();
 }
