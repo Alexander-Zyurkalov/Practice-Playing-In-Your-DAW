@@ -9,53 +9,13 @@
 class TimeSignaturePanel : public juce::Component
 {
 public:
-    TimeSignaturePanel()
-    {
-        addAndMakeVisible(timeSigNumeratorBox);
-        timeSigNumeratorBox.setRange(1, 64, 1);
-        timeSigNumeratorBox.setValue(4);
-        timeSigNumeratorBox.onValueChange = [this] { timeSignatureChanged(); };
+    TimeSignaturePanel();
 
-        addAndMakeVisible(timeSigDenominatorBox);
-        timeSigDenominatorBox.addItem("1", 1);
-        timeSigDenominatorBox.addItem("2", 2);
-        timeSigDenominatorBox.addItem("4", 3);
-        timeSigDenominatorBox.addItem("8", 4);
-        timeSigDenominatorBox.addItem("16", 5);
-        timeSigDenominatorBox.addItem("32", 6);
-        timeSigDenominatorBox.addItem("64", 7);
-        timeSigDenominatorBox.onChange = [this] { timeSignatureChanged(); };
+    void resized() override;
 
-        addAndMakeVisible(numBarsBox);
-        numBarsBox.setRange(1, 64, 1);
-        numBarsBox.setValue(4);
-        numBarsBox.onValueChange = [this] { numBarsChanged(); };
-    }
+    void timeSignatureChanged();
 
-    void resized() override
-    {
-        juce::Grid grid;
-
-        grid.templateRows    = { juce::Grid::TrackInfo(juce::Grid::Fr(1)) };
-        grid.templateColumns = {
-                juce::Grid::TrackInfo(juce::Grid::Fr(1)),
-                juce::Grid::TrackInfo(juce::Grid::Px(200)),
-                juce::Grid::TrackInfo(juce::Grid::Fr(1))
-        };
-
-        grid.items = { juce::GridItem(timeSigNumeratorBox), juce::GridItem(timeSigDenominatorBox), juce::GridItem(numBarsBox) };
-        grid.performLayout(getLocalBounds());
-    }
-
-    void timeSignatureChanged()
-    {
-        // Do something when the time signature is changed
-    }
-
-    void numBarsChanged()
-    {
-        // Do something when the number of bars is changed
-    }
+    void numBarsChanged();
 
 private:
     juce::Label timeSigLabel;
@@ -67,3 +27,4 @@ private:
 };
 
 #endif //PRACTICEPLAYINGINDAW_TIMESIGNATUREPANEL_H
+

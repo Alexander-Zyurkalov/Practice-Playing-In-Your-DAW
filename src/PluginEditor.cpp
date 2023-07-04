@@ -7,7 +7,7 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor (AudioPluginAud
     : AudioProcessorEditor (&p), processorRef (p)
 {
     juce::ignoreUnused (processorRef);
-    setSize (400, 300);
+    setSize (1200, 600);
     setResizable(true, true);
     processorRef.addChangeListener(this);
     addAndMakeVisible(noteGrid);
@@ -31,7 +31,7 @@ void AudioPluginAudioProcessorEditor::resized()
 
     juce::Grid grid;
 
-    grid.templateRows    = { Track(juce::Grid::Px(50)), Track(Fr(1)) };
+    grid.templateRows    = { Track(juce::Grid::Px(20)), Track(Fr(1)) };
     grid.templateColumns = { Track(Fr(1)) };
 
     grid.items = { juce::GridItem(timeSigPanel), juce::GridItem(noteGrid) };
