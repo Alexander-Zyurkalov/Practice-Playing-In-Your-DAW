@@ -18,6 +18,8 @@ public:
 
     void numBarsChanged();
 
+    void newTimeSignature(int num, int denom);
+
 private:
     juce::Label timeSigLabel;
     juce::Label numBarsLabel;

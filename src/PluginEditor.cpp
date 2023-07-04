@@ -44,5 +44,7 @@ void AudioPluginAudioProcessorEditor::resized()
 
 
 void AudioPluginAudioProcessorEditor::changeListenerCallback(juce::ChangeBroadcaster *source) {
-    noteGrid.updateTimeSignature(processorRef.getTimeSignature());
+    const TimeSignature &sig = processorRef.getTimeSignature();
+    noteGrid.updateTimeSignature(sig);
+    timeSigPanel.newTimeSignature(sig.getNumerator(), sig.getDenominator());
 }

@@ -59,13 +59,13 @@ void TimeSignaturePanel::timeSignatureChanged()
 {
     int denominator;
     switch (timeSigDenominatorBox.getSelectedId()) {
-        case 0: denominator = 1; break;
-        case 1: denominator = 2; break;
-        case 2: denominator = 4; break;
-        case 3: denominator = 8; break;
-        case 4: denominator = 16; break;
-        case 5: denominator = 32; break;
-        case 6: denominator = 64; break;
+        case 1: denominator = 1; break;
+        case 2: denominator = 2; break;
+        case 3: denominator = 4; break;
+        case 4: denominator = 8; break;
+        case 5: denominator = 16; break;
+        case 6: denominator = 32; break;
+        case 7: denominator = 64; break;
         default: denominator = 4; break;
     }
     TimeSignature newTimeSignature{
@@ -77,4 +77,20 @@ void TimeSignaturePanel::timeSignatureChanged()
 void TimeSignaturePanel::numBarsChanged()
 {
     // Do something when the number of bars is changed
+}
+
+void TimeSignaturePanel::newTimeSignature(int num, int denom) {
+    timeSigNumeratorBox.setValue(num, juce::dontSendNotification);
+    int selectedId;
+    switch (denom) {
+        case 1: selectedId = 1; break;
+        case 2: selectedId = 2; break;
+        case 4: selectedId = 3; break;
+        case 8: selectedId = 4; break;
+        case 16: selectedId = 5; break;
+        case 32: selectedId = 6; break;
+        case 64: selectedId = 7; break;
+        default: selectedId = 3; break;
+    }
+    timeSigDenominatorBox.setSelectedId(selectedId, juce::dontSendNotification);
 }
