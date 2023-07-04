@@ -7,6 +7,7 @@
 
 #include "juce_gui_basics/juce_gui_basics.h"
 #include "../PluginProcessor.h"
+#include "../processing/TimeSignature.h"
 
 class NoteGrid : public juce::Component
 {

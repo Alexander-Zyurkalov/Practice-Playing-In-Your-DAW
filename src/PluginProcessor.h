@@ -1,29 +1,7 @@
 #pragma once
 
 #include <juce_audio_processors/juce_audio_processors.h>
-
-class TimeSignature
-{
-public:
-    TimeSignature(int numerator=4, int denominator=4) :
-        numerator{numerator}, denominator{denominator}
-    {}
-
-    int getNumerator() const { return numerator; }
-    int getDenominator() const { return denominator; }
-    bool changed(int numberator, int denominator)
-    {
-        return this->numerator != numberator || this->denominator != denominator;
-    }
-    void set(int numerator, int denominator)
-    {
-        this->numerator = numerator;
-        this->denominator = denominator;
-    }
-private:
-    int numerator;
-    int denominator;
-};
+#include "processing/TimeSignature.h"
 
 //==============================================================================
 class AudioPluginAudioProcessor  : public juce::AudioProcessor, public juce::ChangeBroadcaster

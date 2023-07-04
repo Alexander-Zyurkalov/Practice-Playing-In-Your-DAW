@@ -152,6 +152,8 @@ void AudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
         // ..do something to the data...
     }
 
+    if (juce::JUCEApplicationBase::isStandaloneApp())
+        return;
     // Get the current position information from the host
     if (auto* playHead = getPlayHead())
     {
