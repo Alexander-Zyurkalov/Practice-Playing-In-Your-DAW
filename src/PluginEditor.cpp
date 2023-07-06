@@ -14,7 +14,6 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor (AudioPluginAud
     viewport.setViewedComponent(&noteGrid, false);
     addAndMakeVisible(viewport);
     addAndMakeVisible(timeSigPanel);
-    trackListSingleton->addTrack(instanceTrack);
     trackListBox.setModel(&trackListBoxModel);
     trackListBox.setBounds(300, 300, 600,600);
     trackListBox.setOpaque(false);
@@ -23,7 +22,6 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor (AudioPluginAud
 
 AudioPluginAudioProcessorEditor::~AudioPluginAudioProcessorEditor()
 {
-    TrackListSingleton::deleteInstance();
 }
 
 //==============================================================================

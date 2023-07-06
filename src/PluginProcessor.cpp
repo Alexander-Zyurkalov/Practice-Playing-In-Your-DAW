@@ -12,10 +12,15 @@ AudioPluginAudioProcessor::AudioPluginAudioProcessor()
                      #endif
                        )
 {
+    TrackListSingleton::getInstance()->addTrack(instanceTrack);
 }
 
 AudioPluginAudioProcessor::~AudioPluginAudioProcessor()
 {
+    if (TrackListSingleton::getInstance()->getNumberOfTracks() > 0)
+        TrackListSingleton::getInstance()->deleteById(instanceTrack.getId());
+    if (TrackListSingleton::getInstance()->getNumberOfTracks() == 0)
+        TrackListSingleton::deleteInstance();
 }
 
 //==============================================================================

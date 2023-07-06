@@ -22,17 +22,18 @@ public:
     // This is overloaded from ListBoxModel, and should fill in the background of the whole row
     void paintListBoxItem(int rowNumber, juce::Graphics &g, int width, int height, bool rowIsSelected) override
     {
-        if (rowNumber == instanceTrack.getId())
-            g.fillAll (juce::Colours::lightblue);
-        else
-            g.fillAll (juce::Colours::grey);
+        g.fillAll (juce::Colours::grey);
 
         g.setColour (juce::Colours::black);
         g.setFont (height * 0.7f);
+        std::vector<Track> trackTracks = trackListSingleton->getTracks();
         juce::StringArray tracks;
-        for (int i = 0; i < trackListSingleton->getNumberOfTracks(); ++i)
+        for (size_t i = 0; i < trackTracks.size(); ++i)
         {
-            tracks.add (trackListSingleton->getTrack(i).getName());
+            Track &track = trackTracks[i];
+            tracks.add (track.getName());
+            if (i == rowNumber && track.getId() == instanceTrack.getId())
+                g.fillAll (juce::Colours::lightblue);
         }
 
 

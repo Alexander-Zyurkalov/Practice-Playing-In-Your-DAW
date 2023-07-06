@@ -26,7 +26,6 @@ private:
     juce::ListBox trackListBox;
     Track instanceTrack;
     TrackListBoxModel trackListBoxModel;
-    TrackListSingleton* trackListSingleton = TrackListSingleton::getInstance();
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AudioPluginAudioProcessorEditor)
 };

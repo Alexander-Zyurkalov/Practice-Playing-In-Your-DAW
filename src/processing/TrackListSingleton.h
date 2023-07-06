@@ -17,13 +17,13 @@ public:
     // Add a track
     void addTrack (const Track& track);
 
+    virtual ~TrackListSingleton();
+
     int getNumberOfTracks();
 
-    Track& getTrack (size_t index);
+    void deleteById (int id);
 
-    void clearTracks();
-
-    virtual ~TrackListSingleton();
+    std::vector<Track> getTracks();
 
     JUCE_DECLARE_SINGLETON (TrackListSingleton, false)
 

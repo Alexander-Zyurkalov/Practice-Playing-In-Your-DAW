@@ -10,17 +10,6 @@ int TrackListSingleton::getNumberOfTracks()
     return (int)tracks.size();
 }
 
-Track& TrackListSingleton::getTrack (size_t index)
-{
-    std::shared_lock<std::shared_mutex> lock(mutex);
-    return tracks[index];
-}
-
-void TrackListSingleton::clearTracks()
-{
-    std::unique_lock<std::shared_mutex> lock(mutex);
-    tracks.clear();
-}
 
 void TrackListSingleton::addTrack(const Track &track) {
     std::unique_lock<std::shared_mutex> lock(mutex);
@@ -29,6 +18,18 @@ void TrackListSingleton::addTrack(const Track &track) {
 
 TrackListSingleton::~TrackListSingleton() {
     clearSingletonInstance();
+}
+
+
+void TrackListSingleton::deleteById (int id)
+{
+    std::unique_lock<std::shared_mutex> lock(mutex);
+    std::erase_if(tracks, [id](const Track& track) { return track.getId() == id; });
+}
+
+std::vector<Track> TrackListSingleton::getTracks() {
+    std::shared_lock<std::shared_mutex> lock(mutex);
+    return tracks;
 }
 
 JUCE_IMPLEMENT_SINGLETON (TrackListSingleton)
