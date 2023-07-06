@@ -25,7 +25,7 @@ public:
 private:
     TrackListSingleton() = default;
 
-    juce::StringArray tracks;
+    juce::StringArray tracks{"Empty"};
     static TrackListSingleton* instance;
 };
 

@@ -3,6 +3,7 @@
 #include "PluginProcessor.h"
 #include "gui/NoteGrid.h"
 #include "gui/TimeSignaturePanel.h"
+#include "gui/TrackListBoxModel.h"
 
 //==============================================================================
 class AudioPluginAudioProcessorEditor  : public juce::AudioProcessorEditor, public juce::ChangeListener
@@ -22,6 +23,8 @@ private:
     NoteGrid noteGrid;
     TimeSignaturePanel timeSigPanel;
     juce::Viewport viewport;
+    juce::ListBox trackListBox;
+    std::unique_ptr<TrackListBoxModel> trackListBoxModel;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AudioPluginAudioProcessorEditor)
 };

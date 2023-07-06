@@ -12,6 +12,11 @@ juce_add_plugin(PracticePlayingInDAW
         PLUGIN_CODE PrPl
         FORMATS VST3 Standalone   # This line enables VST3 and Standalone formats
         ProductName "Practice Playing In DAW"
+        MIDI_INPUTS "1"
+        NEEDS_MIDI_INPUT TRUE
+        NEEDS_MIDI_OUTPUT TRUE
+        IS_MIDI_EFFECT TRUE
+        MIDI_EFFECT_ONLY FALSE
 )
 
 target_sources(PracticePlayingInDAW PRIVATE

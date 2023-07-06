@@ -2,6 +2,7 @@
 
 #include <juce_audio_processors/juce_audio_processors.h>
 #include "processing/TimeSignature.h"
+#include "processing/TrackListSingleton.h"
 
 //==============================================================================
 class AudioPluginAudioProcessor  : public juce::AudioProcessor, public juce::ChangeBroadcaster
@@ -45,9 +46,13 @@ public:
 
     TimeSignature getTimeSignature() ;
 
+    void updateTrackProperties(const TrackProperties &properties) override;
+
+
 private:
     TimeSignature timeSignature;
     std::mutex timeSignatureMutex;
+    TrackListSingleton* trackListSingleton = TrackListSingleton::getInstance();
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AudioPluginAudioProcessor)
 };
