@@ -20,7 +20,7 @@ public:
     // Clear the tracks
     void clearTracks();
 
-    JUCE_DECLARE_SINGLETON (TrackListSingleton, true)
+    JUCE_DECLARE_SINGLETON (TrackListSingleton, false)
 
 private:
     TrackListSingleton() = default;

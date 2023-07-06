@@ -46,13 +46,10 @@ public:
 
     TimeSignature getTimeSignature() ;
 
-    void updateTrackProperties(const TrackProperties &properties) override;
-
 
 private:
     TimeSignature timeSignature;
     std::mutex timeSignatureMutex;
-    TrackListSingleton* trackListSingleton = TrackListSingleton::getInstance();
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AudioPluginAudioProcessor)
 };

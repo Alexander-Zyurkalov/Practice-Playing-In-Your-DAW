@@ -211,8 +211,3 @@ TimeSignature AudioPluginAudioProcessor::getTimeSignature()
     std::lock_guard<std::mutex> lock{timeSignatureMutex};
     return timeSignature;
 }
-
-void AudioPluginAudioProcessor::updateTrackProperties(const juce::AudioProcessor::TrackProperties &properties) {
-    AudioProcessor::updateTrackProperties(properties);
-    trackListSingleton->addTrack(properties.name);
-}

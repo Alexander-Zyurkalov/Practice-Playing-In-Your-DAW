@@ -22,6 +22,7 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor (AudioPluginAud
 
 AudioPluginAudioProcessorEditor::~AudioPluginAudioProcessorEditor()
 {
+    TrackListSingleton::deleteInstance();
 }
 
 //==============================================================================
@@ -43,15 +44,12 @@ void AudioPluginAudioProcessorEditor::resized()
             Track(Fr(1)) };
     grid.templateColumns = {
             Track(Fr(1)),
-//            Track(Fr(4))
     };
 
     grid.items = {
             juce::GridItem(timeSigPanel).withMargin(juce::GridItem::Margin{10, 0,0,0}),
-//            juce::GridItem(trackListBox).withMargin(juce::GridItem::Margin{0, 20, 0, 0}),
             juce::GridItem(viewport).withMargin(juce::GridItem::Margin{10, 0, 0 ,0}),
     };
-    trackListBox.updateContent();
 
     grid.performLayout(getLocalBounds());
 }
