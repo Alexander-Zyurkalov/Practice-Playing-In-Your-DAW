@@ -11,11 +11,13 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor (AudioPluginAud
     setResizable(true, true);
     processorRef.addChangeListener(this);
     viewport.setViewedComponent(&noteGrid, false);
-    trackListBox.setModel(trackListBoxModel.get());
-    addAndMakeVisible(trackListBox);
-
     addAndMakeVisible(viewport);
     addAndMakeVisible(timeSigPanel);
+    trackListBox.setModel(&trackListBoxModel);
+    trackListBox.setBounds(300, 300, 600,600);
+    trackListBox.setOpaque(false);
+//    trackListBox.setSize(200, 200);
+    addAndMakeVisible(trackListBox);
 }
 
 AudioPluginAudioProcessorEditor::~AudioPluginAudioProcessorEditor()
@@ -41,14 +43,15 @@ void AudioPluginAudioProcessorEditor::resized()
             Track(Fr(1)) };
     grid.templateColumns = {
             Track(Fr(1)),
-            Track(Fr(4))
+//            Track(Fr(4))
     };
 
     grid.items = {
             juce::GridItem(timeSigPanel).withMargin(juce::GridItem::Margin{10, 0,0,0}),
-            juce::GridItem(trackListBox).withMargin(juce::GridItem::Margin{0, 20, 0, 0}),
+//            juce::GridItem(trackListBox).withMargin(juce::GridItem::Margin{0, 20, 0, 0}),
             juce::GridItem(viewport).withMargin(juce::GridItem::Margin{10, 0, 0 ,0}),
     };
+    trackListBox.updateContent();
 
     grid.performLayout(getLocalBounds());
 }

@@ -24,7 +24,7 @@ private:
     TimeSignaturePanel timeSigPanel;
     juce::Viewport viewport;
     juce::ListBox trackListBox;
-    std::unique_ptr<TrackListBoxModel> trackListBoxModel;
+    TrackListBoxModel trackListBoxModel;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AudioPluginAudioProcessorEditor)
 };
