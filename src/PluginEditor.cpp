@@ -4,7 +4,8 @@
 
 //==============================================================================
 AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor (AudioPluginAudioProcessor& p)
-    : AudioProcessorEditor (&p), processorRef (p), timeSigPanel(noteGrid)
+    : AudioProcessorEditor (&p), processorRef (p), timeSigPanel(noteGrid),
+      instanceTrack(p.getInstanceTrack()), trackListBoxModel(p.getInstanceTrack())
 {
     juce::ignoreUnused (processorRef);
     setSize (1200, 600);
@@ -13,10 +14,10 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor (AudioPluginAud
     viewport.setViewedComponent(&noteGrid, false);
     addAndMakeVisible(viewport);
     addAndMakeVisible(timeSigPanel);
+    trackListSingleton->addTrack(instanceTrack);
     trackListBox.setModel(&trackListBoxModel);
     trackListBox.setBounds(300, 300, 600,600);
     trackListBox.setOpaque(false);
-//    trackListBox.setSize(200, 200);
     addAndMakeVisible(trackListBox);
 }
 
@@ -50,6 +51,7 @@ void AudioPluginAudioProcessorEditor::resized()
             juce::GridItem(timeSigPanel).withMargin(juce::GridItem::Margin{10, 0,0,0}),
             juce::GridItem(viewport).withMargin(juce::GridItem::Margin{10, 0, 0 ,0}),
     };
+    trackListBox.updateContent();
 
     grid.performLayout(getLocalBounds());
 }

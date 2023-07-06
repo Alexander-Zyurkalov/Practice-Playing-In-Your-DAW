@@ -4,19 +4,31 @@
 
 #include "TrackListSingleton.h"
 
-void TrackListSingleton::addTrack (const juce::String& track)
+int TrackListSingleton::getNumberOfTracks()
 {
-    tracks.add (track);
+    std::shared_lock<std::shared_mutex> lock(mutex);
+    return (int)tracks.size();
 }
 
-const juce::StringArray& TrackListSingleton::getTracks() const
+Track& TrackListSingleton::getTrack (size_t index)
 {
-    return tracks;
+    std::shared_lock<std::shared_mutex> lock(mutex);
+    return tracks[index];
 }
 
 void TrackListSingleton::clearTracks()
 {
+    std::unique_lock<std::shared_mutex> lock(mutex);
     tracks.clear();
+}
+
+void TrackListSingleton::addTrack(const Track &track) {
+    std::unique_lock<std::shared_mutex> lock(mutex);
+    tracks.push_back(track);
+}
+
+TrackListSingleton::~TrackListSingleton() {
+    clearSingletonInstance();
 }
 
 JUCE_IMPLEMENT_SINGLETON (TrackListSingleton)

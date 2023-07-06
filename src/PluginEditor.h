@@ -24,8 +24,8 @@ private:
     TimeSignaturePanel timeSigPanel;
     juce::Viewport viewport;
     juce::ListBox trackListBox;
+    Track instanceTrack;
     TrackListBoxModel trackListBoxModel;
-    int pluginInstanceNumber = 0;
     TrackListSingleton* trackListSingleton = TrackListSingleton::getInstance();
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AudioPluginAudioProcessorEditor)

@@ -10,26 +10,31 @@
 class TrackListBoxModel : public juce::ListBoxModel
 {
 public:
-    TrackListBoxModel() = default;
+    explicit TrackListBoxModel(const Track track ): instanceTrack(track) {}
     ~TrackListBoxModel() override = default;
 
     // This should return the total number of rows in the table.
     int getNumRows() override
     {
-        return trackListSingleton->getTracks().size();
+        return trackListSingleton->getNumberOfTracks();
     }
 
     // This is overloaded from ListBoxModel, and should fill in the background of the whole row
     void paintListBoxItem(int rowNumber, juce::Graphics &g, int width, int height, bool rowIsSelected) override
     {
-        if (rowIsSelected)
+        if (rowNumber == instanceTrack.getId())
             g.fillAll (juce::Colours::lightblue);
         else
-            g.fillAll (juce::Colours::white);
+            g.fillAll (juce::Colours::grey);
 
         g.setColour (juce::Colours::black);
         g.setFont (height * 0.7f);
-        auto &tracks = trackListSingleton->getTracks();
+        juce::StringArray tracks;
+        for (int i = 0; i < trackListSingleton->getNumberOfTracks(); ++i)
+        {
+            tracks.add (trackListSingleton->getTrack(i).getName());
+        }
+
 
         if (rowNumber < tracks.size())
         {
@@ -41,6 +46,7 @@ public:
 
 private:
     TrackListSingleton* trackListSingleton = TrackListSingleton::getInstance();
+    Track instanceTrack;
 };
 
 

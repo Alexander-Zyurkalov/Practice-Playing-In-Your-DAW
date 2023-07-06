@@ -44,10 +44,12 @@ public:
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
 
+    //==============================================================================
     TimeSignature getTimeSignature() ;
-
+    Track getInstanceTrack() const;
 
 private:
+    Track instanceTrack;
     TimeSignature timeSignature;
     std::mutex timeSignatureMutex;
     //==============================================================================

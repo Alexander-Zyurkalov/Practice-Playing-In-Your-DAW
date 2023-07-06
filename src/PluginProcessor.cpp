@@ -211,3 +211,8 @@ TimeSignature AudioPluginAudioProcessor::getTimeSignature()
     std::lock_guard<std::mutex> lock{timeSignatureMutex};
     return timeSignature;
 }
+
+
+ Track AudioPluginAudioProcessor::getInstanceTrack() const {
+    return instanceTrack;
+}
