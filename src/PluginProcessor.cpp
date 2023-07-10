@@ -152,11 +152,14 @@ void AudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
         // ..do something to the data...
     }
 
-    if (juce::JUCEApplicationBase::isStandaloneApp())
+    timeSignatureBlockCounter++;
+
+    if (juce::JUCEApplicationBase::isStandaloneApp() || timeSignatureBlockCounter < 40)
         return;
     // Get the current position information from the host
     if (auto* playHead = getPlayHead())
     {
+        timeSignatureBlockCounter = 0;
         juce::Optional<juce::AudioPlayHead::PositionInfo> positionInfo = playHead->getPosition();
         if (timeSignature.changed(positionInfo->getTimeSignature()->numerator, positionInfo->getTimeSignature()->denominator))
         {

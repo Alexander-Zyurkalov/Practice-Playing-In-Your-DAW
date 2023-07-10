@@ -51,4 +51,5 @@ private:
     std::mutex timeSignatureMutex;
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AudioPluginAudioProcessor)
+    int timeSignatureBlockCounter = 0;
 };
