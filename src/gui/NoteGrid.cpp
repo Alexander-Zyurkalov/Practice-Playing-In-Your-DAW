@@ -6,7 +6,10 @@
 
 NoteGrid::NoteGrid(juce::Viewport& viewport) : viewport(&viewport)
 {
-    this->setSize(1400, 1200);
+    this->setSize(1400, 3000);
+    this->addAndMakeVisible(noteBars);
+    this->noteBars.setSize(this->getWidth(), this->getHeight());
+
 }
 
 NoteGrid::~NoteGrid()
@@ -24,7 +27,8 @@ void NoteGrid::paint (juce::Graphics& g)
     double beatWidth = OneFirstBeatWidth / timeSignature.getDenominator();
     double barWidth = beatWidth * timeSignature.getNumerator();
     double noteGridWidth = barWidth * totalBarsInSong;
-    setSize(static_cast<int>(noteGridWidth), 1200);
+    setSize(static_cast<int>(noteGridWidth), getHeight());
+    noteBars.setSize(static_cast<int>(noteGridWidth), getHeight());
 
     // Set a background color
     g.fillAll (juce::Colours::black);
@@ -54,6 +58,7 @@ void NoteGrid::paint (juce::Graphics& g)
             }
         }
     }
+
 }
 
 void NoteGrid::resized()

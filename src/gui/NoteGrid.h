@@ -8,6 +8,7 @@
 #include "juce_gui_basics/juce_gui_basics.h"
 #include "../PluginProcessor.h"
 #include "../processing/TimeSignature.h"
+#include "NoteBars.h"
 #include <memory>
 
 class NoteGrid : public juce::Component
@@ -27,6 +28,7 @@ public:
 private:
     juce::Viewport* viewport;
     TimeSignature timeSignature;
+    NoteBars noteBars;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(NoteGrid)
 };

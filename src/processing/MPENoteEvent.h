@@ -9,22 +9,45 @@
 class MPENoteEvent
 {
 public:
-    MPENoteEvent(const juce::MPENote& note, const juce::Time& start) : mpeNote(note),
-            startTime(std::make_unique<juce::Time>(start)), releaseTime(nullptr)
-    {
-    }
+    MPENoteEvent(const juce::MPENote& note) : mpeNote(note) {}
+
     bool isPlaying() const
     {
-        return releaseTime == nullptr;
+        return releaseTime < startTime;
     }
-    void setReleaseTime(const juce::Time& time)
+    void setReleaseTime(const double time)
     {
-        releaseTime = std::make_unique<juce::Time>(time);
+        releaseTime =time;
+    }
+
+    double getStartTime() const
+    {
+        return startTime;
+    }
+
+    double getReleaseTime() const
+    {
+        return releaseTime;
+    }
+
+    juce::MPENote getMpeNote() const
+    {
+        return mpeNote;
+    }
+
+    void setStartTime(const double time)
+    {
+        startTime = time;
+    }
+
+    juce::String getNoteName() const
+    {
+        return juce::MidiMessage::getMidiNoteName(mpeNote.initialNote, true, true, 3);
     }
 private:
     juce::MPENote mpeNote;
-    std::unique_ptr<juce::Time>startTime;
-    std::unique_ptr<juce::Time> releaseTime;
+    double startTime;
+    double releaseTime;
 
 };
 

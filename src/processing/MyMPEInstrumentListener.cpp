@@ -7,7 +7,7 @@
 void MyMPEInstrumentListener::noteAdded(juce::MPENote newNote) {
     Listener::noteAdded(newNote);
     notes.emplace(newNote.noteID,
-                    MPENoteEvent{newNote, juce::Time::getCurrentTime()});
+                    MPENoteEvent{newNote});
 
 }
 
@@ -29,7 +29,7 @@ void MyMPEInstrumentListener::noteKeyStateChanged(juce::MPENote changedNote) {
 
 void MyMPEInstrumentListener::noteReleased(juce::MPENote finishedNote) {
     Listener::noteReleased(finishedNote);
-    notes.at(finishedNote.noteID).setReleaseTime(juce::Time::getCurrentTime());
+    notes.at(finishedNote.noteID).setReleaseTime(1);
 }
 
 void MyMPEInstrumentListener::zoneLayoutChanged() {
