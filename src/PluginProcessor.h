@@ -2,6 +2,8 @@
 
 #include <juce_audio_processors/juce_audio_processors.h>
 #include "processing/TimeSignature.h"
+#include "processing/MyMPEInstrumentListener.h"
+
 
 //==============================================================================
 class AudioPluginAudioProcessor  : public juce::AudioProcessor, public juce::ChangeBroadcaster
@@ -49,6 +51,8 @@ public:
 private:
     TimeSignature timeSignature;
     std::mutex timeSignatureMutex;
+    juce::MPEInstrument mpeInstrument;
+    MyMPEInstrumentListener mpeInstrumentListener;
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AudioPluginAudioProcessor)
     int timeSignatureBlockCounter = 0;
