@@ -24,7 +24,5 @@ private:
     TimeSignaturePanel timeSigPanel;
     juce::Viewport viewport;
     juce::ListBox trackListBox;
-    juce::MPEInstrument mpeInstrument;
-    juce::MPEKeyboardComponent mpeKeyboard;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AudioPluginAudioProcessorEditor)
 };
