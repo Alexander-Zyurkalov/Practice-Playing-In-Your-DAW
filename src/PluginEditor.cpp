@@ -4,7 +4,8 @@
 
 //==============================================================================
 AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor (AudioPluginAudioProcessor& p)
-    : AudioProcessorEditor (&p), processorRef (p), timeSigPanel(noteGrid)
+    : AudioProcessorEditor (&p), processorRef (p), timeSigPanel(noteGrid),
+    mpeKeyboard(mpeInstrument, juce::KeyboardComponentBase::horizontalKeyboard)
 {
     juce::ignoreUnused (processorRef);
     setSize (1200, 600);
@@ -13,6 +14,7 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor (AudioPluginAud
     viewport.setViewedComponent(&noteGrid, false);
     addAndMakeVisible(viewport);
     addAndMakeVisible(timeSigPanel);
+    addAndMakeVisible(mpeKeyboard);
 }
 
 AudioPluginAudioProcessorEditor::~AudioPluginAudioProcessorEditor()
@@ -35,7 +37,9 @@ void AudioPluginAudioProcessorEditor::resized()
 
     grid.templateRows    = {
             Track(Px(30)),
-            Track(Fr(1)) };
+            Track(Fr(3)) ,
+            Track (Fr(1))
+    };
     grid.templateColumns = {
             Track(Fr(1)),
     };
@@ -43,6 +47,7 @@ void AudioPluginAudioProcessorEditor::resized()
     grid.items = {
             juce::GridItem(timeSigPanel).withMargin(juce::GridItem::Margin{10, 0,0,0}),
             juce::GridItem(viewport).withMargin(juce::GridItem::Margin{10, 0, 0 ,0}),
+            juce::GridItem(mpeKeyboard).withMargin(juce::GridItem::Margin{0, 0, 0, 0})
     };
     trackListBox.updateContent();
 
