@@ -27,10 +27,10 @@ void NoteBars::paint(juce::Graphics& g)
         const juce::Point<float> circleCenter(rectangle.getBottomLeft().getX(), rectangle.getCentreY());
         const float circleRadius = rectangle.getHeight() * 1.2f;
 
-        g.setColour(note.isPlaying() ? juce::Colours::red : juce::Colours::green);
+        g.setColour(note.isPlaying() ? juce::Colours::red : juce::Colours::lightseagreen);
         g.fillRect(rectangle);
 
-        g.setColour(juce::Colours::red);
+        g.setColour(juce::Colours::green);
         const juce::Rectangle<float> &widthOfText = rectangle.withWidth(rectangle.getHeight());
         g.fillRect(widthOfText);
 
