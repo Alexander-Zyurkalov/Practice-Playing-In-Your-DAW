@@ -4,7 +4,7 @@
 
 #include "NoteGrid.h"
 
-NoteGrid::NoteGrid()
+NoteGrid::NoteGrid(juce::Viewport& viewport) : viewport(&viewport)
 {
     this->setSize(1400, 1200);
 }
@@ -16,6 +16,8 @@ NoteGrid::~NoteGrid()
 
 void NoteGrid::paint (juce::Graphics& g)
 {
+    juce::Rectangle<float> visibleArea = viewport->getViewArea().toFloat();
+
     int totalBarsInSong = 10;
     int pixelsPerQuarterNote = 100;
     double OneFirstBeatWidth = pixelsPerQuarterNote * 4;
@@ -38,14 +40,17 @@ void NoteGrid::paint (juce::Graphics& g)
         {
             // Calculate the x position for this beat
             int beatPosition = static_cast<int>(beatWidth * beat + bar * barWidth);
+            juce::Line<float> line(beatPosition, 0, beatPosition, bounds.getHeight());
+            if (!visibleArea.intersects(line))
+                continue;
 
             // Draw a line at this x position
-            g.drawLine (beatPosition, 0, beatPosition, bounds.getHeight(), 1.0f);
+            g.drawLine (line, 1.0f);
 
             if (beat == 0)
             {
                 // Draw a thicker line at the start of each bar
-                g.drawLine (beatPosition, 0, beatPosition, bounds.getHeight(), 2.0f);
+                g.drawLine (line, 2.0f);
             }
         }
     }
