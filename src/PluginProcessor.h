@@ -2,7 +2,6 @@
 
 #include <juce_audio_processors/juce_audio_processors.h>
 #include "processing/TimeSignature.h"
-#include "processing/TrackListSingleton.h"
 
 //==============================================================================
 class AudioPluginAudioProcessor  : public juce::AudioProcessor, public juce::ChangeBroadcaster
@@ -46,10 +45,8 @@ public:
 
     //==============================================================================
     TimeSignature getTimeSignature() ;
-    Track getInstanceTrack() const;
 
 private:
-    Track instanceTrack;
     TimeSignature timeSignature;
     std::mutex timeSignatureMutex;
     //==============================================================================

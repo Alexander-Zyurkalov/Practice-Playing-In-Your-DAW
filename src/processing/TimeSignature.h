@@ -16,7 +16,7 @@ public:
 
     int getNumerator() const { return numerator; }
     int getDenominator() const { return denominator; }
-    bool changed(int num, int denom)
+    bool changed(int num, int denom) const
     {
         return this->numerator != num || this->denominator != denom;
     }

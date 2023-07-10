@@ -4,8 +4,7 @@
 
 //==============================================================================
 AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor (AudioPluginAudioProcessor& p)
-    : AudioProcessorEditor (&p), processorRef (p), timeSigPanel(noteGrid),
-      instanceTrack(p.getInstanceTrack()), trackListBoxModel(p.getInstanceTrack())
+    : AudioProcessorEditor (&p), processorRef (p), timeSigPanel(noteGrid)
 {
     juce::ignoreUnused (processorRef);
     setSize (1200, 600);
@@ -14,10 +13,6 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor (AudioPluginAud
     viewport.setViewedComponent(&noteGrid, false);
     addAndMakeVisible(viewport);
     addAndMakeVisible(timeSigPanel);
-    trackListBox.setModel(&trackListBoxModel);
-    trackListBox.setBounds(300, 300, 600,600);
-    trackListBox.setOpaque(false);
-    addAndMakeVisible(trackListBox);
 }
 
 AudioPluginAudioProcessorEditor::~AudioPluginAudioProcessorEditor()

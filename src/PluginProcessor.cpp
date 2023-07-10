@@ -12,15 +12,10 @@ AudioPluginAudioProcessor::AudioPluginAudioProcessor()
                      #endif
                        )
 {
-    TrackListSingleton::getInstance()->addTrack(instanceTrack);
 }
 
 AudioPluginAudioProcessor::~AudioPluginAudioProcessor()
 {
-    if (TrackListSingleton::getInstance()->getNumberOfTracks() > 0)
-        TrackListSingleton::getInstance()->deleteById(instanceTrack.getId());
-    if (TrackListSingleton::getInstance()->getNumberOfTracks() == 0)
-        TrackListSingleton::deleteInstance();
 }
 
 //==============================================================================
@@ -166,8 +161,7 @@ void AudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
         if (timeSignature.changed(positionInfo->getTimeSignature()->numerator, positionInfo->getTimeSignature()->denominator))
         {
             {
-                std::unique_lock<std::mutex> lock(timeSignatureMutex);
-                std::cout << "Time signature changed\n";
+                std::lock_guard<std::mutex> lock(timeSignatureMutex);
                 timeSignature.set(positionInfo->getTimeSignature()->numerator,
                                   positionInfo->getTimeSignature()->denominator);
             }
@@ -217,7 +211,3 @@ TimeSignature AudioPluginAudioProcessor::getTimeSignature()
     return timeSignature;
 }
 
-
- Track AudioPluginAudioProcessor::getInstanceTrack() const {
-    return instanceTrack;
-}
