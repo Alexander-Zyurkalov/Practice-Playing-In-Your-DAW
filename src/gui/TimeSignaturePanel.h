@@ -20,6 +20,8 @@ public:
 
     void newTimeSignature(int num, int denom);
 
+    void newNumBars(int numBars);
+
 private:
     juce::Label timeSigLabel;
     juce::Label numBarsLabel;
@@ -28,6 +30,7 @@ private:
     juce::ComboBox timeSigDenominatorBox;
     juce::Slider numBarsBox;
     NoteGrid& noteGrid;
+
 };
 
 #endif //PRACTICEPLAYINGINDAW_TIMESIGNATUREPANEL_H

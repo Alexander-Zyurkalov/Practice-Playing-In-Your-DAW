@@ -26,8 +26,8 @@ TimeSignaturePanel::TimeSignaturePanel(NoteGrid& nGrid) :
 
     addAndMakeVisible(numBarsBox);
     numBarsBox.setRange(1, 64, 1);
-    numBarsBox.setValue(4);
-    numBarsBox.onValueChange = [this] { numBarsChanged(); };
+    numBarsBox.setValue(16);
+    numBarsBox.onValueChange = [this] { timeSignatureChanged(); };
 
     if (!juce::JUCEApplicationBase::isStandaloneApp())
     {
@@ -71,7 +71,9 @@ void TimeSignaturePanel::timeSignatureChanged()
     DAWTransportData newTimeSignature{
             static_cast<int>(timeSigNumeratorBox.getValue()),
             denominator};
-    noteGrid.updateTimeSignature(newTimeSignature);
+    double endLoopPos = numBarsBox.getValue() * newTimeSignature.getNumerator() * 4/newTimeSignature.getDenominator();
+    newTimeSignature.set(0, 0, endLoopPos);
+    noteGrid.updateDAWTransportData(newTimeSignature);
 }
 
 void TimeSignaturePanel::numBarsChanged()
@@ -93,4 +95,8 @@ void TimeSignaturePanel::newTimeSignature(int num, int denom) {
         default: selectedId = 3; break;
     }
     timeSigDenominatorBox.setSelectedId(selectedId, juce::dontSendNotification);
+}
+
+void TimeSignaturePanel::newNumBars(int numBars) {
+    numBarsBox.setValue(numBars, juce::dontSendNotification);
 }

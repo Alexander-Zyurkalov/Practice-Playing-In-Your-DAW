@@ -28,10 +28,10 @@ void NoteGrid::paint(juce::Graphics& g)
     juce::Rectangle<float> visibleArea = viewport->getViewArea().toFloat();
     int pixelsPerQuarterNote = 100;
 
-    int totalBarsInSong = 20; // we will read it later
-    double quarterNotesPerBeat =  4.0/timeSignature.getDenominator();
+    int totalBarsInSong = dawTransportData.getNumBars();
+    double quarterNotesPerBeat = 4.0 / dawTransportData.getDenominator();
     double beatWidth = quarterNotesPerBeat * pixelsPerQuarterNote;
-    double barWidth = beatWidth * timeSignature.getNumerator();
+    double barWidth = beatWidth * dawTransportData.getNumerator();
     double noteGridWidth = barWidth * totalBarsInSong;
     setSize(static_cast<int>(noteGridWidth), getHeight());
     noteBars.setSize(static_cast<int>(noteGridWidth), getHeight());
@@ -73,7 +73,7 @@ void NoteGrid::paint(juce::Graphics& g)
 
     for (int bar = 0; bar < totalBarsInSong; ++bar)
     {
-        for (int beat = 0; beat < timeSignature.getNumerator(); ++beat)
+        for (int beat = 0; beat < dawTransportData.getNumerator(); ++beat)
         {
             // Calculate the x position for this beat
             int beatPosition = static_cast<int>(beatWidth * beat + bar * barWidth);

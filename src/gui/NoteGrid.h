@@ -20,14 +20,14 @@ public:
     void paint(juce::Graphics& g) override;
     void resized() override;
 
-    void updateTimeSignature(DAWTransportData timeSig)
+    void updateDAWTransportData(DAWTransportData transportData)
     {
-        this->timeSignature = timeSig;
+        this->dawTransportData = transportData;
         repaint();
     }
 private:
     juce::Viewport* viewport;
-    DAWTransportData timeSignature;
+    DAWTransportData dawTransportData;
     NoteBars noteBars;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(NoteGrid)

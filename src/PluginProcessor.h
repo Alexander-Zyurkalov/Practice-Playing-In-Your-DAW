@@ -46,7 +46,7 @@ public:
     void setStateInformation (const void* data, int sizeInBytes) override;
 
     //==============================================================================
-    DAWTransportData getTimeSignature() ;
+    DAWTransportData getDAWTransportData() ;
 
 private:
     DAWTransportData timeSignature;

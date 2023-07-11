@@ -40,12 +40,20 @@ public:
         this->ppqEndLoopPosition = ppqEndLoopPos;
     }
 
+    int getNumBars() const {
+        double ppqLoopLength = (ppqEndLoopPosition - ppqStartLoopPosition);
+        double quarterNotesPerBeat = 4.0 / denominator;
+        double ppqPerBeat = quarterNotesPerBeat * numerator;
+        double numBars = ppqLoopLength / ppqPerBeat;
+        return static_cast<int>(numBars);
+    }
+
 private:
     int numerator;
     int denominator;
-    double ppqPosition;
-    double ppqStartLoopPosition;
-    double ppqEndLoopPosition;
+    double ppqPosition = 0.0;
+    double ppqStartLoopPosition = 0.0;
+    double ppqEndLoopPosition = 16.0;
 
 
     //TODO: we also need to know whether the transport is playing or not

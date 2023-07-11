@@ -228,7 +228,7 @@ juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 }
 
 
-DAWTransportData AudioPluginAudioProcessor::getTimeSignature()
+DAWTransportData AudioPluginAudioProcessor::getDAWTransportData()
 {
     std::lock_guard<std::mutex> lock{timeSignatureMutex};
     return timeSignature;
