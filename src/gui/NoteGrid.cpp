@@ -17,7 +17,7 @@ NoteGrid::~NoteGrid()
     // Destructor: Clean up your component here
 }
 
-void NoteGrid::paint (juce::Graphics& g)
+void NoteGrid::paint(juce::Graphics& g)
 {
     juce::Rectangle<float> visibleArea = viewport->getViewArea().toFloat();
 
@@ -31,10 +31,10 @@ void NoteGrid::paint (juce::Graphics& g)
     noteBars.setSize(static_cast<int>(noteGridWidth), getHeight());
 
     // Set a background color
-    g.fillAll (juce::Colours::black);
+    g.fillAll(juce::Colours::lightgrey);
 
     // Set the color for the grid lines
-    g.setColour (juce::Colours::grey);
+    g.setColour(juce::Colours::grey);
 
     auto bounds = getLocalBounds();
 
@@ -49,17 +49,33 @@ void NoteGrid::paint (juce::Graphics& g)
                 continue;
 
             // Draw a line at this x position
-            g.drawLine (line, 1.0f);
+            g.drawLine(line, 1.0f);
 
             if (beat == 0)
             {
                 // Draw a thicker line at the start of each bar
-                g.drawLine (line, 2.0f);
+                g.drawLine(line, 2.0f);
             }
         }
     }
 
+    // Draw pitch lines
+    g.setColour(juce::Colours::grey);
+
+    const int numPitches = 128;
+    const int pitchHeight = getHeight() / numPitches;
+
+    for (int pitch = 0; pitch < numPitches; ++pitch)
+    {
+        int pitchPosition = pitch * pitchHeight;
+        juce::Line<float> pitchLine(0, pitchPosition, getWidth(), pitchPosition);
+        if (visibleArea.intersects(pitchLine))
+        {
+            g.drawLine(pitchLine, 1.0f);
+        }
+    }
 }
+
 
 void NoteGrid::resized()
 {
