@@ -4,6 +4,12 @@
 
 #include "NoteGrid.h"
 
+bool isSharp(int pitch)
+{
+    int pitchClass = pitch % 12;
+    return pitchClass == 1 || pitchClass == 3 || pitchClass == 6 || pitchClass == 8 || pitchClass == 10;
+}
+
 NoteGrid::NoteGrid(juce::Viewport& viewport) : viewport(&viewport)
 {
     this->setSize(1400, 3000);
@@ -33,6 +39,31 @@ void NoteGrid::paint(juce::Graphics& g)
     // Set a background color
     g.fillAll(juce::Colours::lightgrey);
 
+    // Draw pitch lines
+    g.setColour(juce::Colours::grey);
+
+    const int numPitches = 128;
+    const int pitchHeight = getHeight() / numPitches;
+
+    for (int pitch = 0; pitch < numPitches; ++pitch)
+    {
+        int pitchPosition = pitch * pitchHeight;
+        juce::Line<float> pitchLine(0, pitchPosition, getWidth(), pitchPosition);
+        juce::Rectangle<float> pitchArea(0, pitchPosition, getWidth(), pitchHeight);
+
+        if (visibleArea.intersects(pitchArea))
+        {
+            if (isSharp(pitch))
+            {
+                // Fill the area with a darker color for sharps
+                g.setColour(juce::Colour(199, 199, 199));
+                g.fillRect(pitchArea);
+            }
+            g.setColour(juce::Colour(180, 180, 180));
+            g.drawLine(pitchLine, 0.5f);
+        }
+    }
+
     // Set the color for the grid lines
     g.setColour(juce::Colours::grey);
 
@@ -59,21 +90,7 @@ void NoteGrid::paint(juce::Graphics& g)
         }
     }
 
-    // Draw pitch lines
-    g.setColour(juce::Colours::grey);
 
-    const int numPitches = 128;
-    const int pitchHeight = getHeight() / numPitches;
-
-    for (int pitch = 0; pitch < numPitches; ++pitch)
-    {
-        int pitchPosition = pitch * pitchHeight;
-        juce::Line<float> pitchLine(0, pitchPosition, getWidth(), pitchPosition);
-        if (visibleArea.intersects(pitchLine))
-        {
-            g.drawLine(pitchLine, 1.0f);
-        }
-    }
 }
 
 
