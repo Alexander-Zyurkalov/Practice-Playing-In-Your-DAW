@@ -30,9 +30,7 @@ void NoteBars::paint(juce::Graphics& g)
         g.setColour(note.isPlaying() ? juce::Colours::red : juce::Colours::lightseagreen);
         g.fillRect(rectangle);
 
-        g.setColour(juce::Colours::green);
         const juce::Rectangle<float> &widthOfText = rectangle.withWidth(rectangle.getHeight());
-        g.fillRect(widthOfText);
 
         g.setColour(juce::Colours::black);
         g.drawText(note.getNoteName(), widthOfText, juce::Justification::left);
