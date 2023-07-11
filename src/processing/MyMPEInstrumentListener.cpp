@@ -29,7 +29,7 @@ void MyMPEInstrumentListener::noteKeyStateChanged(juce::MPENote changedNote) {
 
 void MyMPEInstrumentListener::noteReleased(juce::MPENote finishedNote) {
     Listener::noteReleased(finishedNote);
-    notes.at(finishedNote.noteID).setReleaseTime(1);
+    notes.at(finishedNote.noteID).setPpqReleasePosition(1);
 }
 
 void MyMPEInstrumentListener::zoneLayoutChanged() {

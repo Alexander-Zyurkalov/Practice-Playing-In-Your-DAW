@@ -160,6 +160,7 @@ void AudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
     {
         timeSignatureBlockCounter = 0;
         juce::Optional<juce::AudioPlayHead::PositionInfo> positionInfo = playHead->getPosition();
+
         if (timeSignature.changed(positionInfo->getTimeSignature()->numerator, positionInfo->getTimeSignature()->denominator))
         {
             {

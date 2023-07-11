@@ -13,21 +13,21 @@ public:
 
     bool isPlaying() const
     {
-        return releaseTime < startTime;
+        return ppqReleasePosition < ppqStartPosition;
     }
-    void setReleaseTime(const double time)
+    void setPpqReleasePosition(const double position)
     {
-        releaseTime =time;
-    }
-
-    double getStartTime() const
-    {
-        return startTime;
+        ppqReleasePosition = position;
     }
 
-    double getReleaseTime() const
+    double getPpqStartPosition() const
     {
-        return releaseTime;
+        return ppqStartPosition;
+    }
+
+    double getPpqReleasePosition() const
+    {
+        return ppqReleasePosition;
     }
 
     juce::MPENote getMpeNote() const
@@ -35,9 +35,9 @@ public:
         return mpeNote;
     }
 
-    void setStartTime(const double time)
+    void setPpqStartPosition(const double position)
     {
-        startTime = time;
+        ppqStartPosition = position;
     }
 
     juce::String getNoteName() const
@@ -46,8 +46,8 @@ public:
     }
 private:
     juce::MPENote mpeNote;
-    double startTime;
-    double releaseTime;
+    double ppqStartPosition;
+    double ppqReleasePosition;
 
 };
 

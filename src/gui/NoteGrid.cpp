@@ -12,7 +12,7 @@ bool isSharp(int pitch)
 
 NoteGrid::NoteGrid(juce::Viewport& viewport) : viewport(&viewport)
 {
-    this->setSize(1400, 3000);
+    this->setSize(3000, 3000);
     this->addAndMakeVisible(noteBars);
     this->noteBars.setSize(this->getWidth(), this->getHeight());
 
@@ -26,11 +26,11 @@ NoteGrid::~NoteGrid()
 void NoteGrid::paint(juce::Graphics& g)
 {
     juce::Rectangle<float> visibleArea = viewport->getViewArea().toFloat();
-
-    int totalBarsInSong = 10;
     int pixelsPerQuarterNote = 100;
-    double OneFirstBeatWidth = pixelsPerQuarterNote * 4;
-    double beatWidth = OneFirstBeatWidth / timeSignature.getDenominator();
+
+    int totalBarsInSong = 20; // we will read it later
+    double quarterNotesPerBeat =  4.0/timeSignature.getDenominator();
+    double beatWidth = quarterNotesPerBeat * pixelsPerQuarterNote;
     double barWidth = beatWidth * timeSignature.getNumerator();
     double noteGridWidth = barWidth * totalBarsInSong;
     setSize(static_cast<int>(noteGridWidth), getHeight());
@@ -88,7 +88,8 @@ void NoteGrid::paint(juce::Graphics& g)
             if (beat == 0)
             {
                 // Draw a thicker line at the start of each bar
-                g.drawLine(line, 2.0f);
+                g.setColour(juce::Colour(180, 180, 180));
+                g.drawLine(line, 5.0f);
             }
         }
     }
