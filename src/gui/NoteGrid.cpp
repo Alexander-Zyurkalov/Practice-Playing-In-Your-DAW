@@ -43,14 +43,14 @@ void NoteGrid::paint(juce::Graphics& g)
     g.setColour(juce::Colours::grey);
 
     const int numPitches = 128;
-    const int pitchHeight = getHeight() / numPitches;
+    const float pitchHeight = (float)getHeight() / numPitches;
 
     for (int pitch = 0; pitch < numPitches; ++pitch)
     {
-        int pitchPosition = (numPitches - pitch - 1) * pitchHeight;
+        float pitchPosition = (float)(numPitches - pitch - 1) * pitchHeight;
 
-        juce::Line<float> pitchLine(0, pitchPosition, getWidth(), pitchPosition);
-        juce::Rectangle<float> pitchArea(0, pitchPosition, getWidth(), pitchHeight);
+        juce::Line<float> pitchLine(0, pitchPosition, static_cast<float>(getWidth()), pitchPosition);
+        juce::Rectangle<float> pitchArea(0, pitchPosition, static_cast<float>(getWidth()), pitchHeight);
 
         if (visibleArea.intersects(pitchArea))
         {
@@ -76,7 +76,8 @@ void NoteGrid::paint(juce::Graphics& g)
         {
             // Calculate the x position for this beat
             int beatPosition = static_cast<int>(beatWidth * beat + bar * barWidth);
-            juce::Line<float> line(beatPosition, 0, beatPosition, bounds.getHeight());
+            juce::Line<float> line(static_cast<float>(beatPosition), 0, static_cast<float>(beatPosition),
+                                   static_cast<float>(bounds.getHeight()));
             if (!visibleArea.intersects(line))
                 continue;
 

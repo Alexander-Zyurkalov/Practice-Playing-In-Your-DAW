@@ -8,13 +8,13 @@
 NoteBars::NoteBars()
 {
     setOpaque(false);
-    for (int i: {1, 2, 3, 4, 5, 6, 7, 8, 9, -10})
+    for (int i=0; i<128; ++i)
     {
-        const juce::MPENote &note = juce::MPENote(1, 60 + i, juce::MPEValue(), juce::MPEValue(),
+        const juce::MPENote &note = juce::MPENote(1,  i, juce::MPEValue(), juce::MPEValue(),
                                                   juce::MPEValue(), juce::MPEValue(),juce::MPENote::KeyState::keyDown);
         MPENoteEvent noteEvent{note};
-        noteEvent.setStartTime(0.1 * i + 0.1 * juce::Random::getSystemRandom().nextDouble());
-        noteEvent.setReleaseTime(0.1 * (i + 1) + 0.1 * juce::Random::getSystemRandom().nextDouble());
+        noteEvent.setStartTime(0.001 * i );
+        noteEvent.setReleaseTime(0.001 * (i + 1) );
         notes.push_back(noteEvent);
     }
 }
@@ -23,14 +23,14 @@ void NoteBars::paint(juce::Graphics& g)
 {
     for (auto& note : notes)
     {
-        const juce::Rectangle<float>& rectangle = getNoteRectangle(note).toFloat();
+        const juce::Rectangle<int>& rectangle = getNoteRectangle(note);
 
         g.setColour( juce::Colours::lightskyblue);
         g.fillRect(rectangle);
         g.setColour(juce::Colours::black);
-        g.drawRect(rectangle, 0.2f);
+        g.drawRect(rectangle, 1);
 
-        const juce::Rectangle<float> &widthOfText = rectangle.withWidth(rectangle.getHeight());
+        const juce::Rectangle<int> &widthOfText = rectangle.withWidth(rectangle.getHeight()+10);
 
         g.setColour(juce::Colours::black);
         g.drawText(note.getNoteName(), widthOfText, juce::Justification::left);
@@ -44,13 +44,13 @@ void NoteBars::resized()
 
 juce::Rectangle<int> NoteBars::getNoteRectangle(const MPENoteEvent &note)
 {
-    auto noteStart = note.getStartTime();
-    auto noteEnd = note.isPlaying() ? noteStart + 0.1 : note.getReleaseTime();
-    auto noteLength =noteEnd - noteStart;
-    auto noteX = noteStart * getWidth();
+    double noteStart = note.getStartTime();
+    double noteEnd = note.isPlaying() ? noteStart + 0.1 : note.getReleaseTime();
+    double noteLength = noteEnd - noteStart;
+    auto noteX = static_cast<float>(noteStart * getWidth());
     const int numPitches = 128;
-    auto noteY = (numPitches - note.getMpeNote().initialNote) * getHeight() / numPitches;
-    auto noteWidth = noteLength * getWidth();
-    auto noteHeight = getHeight() / numPitches;
-    return juce::Rectangle<int>(noteX, noteY, noteWidth, noteHeight);
+    float noteHeight = (float)getHeight() / numPitches;
+    float noteY = static_cast<float>(numPitches - note.getMpeNote().initialNote - 1.0) * noteHeight;
+    auto noteWidth = static_cast<float>(noteLength * getWidth()); //TODO: we need to know tempo and time signature here
+    return juce::Rectangle<int>{static_cast<int>(noteX), static_cast<int>(noteY), static_cast<int>(noteWidth), static_cast<int>(noteHeight)};
 }
