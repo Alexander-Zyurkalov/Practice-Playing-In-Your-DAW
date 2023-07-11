@@ -61,7 +61,8 @@ void NoteGrid::paint(juce::Graphics& g)
                 g.fillRect(pitchArea);
             }
             g.setColour(juce::Colour(180, 180, 180));
-            g.drawLine(pitchLine, 0.5f);
+            int thickness = (pitch+1) % 12 == 0 ? 5 : 1;
+            g.drawLine(pitchLine, thickness);
         }
     }
 
