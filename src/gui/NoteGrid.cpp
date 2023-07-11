@@ -29,6 +29,7 @@ void NoteGrid::paint(juce::Graphics& g)
     int pixelsPerQuarterNote = 100;
 
     int totalBarsInSong = dawTransportData.getNumBars();
+    totalBarsInSong = totalBarsInSong == 0 ? 1 : totalBarsInSong;
     double quarterNotesPerBeat = 4.0 / dawTransportData.getDenominator();
     double beatWidth = quarterNotesPerBeat * pixelsPerQuarterNote;
     double barWidth = beatWidth * dawTransportData.getNumerator();
