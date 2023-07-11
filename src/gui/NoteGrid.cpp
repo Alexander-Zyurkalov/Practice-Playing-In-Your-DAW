@@ -47,7 +47,8 @@ void NoteGrid::paint(juce::Graphics& g)
 
     for (int pitch = 0; pitch < numPitches; ++pitch)
     {
-        int pitchPosition = pitch * pitchHeight;
+        int pitchPosition = (numPitches - pitch - 1) * pitchHeight;
+
         juce::Line<float> pitchLine(0, pitchPosition, getWidth(), pitchPosition);
         juce::Rectangle<float> pitchArea(0, pitchPosition, getWidth(), pitchHeight);
 

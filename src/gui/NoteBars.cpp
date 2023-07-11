@@ -49,7 +49,7 @@ juce::Rectangle<int> NoteBars::getNoteRectangle(const MPENoteEvent &note)
     auto noteLength =noteEnd - noteStart;
     auto noteX = noteStart * getWidth();
     const int numPitches = 128;
-    auto noteY = note.getMpeNote().initialNote * getHeight() / numPitches;
+    auto noteY = (numPitches - note.getMpeNote().initialNote) * getHeight() / numPitches;
     auto noteWidth = noteLength * getWidth();
     auto noteHeight = getHeight() / numPitches;
     return juce::Rectangle<int>(noteX, noteY, noteWidth, noteHeight);
