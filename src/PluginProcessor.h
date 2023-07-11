@@ -1,7 +1,7 @@
 #pragma once
 
 #include <juce_audio_processors/juce_audio_processors.h>
-#include "processing/TimeSignature.h"
+#include "processing/DAWTransportData.h"
 #include "processing/MyMPEInstrumentListener.h"
 
 
@@ -46,10 +46,10 @@ public:
     void setStateInformation (const void* data, int sizeInBytes) override;
 
     //==============================================================================
-    TimeSignature getTimeSignature() ;
+    DAWTransportData getTimeSignature() ;
 
 private:
-    TimeSignature timeSignature;
+    DAWTransportData timeSignature;
     std::mutex timeSignatureMutex;
     juce::MPEInstrument mpeInstrument;
     MyMPEInstrumentListener mpeInstrumentListener;

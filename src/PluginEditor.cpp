@@ -52,7 +52,7 @@ void AudioPluginAudioProcessorEditor::resized()
 
 
 void AudioPluginAudioProcessorEditor::changeListenerCallback(juce::ChangeBroadcaster *source) {
-    const TimeSignature &sig = processorRef.getTimeSignature();
+    const DAWTransportData &sig = processorRef.getTimeSignature();
     noteGrid.updateTimeSignature(sig);
     timeSigPanel.newTimeSignature(sig.getNumerator(), sig.getDenominator());
 }

@@ -7,7 +7,7 @@
 
 #include "juce_gui_basics/juce_gui_basics.h"
 #include "../PluginProcessor.h"
-#include "../processing/TimeSignature.h"
+#include "../processing/DAWTransportData.h"
 #include "NoteBars.h"
 #include <memory>
 
@@ -20,14 +20,14 @@ public:
     void paint(juce::Graphics& g) override;
     void resized() override;
 
-    void updateTimeSignature(TimeSignature timeSig)
+    void updateTimeSignature(DAWTransportData timeSig)
     {
         this->timeSignature = timeSig;
         repaint();
     }
 private:
     juce::Viewport* viewport;
-    TimeSignature timeSignature;
+    DAWTransportData timeSignature;
     NoteBars noteBars;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(NoteGrid)

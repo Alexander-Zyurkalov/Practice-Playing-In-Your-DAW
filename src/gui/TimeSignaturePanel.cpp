@@ -68,7 +68,7 @@ void TimeSignaturePanel::timeSignatureChanged()
         case 7: denominator = 64; break;
         default: denominator = 4; break;
     }
-    TimeSignature newTimeSignature{
+    DAWTransportData newTimeSignature{
             static_cast<int>(timeSigNumeratorBox.getValue()),
             denominator};
     noteGrid.updateTimeSignature(newTimeSignature);

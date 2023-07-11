@@ -152,14 +152,34 @@ void AudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
 
 
     timeSignatureBlockCounter++;
+    double ppqStart = 0;
+    double ppqEnd = 0;
+    double ppqPosition = 0;
 
-    if (juce::JUCEApplicationBase::isStandaloneApp() || timeSignatureBlockCounter < 40)
+    if (juce::JUCEApplicationBase::isStandaloneApp() || timeSignatureBlockCounter < 10)
         return;
     // Get the current position information from the host
     if (auto* playHead = getPlayHead())
     {
         timeSignatureBlockCounter = 0;
         juce::Optional<juce::AudioPlayHead::PositionInfo> positionInfo = playHead->getPosition();
+
+
+
+        ppqPosition = *positionInfo->getPpqPosition();
+        if (positionInfo->getIsLooping()) {
+            ppqStart = positionInfo->getLoopPoints()->ppqStart;
+             ppqEnd = positionInfo->getLoopPoints()->ppqEnd;
+        }
+        if (timeSignature.changed(ppqPosition, ppqStart, ppqEnd))
+        {
+            {
+                std::lock_guard<std::mutex> lock(timeSignatureMutex);
+                timeSignature.set(ppqPosition, ppqStart, ppqEnd);
+            }
+            sendChangeMessage();
+        }
+
 
         if (timeSignature.changed(positionInfo->getTimeSignature()->numerator, positionInfo->getTimeSignature()->denominator))
         {
@@ -208,7 +228,7 @@ juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 }
 
 
-TimeSignature AudioPluginAudioProcessor::getTimeSignature()
+DAWTransportData AudioPluginAudioProcessor::getTimeSignature()
 {
     std::lock_guard<std::mutex> lock{timeSignatureMutex};
     return timeSignature;
