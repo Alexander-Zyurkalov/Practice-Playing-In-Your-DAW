@@ -48,6 +48,18 @@ public:
         return static_cast<int>(numBars);
     }
 
+    double getPpqPosition() const {
+        return ppqPosition;
+    }
+
+    double getPpqStartLoopPosition() const {
+        return ppqStartLoopPosition;
+    }
+
+    double getPpqEndLoopPosition() const {
+        return ppqEndLoopPosition;
+    }
+
 private:
     int numerator;
     int denominator;

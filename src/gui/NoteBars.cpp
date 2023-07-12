@@ -21,8 +21,16 @@ NoteBars::NoteBars()
 
 void NoteBars::paint(juce::Graphics& g)
 {
+    int pixelsPerQuarterNote = 100; //TODO: it is the second place where we use this constant. Do something with that, DRY!!!
+    double ppqLeftPosition = dawTransportData.getPpqStartLoopPosition();
+    double ppqRightPosition = dawTransportData.getPpqEndLoopPosition() + (double)getHeight()/pixelsPerQuarterNote;
     for (auto& note : notes)
     {
+        if (ppqLeftPosition < note.getPpqStartPosition() && ppqRightPosition < note.getPpqStartPosition())
+            continue;
+        if (ppqLeftPosition> note.getPpqReleasePosition() && ppqRightPosition > note.getPpqReleasePosition())
+            continue;
+
         const juce::Rectangle<int>& rectangle = getNoteRectangle(note);
 
         g.setColour( juce::Colours::lightskyblue);
@@ -47,8 +55,9 @@ void NoteBars::resized()
 juce::Rectangle<int> NoteBars::getNoteRectangle(const MPENoteEvent &note)
 {
     int pixelsPerQuarterNote = 100;
-    double ppqStartPosition = note.getPpqStartPosition();
-    double ppqReleasePosition = note.isPlaying() ? ppqStartPosition + 0.1 : note.getPpqReleasePosition();
+    double ppqStartPosition = note.getPpqStartPosition() - dawTransportData.getPpqStartLoopPosition();
+    double ppqReleasePosition = note.isPlaying() ? ppqStartPosition + 0.1 : note.getPpqReleasePosition()
+            - dawTransportData.getPpqStartLoopPosition();
     double noteLength = ppqReleasePosition - ppqStartPosition;
     auto noteX = static_cast<float>(ppqStartPosition * pixelsPerQuarterNote);
     const int numPitches = 128;

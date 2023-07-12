@@ -169,7 +169,7 @@ void AudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
         ppqPosition = *positionInfo->getPpqPosition();
         if (positionInfo->getIsLooping()) {
             ppqStart = positionInfo->getLoopPoints()->ppqStart;
-             ppqEnd = positionInfo->getLoopPoints()->ppqEnd;
+            ppqEnd = positionInfo->getLoopPoints()->ppqEnd;
         }
         if (timeSignature.changed(ppqPosition, ppqStart, ppqEnd))
         {

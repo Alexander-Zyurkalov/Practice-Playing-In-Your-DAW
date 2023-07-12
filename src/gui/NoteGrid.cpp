@@ -26,7 +26,7 @@ NoteGrid::~NoteGrid()
 void NoteGrid::paint(juce::Graphics& g)
 {
     juce::Rectangle<float> visibleArea = viewport->getViewArea().toFloat();
-    int pixelsPerQuarterNote = 100;
+    int pixelsPerQuarterNote = 100; //TODO: define it as constant or do scaling with this variable
 
     int totalBarsInSong = dawTransportData.getNumBars();
     totalBarsInSong = totalBarsInSong == 0 ? 1 : totalBarsInSong;

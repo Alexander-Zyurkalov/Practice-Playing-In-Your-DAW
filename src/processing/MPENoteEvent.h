@@ -9,7 +9,9 @@
 class MPENoteEvent
 {
 public:
-    MPENoteEvent(const juce::MPENote& note) : mpeNote(note) {}
+    explicit MPENoteEvent(const juce::MPENote& note) : mpeNote(note) {}
+
+    MPENoteEvent() = default;
 
     bool isPlaying() const
     {
@@ -46,8 +48,8 @@ public:
     }
 private:
     juce::MPENote mpeNote;
-    double ppqStartPosition;
-    double ppqReleasePosition;
+    double ppqStartPosition{};
+    double ppqReleasePosition{};
 
 };
 

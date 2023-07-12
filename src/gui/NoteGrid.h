@@ -22,7 +22,8 @@ public:
 
     void updateDAWTransportData(DAWTransportData transportData)
     {
-        this->dawTransportData = transportData;
+        dawTransportData = transportData;
+        noteBars.updateDAWTransportData(transportData);
         repaint();
     }
 private:
