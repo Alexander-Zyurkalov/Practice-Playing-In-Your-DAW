@@ -17,6 +17,7 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor (AudioPluginAud
 
 AudioPluginAudioProcessorEditor::~AudioPluginAudioProcessorEditor()
 {
+    processorRef.removeChangeListener(this);
 }
 
 //==============================================================================
@@ -48,6 +49,7 @@ void AudioPluginAudioProcessorEditor::resized()
     trackListBox.updateContent();
 
     grid.performLayout(getLocalBounds());
+    changeListenerCallback(nullptr);
 }
 
 
