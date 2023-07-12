@@ -49,7 +49,7 @@ public:
     }
 
     double getPpqPosition() const {
-        return ppqPosition;
+        return ppqPosition - ppqStartLoopPosition;
     }
 
     double getPpqStartLoopPosition() const {

@@ -20,12 +20,8 @@ public:
     void paint(juce::Graphics& g) override;
     void resized() override;
 
-    void updateDAWTransportData(DAWTransportData transportData)
-    {
-        dawTransportData = transportData;
-        noteBars.updateDAWTransportData(transportData);
-        repaint();
-    }
+    void updateDAWTransportData(DAWTransportData transportData);
+
 private:
     juce::Viewport* viewport;
     DAWTransportData dawTransportData;

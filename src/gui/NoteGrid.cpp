@@ -95,6 +95,14 @@ void NoteGrid::paint(juce::Graphics& g)
         }
     }
 
+    auto cursorX = static_cast<float>(dawTransportData.getPpqPosition() * pixelsPerQuarterNote);
+    if (cursorX >=0 && cursorX <= static_cast<float>(getWidth()))
+    {
+        g.setColour(juce::Colours::red);
+        juce::Line<float> line{cursorX, 0, cursorX, static_cast<float>(getHeight())};
+        g.drawLine(line, 2.0f);
+    }
+
 
 }
 
@@ -103,3 +111,12 @@ void NoteGrid::resized()
 {
     // This method is where you'll handle resizing of your component.
 }
+
+void NoteGrid::updateDAWTransportData(DAWTransportData transportData)
+{
+    dawTransportData = transportData;
+    noteBars.updateDAWTransportData(transportData);
+    repaint();
+}
+
+
