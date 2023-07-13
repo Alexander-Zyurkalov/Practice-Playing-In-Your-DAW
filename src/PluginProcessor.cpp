@@ -172,7 +172,6 @@ void AudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
         juce::Optional<juce::AudioPlayHead::PositionInfo> positionInfo = playHead->getPosition();
 
 
-
         ppqPosition = *positionInfo->getPpqPosition();
         if (positionInfo->getIsLooping()) {
             ppqStart = positionInfo->getLoopPoints()->ppqStart;
