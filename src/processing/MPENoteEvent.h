@@ -48,8 +48,8 @@ public:
     }
 private:
     juce::MPENote mpeNote;
-    double ppqStartPosition{};
-    double ppqReleasePosition{};
+    double ppqStartPosition{0};
+    double ppqReleasePosition{0};
 
 };
 

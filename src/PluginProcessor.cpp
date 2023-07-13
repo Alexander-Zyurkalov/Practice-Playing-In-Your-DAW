@@ -149,7 +149,7 @@ void AudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
         mpeInstrument.processNextMidiEvent(message);
     }
     loopsCounter++;
-    if (loopsCounter > 30)
+    if (loopsCounter > 5)
     {
         std::unique_lock<std::mutex> lock(noteEventVectorMutex);
         loopsCounter = 0;
