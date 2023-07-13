@@ -8,15 +8,6 @@
 NoteBars::NoteBars()
 {
     setOpaque(false);
-    for (int i=0; i<128; ++i)
-    {
-        const juce::MPENote &note = juce::MPENote(1,  i, juce::MPEValue(), juce::MPEValue(),
-                                                  juce::MPEValue(), juce::MPEValue(),juce::MPENote::KeyState::keyDown);
-        MPENoteEvent noteEvent{note};
-        noteEvent.setPpqStartPosition( i);
-        noteEvent.setPpqReleasePosition((i + 1));
-        notes.push_back(noteEvent);
-    }
 }
 
 void NoteBars::paint(juce::Graphics& g)

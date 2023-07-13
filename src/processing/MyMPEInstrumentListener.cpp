@@ -9,8 +9,7 @@ MyMPEInstrumentListener::MyMPEInstrumentListener(DAWTransportData *transportData
 void MyMPEInstrumentListener::noteAdded(juce::MPENote newNote) {
     MPENoteEvent mpeNoteEvent{newNote};
     mpeNoteEvent.setPpqStartPosition(dawTransportData->getPpqPosition());
-    notes.emplace(newNote.noteID, MPENoteEvent{newNote});
-
+    notes[newNote.noteID] = mpeNoteEvent;
 }
 
 void MyMPEInstrumentListener::notePressureChanged(juce::MPENote changedNote) {
