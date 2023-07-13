@@ -22,10 +22,10 @@ public:
 
     void updateDAWTransportData(DAWTransportData transportData);
 
+    NoteBars noteBars;
 private:
     juce::Viewport* viewport;
     DAWTransportData dawTransportData;
-    NoteBars noteBars;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(NoteGrid)
 };

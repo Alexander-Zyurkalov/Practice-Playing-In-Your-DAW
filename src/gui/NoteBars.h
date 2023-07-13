@@ -24,8 +24,8 @@ public:
         repaint();
     }
 
-private:
     std::vector<MPENoteEvent> notes;
+private:
     DAWTransportData dawTransportData;
 
     juce::Rectangle<int> getNoteRectangle(const MPENoteEvent& note);

@@ -55,6 +55,7 @@ void AudioPluginAudioProcessorEditor::resized()
 
 void AudioPluginAudioProcessorEditor::changeListenerCallback(juce::ChangeBroadcaster *source) {
     const DAWTransportData &dawTransportData = processorRef.getDAWTransportData();
+    noteGrid.noteBars.notes = processorRef.getNoteEventVector();
     noteGrid.updateDAWTransportData(dawTransportData);
     timeSigPanel.newTimeSignature(dawTransportData.getNumerator(), dawTransportData.getDenominator());
     timeSigPanel.newNumBars(dawTransportData.getNumBars());

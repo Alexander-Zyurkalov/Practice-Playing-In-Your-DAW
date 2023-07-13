@@ -48,11 +48,18 @@ public:
     //==============================================================================
     DAWTransportData getDAWTransportData() ;
 
+    std::vector<MPENoteEvent> getNoteEventVector();
+
 private:
     DAWTransportData dawTransportData;
     std::mutex timeSignatureMutex;
     juce::MPEInstrument mpeInstrument;
     MyMPEInstrumentListener mpeInstrumentListener{&dawTransportData};
+
+    std::vector<MPENoteEvent> noteEventVector;
+    std::mutex noteEventVectorMutex;
+    size_t loopsCounter = 0;
+
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AudioPluginAudioProcessor)
     int timeSignatureBlockCounter = 0;

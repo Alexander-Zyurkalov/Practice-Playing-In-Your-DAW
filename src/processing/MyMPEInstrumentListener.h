@@ -30,6 +30,8 @@ public:
 
     void noteReleased(juce::MPENote finishedNote) override;
 
+    std::vector<MPENoteEvent> createNoteEventVector();
+
 private:
     std::unordered_map<juce::uint16 , MPENoteEvent> notes;
     DAWTransportData* dawTransportData;

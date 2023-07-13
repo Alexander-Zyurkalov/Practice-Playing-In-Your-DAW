@@ -9,8 +9,7 @@ MyMPEInstrumentListener::MyMPEInstrumentListener(DAWTransportData *transportData
 void MyMPEInstrumentListener::noteAdded(juce::MPENote newNote) {
     MPENoteEvent mpeNoteEvent{newNote};
     mpeNoteEvent.setPpqStartPosition(dawTransportData->getPpqPosition());
-    notes.emplace(newNote.noteID,
-                    MPENoteEvent{newNote});
+    notes.emplace(newNote.noteID, MPENoteEvent{newNote});
 
 }
 
@@ -31,4 +30,13 @@ void MyMPEInstrumentListener::noteReleased(juce::MPENote finishedNote) {
 }
 
 void MyMPEInstrumentListener::zoneLayoutChanged() {
+}
+
+std::vector<MPENoteEvent> MyMPEInstrumentListener::createNoteEventVector() {
+    std::vector<MPENoteEvent> noteEventVector;
+    noteEventVector.reserve(notes.size());
+    for (auto& note: notes) {
+        noteEventVector.push_back(note.second);
+    }
+    return noteEventVector;
 }

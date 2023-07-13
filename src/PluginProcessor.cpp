@@ -148,6 +148,13 @@ void AudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
 
         mpeInstrument.processNextMidiEvent(message);
     }
+    loopsCounter++;
+    if (loopsCounter > 30)
+    {
+        std::unique_lock<std::mutex> lock(noteEventVectorMutex);
+        loopsCounter = 0;
+        noteEventVector = mpeInstrumentListener.createNoteEventVector();
+    }
 
 
 
@@ -156,7 +163,7 @@ void AudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
     double ppqEnd = 0;
     double ppqPosition = 0;
 
-    if (juce::JUCEApplicationBase::isStandaloneApp() || timeSignatureBlockCounter < 10)
+    if (juce::JUCEApplicationBase::isStandaloneApp() )
         return;
     // Get the current position information from the host
     if (auto* playHead = getPlayHead())
@@ -232,5 +239,10 @@ DAWTransportData AudioPluginAudioProcessor::getDAWTransportData()
 {
     std::lock_guard<std::mutex> lock{timeSignatureMutex};
     return dawTransportData;
+}
+
+std::vector<MPENoteEvent> AudioPluginAudioProcessor::getNoteEventVector() {
+    std::lock_guard<std::mutex> lock{noteEventVectorMutex};
+    return noteEventVector;
 }
 
