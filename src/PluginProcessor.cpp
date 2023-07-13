@@ -171,22 +171,22 @@ void AudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
             ppqStart = positionInfo->getLoopPoints()->ppqStart;
             ppqEnd = positionInfo->getLoopPoints()->ppqEnd;
         }
-        if (timeSignature.changed(ppqPosition, ppqStart, ppqEnd))
+        if (dawTransportData.changed(ppqPosition, ppqStart, ppqEnd))
         {
             {
                 std::lock_guard<std::mutex> lock(timeSignatureMutex);
-                timeSignature.set(ppqPosition, ppqStart, ppqEnd);
+                dawTransportData.set(ppqPosition, ppqStart, ppqEnd);
             }
             sendChangeMessage();
         }
 
 
-        if (timeSignature.changed(positionInfo->getTimeSignature()->numerator, positionInfo->getTimeSignature()->denominator))
+        if (dawTransportData.changed(positionInfo->getTimeSignature()->numerator, positionInfo->getTimeSignature()->denominator))
         {
             {
                 std::lock_guard<std::mutex> lock(timeSignatureMutex);
-                timeSignature.set(positionInfo->getTimeSignature()->numerator,
-                                  positionInfo->getTimeSignature()->denominator);
+                dawTransportData.set(positionInfo->getTimeSignature()->numerator,
+                                     positionInfo->getTimeSignature()->denominator);
             }
             sendChangeMessage();
         }
@@ -231,6 +231,6 @@ juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 DAWTransportData AudioPluginAudioProcessor::getDAWTransportData()
 {
     std::lock_guard<std::mutex> lock{timeSignatureMutex};
-    return timeSignature;
+    return dawTransportData;
 }
 

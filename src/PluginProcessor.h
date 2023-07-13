@@ -49,10 +49,10 @@ public:
     DAWTransportData getDAWTransportData() ;
 
 private:
-    DAWTransportData timeSignature;
+    DAWTransportData dawTransportData;
     std::mutex timeSignatureMutex;
     juce::MPEInstrument mpeInstrument;
-    MyMPEInstrumentListener mpeInstrumentListener;
+    MyMPEInstrumentListener mpeInstrumentListener{&dawTransportData};
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AudioPluginAudioProcessor)
     int timeSignatureBlockCounter = 0;

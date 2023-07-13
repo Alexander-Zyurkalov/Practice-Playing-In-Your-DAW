@@ -6,9 +6,14 @@
 #define PRACTICEPLAYINGINDAW_MYMPEINSTRUMENTLISTENER_H
 #include <juce_audio_basics/juce_audio_basics.h>
 #include "MPENoteEvent.h"
+#include "DAWTransportData.h"
 
 class MyMPEInstrumentListener: public juce::MPEInstrument::Listener {
 public:
+
+    explicit MyMPEInstrumentListener(DAWTransportData* transportData);
+    MyMPEInstrumentListener() = delete;
+
     void noteAdded(juce::MPENote newNote) override;
 
     ~MyMPEInstrumentListener() override = default;
@@ -27,6 +32,7 @@ public:
 
 private:
     std::unordered_map<juce::uint16 , MPENoteEvent> notes;
+    DAWTransportData* dawTransportData;
 };
 
 
