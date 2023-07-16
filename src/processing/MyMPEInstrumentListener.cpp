@@ -7,9 +7,11 @@
 MyMPEInstrumentListener::MyMPEInstrumentListener(DAWTransportData *transportData): dawTransportData(transportData) {}
 
 void MyMPEInstrumentListener::noteAdded(juce::MPENote newNote) {
-    MPENoteEvent mpeNoteEvent{newNote};
+    MPENoteEvent mpeNoteEvent{newNote, noteEventVector.size()};
     mpeNoteEvent.setPpqStartPosition(dawTransportData->getPpqPosition());
-    notes[newNote.noteID] = mpeNoteEvent;
+    notes.emplace(newNote.noteID, mpeNoteEvent);
+    noteEventVector.push_back(mpeNoteEvent);
+
 }
 
 void MyMPEInstrumentListener::notePressureChanged(juce::MPENote changedNote) {
@@ -25,17 +27,15 @@ void MyMPEInstrumentListener::noteKeyStateChanged(juce::MPENote changedNote) {
 }
 
 void MyMPEInstrumentListener::noteReleased(juce::MPENote finishedNote) {
-    notes.at(finishedNote.noteID).setPpqReleasePosition(dawTransportData->getPpqPosition());
+    MPENoteEvent &event = notes.at(finishedNote.noteID);
+    double position = dawTransportData->getPpqPosition();
+    event.setPpqReleasePosition(position);
+    noteEventVector[event.getNoteIndex()].setPpqReleasePosition(position);
 }
 
 void MyMPEInstrumentListener::zoneLayoutChanged() {
 }
 
 std::vector<MPENoteEvent> MyMPEInstrumentListener::createNoteEventVector() {
-    std::vector<MPENoteEvent> noteEventVector;
-    noteEventVector.reserve(notes.size());
-    for (auto& note: notes) {
-        noteEventVector.push_back(note.second);
-    }
     return noteEventVector;
 }

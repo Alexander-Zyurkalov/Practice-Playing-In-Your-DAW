@@ -9,9 +9,9 @@
 class MPENoteEvent
 {
 public:
-    explicit MPENoteEvent(const juce::MPENote& note) : mpeNote(note) {}
+    explicit MPENoteEvent(const juce::MPENote& note, size_t index) : mpeNote(note), noteIndex{index} {}
 
-    MPENoteEvent() = default;
+    MPENoteEvent() = delete;
 
     bool isPlaying() const
     {
@@ -46,10 +46,17 @@ public:
     {
         return juce::MidiMessage::getMidiNoteName(mpeNote.initialNote, true, true, 3);
     }
+
+    size_t getNoteIndex() const {
+        return noteIndex;
+    }
+
+
 private:
     juce::MPENote mpeNote;
     double ppqStartPosition{0};
     double ppqReleasePosition{0};
+    size_t noteIndex{0};
 
 };
 
