@@ -158,7 +158,7 @@ void AudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
 
 
 
-    timeSignatureBlockCounter++;
+    positionChangeCounter++;
     double ppqStart = 0;
     double ppqEnd = 0;
     double ppqPosition = 0;
@@ -168,7 +168,7 @@ void AudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
     // Get the current position information from the host
     if (auto* playHead = getPlayHead())
     {
-        timeSignatureBlockCounter = 0;
+
         juce::Optional<juce::AudioPlayHead::PositionInfo> positionInfo = playHead->getPosition();
 
 
@@ -177,13 +177,17 @@ void AudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
             ppqStart = positionInfo->getLoopPoints()->ppqStart;
             ppqEnd = positionInfo->getLoopPoints()->ppqEnd;
         }
-        if (dawTransportData.changed(ppqPosition, ppqStart, ppqEnd))
+        mpeInstrumentListener.updateNotes();
+
+        if (positionChangeCounter > 5 &&
+            dawTransportData.changed(ppqPosition, ppqStart, ppqEnd))
         {
             {
                 std::lock_guard<std::mutex> lock(timeSignatureMutex);
                 dawTransportData.set(ppqPosition, ppqStart, ppqEnd);
             }
             sendChangeMessage();
+            positionChangeCounter = 0;
         }
 
 

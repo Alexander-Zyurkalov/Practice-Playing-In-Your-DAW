@@ -13,10 +13,6 @@ public:
 
     MPENoteEvent() = delete;
 
-    bool isPlaying() const
-    {
-        return ppqReleasePosition < ppqStartPosition;
-    }
     void setPpqReleasePosition(const double position)
     {
         ppqReleasePosition = position;
