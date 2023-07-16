@@ -25,7 +25,9 @@ target_sources(PracticePlayingInDAW PRIVATE
         src/gui/NoteGrid.cpp
         src/gui/TimeSignaturePanel.cpp
         src/gui/NoteBars.cpp
+        src/gui/RecordButtonLookAndFeel.cpp
         src/processing/MyMPEInstrumentListener.cpp
+
 )
 
 target_compile_definitions(PracticePlayingInDAW

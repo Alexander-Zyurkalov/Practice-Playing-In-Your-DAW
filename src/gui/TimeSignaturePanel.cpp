@@ -3,6 +3,7 @@
 //
 
 #include "TimeSignaturePanel.h"
+#include "RecordButtonLookAndFeel.h"
 
 TimeSignaturePanel::TimeSignaturePanel(NoteGrid& nGrid) :
         noteGrid{nGrid}
@@ -29,6 +30,11 @@ TimeSignaturePanel::TimeSignaturePanel(NoteGrid& nGrid) :
     numBarsBox.setValue(16);
     numBarsBox.onValueChange = [this] { timeSignatureChanged(); };
 
+
+    recordButton.setLookAndFeel(&recordButtonLookAndFeel);
+    recordButton.setClickingTogglesState(true);
+    addAndMakeVisible(recordButton);
+
     if (!juce::JUCEApplicationBase::isStandaloneApp())
     {
         timeSigNumeratorBox.setEnabled(false);
@@ -46,12 +52,15 @@ void TimeSignaturePanel::resized()
             juce::Grid::TrackInfo(juce::Grid::Fr(1)),
             juce::Grid::TrackInfo(juce::Grid::Px(100)),
             juce::Grid::TrackInfo(juce::Grid::Fr(1)),
-            juce::Grid::TrackInfo(juce::Grid::Fr(2)) };
+            juce::Grid::TrackInfo(juce::Grid::Px(50)),
+    };
 
     grid.items = {
             juce::GridItem(timeSigNumeratorBox).withMargin(juce::GridItem::Margin(0,10,0,0)),
             juce::GridItem(timeSigDenominatorBox).withMargin(juce::GridItem::Margin(0,10,0,10)),
-            juce::GridItem(numBarsBox).withMargin(juce::GridItem::Margin(0,10,0,10)) };
+            juce::GridItem(numBarsBox).withMargin(juce::GridItem::Margin(0,10,0,10)),
+            juce::GridItem(&recordButton).withMargin(juce::GridItem::Margin(0,10,0,10))
+    };
     grid.performLayout(getLocalBounds());
 }
 

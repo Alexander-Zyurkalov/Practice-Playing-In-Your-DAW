@@ -6,6 +6,7 @@
 
 #include <juce_gui_basics/juce_gui_basics.h>
 #include "NoteGrid.h"
+#include "RecordButtonLookAndFeel.h"
 
 class TimeSignaturePanel : public juce::Component
 {
@@ -28,8 +29,10 @@ private:
 
     juce::Slider timeSigNumeratorBox;
     juce::ComboBox timeSigDenominatorBox;
+    RecordButtonLookAndFeel recordButtonLookAndFeel;
     juce::Slider numBarsBox;
     NoteGrid& noteGrid;
+    juce::TextButton recordButton;
 
 };
 
