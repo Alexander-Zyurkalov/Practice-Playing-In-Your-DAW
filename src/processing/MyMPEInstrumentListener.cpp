@@ -31,6 +31,7 @@ void MyMPEInstrumentListener::noteReleased(juce::MPENote finishedNote) {
     double position = dawTransportData->getPpqPosition();
     event.setPpqReleasePosition(position);
     noteEventVector[event.getNoteIndex()].setPpqReleasePosition(position);
+    notes.erase(finishedNote.noteID);
 }
 
 void MyMPEInstrumentListener::zoneLayoutChanged() {

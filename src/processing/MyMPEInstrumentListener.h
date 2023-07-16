@@ -36,6 +36,8 @@ private:
     std::unordered_map<juce::uint16 , MPENoteEvent> notes;
     DAWTransportData* dawTransportData;
     std::vector<MPENoteEvent> noteEventVector{};
+    std::map<double, MPENoteEvent*> noteEventBeginnings;
+    std::map<double, MPENoteEvent*> noteEventEndings;
 };
 
 
