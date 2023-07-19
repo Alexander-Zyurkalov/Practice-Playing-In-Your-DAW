@@ -4,7 +4,7 @@
 
 //==============================================================================
 AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor (AudioPluginAudioProcessor& p)
-    : AudioProcessorEditor (&p), processorRef (p), noteGrid(viewport), timeSigPanel(noteGrid)
+    : AudioProcessorEditor (&p), processorRef (p), noteGrid(viewport), timeSigPanel(noteGrid, &p)
 {
     juce::ignoreUnused (processorRef);
     setSize (1200, 600);

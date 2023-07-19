@@ -249,3 +249,11 @@ std::vector<MPENoteEvent> AudioPluginAudioProcessor::getNoteEventVector() {
     return noteEventVector;
 }
 
+void AudioPluginAudioProcessor::toggleRecording() {
+    mpeInstrumentListener.toggleRecording();
+}
+
+bool AudioPluginAudioProcessor::isRecording() const {
+    return mpeInstrumentListener.isRecording();
+}
+

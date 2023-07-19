@@ -8,10 +8,11 @@
 #include "NoteGrid.h"
 #include "RecordButtonLookAndFeel.h"
 
-class TimeSignaturePanel : public juce::Component
+class TimeSignaturePanel : public juce::Component, public juce::Button::Listener
 {
 public:
-    TimeSignaturePanel(NoteGrid& nGrid);
+    TimeSignaturePanel(NoteGrid& nGrid, AudioPluginAudioProcessor* audioProcessor);
+    TimeSignaturePanel() = delete;
 
     void resized() override;
 
@@ -23,6 +24,8 @@ public:
 
     void newNumBars(int numBars);
 
+    void buttonClicked(juce::Button *button) override;
+
 private:
     juce::Label timeSigLabel;
     juce::Label numBarsLabel;
@@ -33,6 +36,7 @@ private:
     juce::Slider numBarsBox;
     NoteGrid& noteGrid;
     juce::TextButton recordButton;
+    AudioPluginAudioProcessor* audioPluginAudioProcessor;
 
 };
 

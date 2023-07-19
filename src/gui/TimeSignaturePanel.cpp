@@ -5,8 +5,8 @@
 #include "TimeSignaturePanel.h"
 #include "RecordButtonLookAndFeel.h"
 
-TimeSignaturePanel::TimeSignaturePanel(NoteGrid& nGrid) :
-        noteGrid{nGrid}
+TimeSignaturePanel::TimeSignaturePanel(NoteGrid& nGrid, AudioPluginAudioProcessor* audioProcessor) :
+        noteGrid{nGrid}, audioPluginAudioProcessor{audioProcessor}
 {
     addAndMakeVisible(timeSigNumeratorBox);
     timeSigNumeratorBox.setRange(1, 64, 1);
@@ -33,6 +33,9 @@ TimeSignaturePanel::TimeSignaturePanel(NoteGrid& nGrid) :
 
     recordButton.setLookAndFeel(&recordButtonLookAndFeel);
     recordButton.setClickingTogglesState(true);
+    recordButton.addListener(this);
+    recordButton.setToggleState(audioPluginAudioProcessor->isRecording(),
+                                juce::NotificationType::dontSendNotification);
     addAndMakeVisible(recordButton);
 
     if (!juce::JUCEApplicationBase::isStandaloneApp())
@@ -108,4 +111,8 @@ void TimeSignaturePanel::newTimeSignature(int num, int denom) {
 
 void TimeSignaturePanel::newNumBars(int numBars) {
     numBarsBox.setValue(numBars, juce::dontSendNotification);
+}
+
+void TimeSignaturePanel::buttonClicked(juce::Button *button) {
+    audioPluginAudioProcessor->toggleRecording();
 }

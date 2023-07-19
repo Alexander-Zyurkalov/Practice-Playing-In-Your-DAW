@@ -50,6 +50,9 @@ public:
 
     std::vector<MPENoteEvent> getNoteEventVector();
 
+    void toggleRecording();
+    bool isRecording() const;
+
 private:
     DAWTransportData dawTransportData;
     std::mutex timeSignatureMutex;
