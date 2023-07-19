@@ -26,6 +26,8 @@ public:
 
     void buttonClicked(juce::Button *button) override;
 
+    void updateButtonState();
+
 private:
     juce::Label timeSigLabel;
     juce::Label numBarsLabel;

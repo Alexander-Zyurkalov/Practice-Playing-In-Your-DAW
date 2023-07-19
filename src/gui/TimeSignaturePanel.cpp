@@ -116,3 +116,8 @@ void TimeSignaturePanel::newNumBars(int numBars) {
 void TimeSignaturePanel::buttonClicked(juce::Button *button) {
     audioPluginAudioProcessor->toggleRecording();
 }
+
+void TimeSignaturePanel::updateButtonState() {
+    recordButton.setToggleState(audioPluginAudioProcessor->isRecording(),
+                                juce::NotificationType::dontSendNotification);
+}

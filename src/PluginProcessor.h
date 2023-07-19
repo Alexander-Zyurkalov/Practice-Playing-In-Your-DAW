@@ -62,8 +62,9 @@ private:
     std::vector<MPENoteEvent> noteEventVector;
     std::mutex noteEventVectorMutex;
     size_t loopsCounter = 0;
+    int positionChangeCounter = 0;
+    double prevPpqPosition = 0;
 
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AudioPluginAudioProcessor)
-    int positionChangeCounter = 0;
 };

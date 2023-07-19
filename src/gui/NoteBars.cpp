@@ -49,6 +49,8 @@ juce::Rectangle<int> NoteBars::getNoteRectangle(const MPENoteEvent &note)
     double ppqStartPosition = note.getPpqStartPosition() - dawTransportData.getPpqStartLoopPosition();
     double ppqReleasePosition =  note.getPpqReleasePosition() - dawTransportData.getPpqStartLoopPosition();
     double noteLength = ppqReleasePosition - ppqStartPosition;
+    if (noteLength <= 0.0)
+        noteLength = 1.0/8;
     auto noteX = static_cast<float>(ppqStartPosition * pixelsPerQuarterNote);
     const int numPitches = 128;
     float noteHeight = (float)getHeight() / numPitches;
