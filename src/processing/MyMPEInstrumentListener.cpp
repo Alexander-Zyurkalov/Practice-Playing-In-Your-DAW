@@ -4,13 +4,21 @@
 
 #include "MyMPEInstrumentListener.h"
 
+ double MyMPEInstrumentListener::roundPpqPosition(double ppqPosition)  {
+    double d = round(ppqPosition * 256) / 256;
+    return d;
+}
+
 MyMPEInstrumentListener::MyMPEInstrumentListener(DAWTransportData *transportData): dawTransportData(transportData) {}
 
 void MyMPEInstrumentListener::noteAdded(juce::MPENote newNote) {
     if (!recording)
         return;
     MPENoteEvent mpeNoteEvent{newNote, noteEventVector.size()};
-    mpeNoteEvent.setPpqStartPosition(dawTransportData->getPpqPositionNotSynced());
+    double position = dawTransportData->getPpqPositionNotSynced();
+    position = roundPpqPosition(position);
+    mpeNoteEvent.setPpqStartPosition(position);
+
     if (unfinishedNotes.find(newNote.noteID) != unfinishedNotes.end()) {
         noteReleased(unfinishedNotes.find(newNote.noteID)->second.getMpeNote());
     }
@@ -35,7 +43,8 @@ void MyMPEInstrumentListener::noteReleased(juce::MPENote finishedNote) {
     if (unfinishedNotes.find(finishedNote.noteID) == unfinishedNotes.end())
         return;
     MPENoteEvent &event = unfinishedNotes.at(finishedNote.noteID);
-    double position = dawTransportData->getPpqPosition();
+    double position = dawTransportData->getPpqPositionNotSynced();
+    position = roundPpqPosition(position);
     event.setPpqReleasePosition(position);
     if (event.getNoteIndex() < noteEventVector.size())
         noteEventVector[event.getNoteIndex()] = event;
@@ -56,11 +65,13 @@ void MyMPEInstrumentListener::updateNotes(double ppqPosition) {
         clearRecordedNotes();
         justStartedRecording = false;
     }
+    ppqPosition = roundPpqPosition(ppqPosition);
     for(auto &note: unfinishedNotes) {
             note.second.setPpqReleasePosition(ppqPosition);
             noteEventVector[note.second.getNoteIndex()] = note.second;
     }
 }
+
 
 void MyMPEInstrumentListener::toggleRecording() {
     if (!recording)

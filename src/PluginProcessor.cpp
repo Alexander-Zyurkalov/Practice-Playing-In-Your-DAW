@@ -187,7 +187,7 @@ void AudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
             dawTransportData.changed(ppqPosition, ppqStart, ppqEnd))
         {
             {
-                std::lock_guard<std::mutex> lock(timeSignatureMutex);
+                std::lock_guard<std::mutex> lock(dawTransportDataMutex);
                 dawTransportData.set(ppqPosition, ppqStart, ppqEnd);
             }
             sendChangeMessage();
@@ -198,13 +198,21 @@ void AudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
         if (dawTransportData.changed(positionInfo->getTimeSignature()->numerator, positionInfo->getTimeSignature()->denominator))
         {
             {
-                std::lock_guard<std::mutex> lock(timeSignatureMutex);
+                std::lock_guard<std::mutex> lock(dawTransportDataMutex);
                 dawTransportData.set(positionInfo->getTimeSignature()->numerator,
                                      positionInfo->getTimeSignature()->denominator);
             }
             sendChangeMessage();
         }
 
+        if (dawTransportData.bpmChanged(*positionInfo->getBpm()))
+        {
+            {
+                std::lock_guard<std::mutex> lock(dawTransportDataMutex);
+                dawTransportData.setBpm(*positionInfo->getBpm());
+            }
+            sendChangeMessage();
+        }
 
         double maxPpq = (double) dawTransportData.getNumerator() * 4 / dawTransportData.getDenominator();
         const bool cursorReachedLoopEnd =
@@ -254,7 +262,7 @@ juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 
 DAWTransportData AudioPluginAudioProcessor::getDAWTransportData()
 {
-    std::lock_guard<std::mutex> lock{timeSignatureMutex};
+    std::lock_guard<std::mutex> lock{dawTransportDataMutex};
     return dawTransportData;
 }
 

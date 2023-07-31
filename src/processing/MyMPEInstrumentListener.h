@@ -46,6 +46,8 @@ private:
     std::vector<MPENoteEvent> noteEventVector{};
     bool recording{false};
     bool justStartedRecording{false};
+
+    double roundPpqPosition(double ppqPosition);
 };
 
 

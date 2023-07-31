@@ -6,6 +6,7 @@
 #define PRACTICEPLAYINGINDAW_DAWTRANSPORTDATA_H
 
 #include <juce_audio_processors/juce_audio_processors.h>
+#include <chrono>
 
 class DAWTransportData
 {
@@ -61,13 +62,27 @@ public:
     }
 
     double getPpqPositionNotSynced() const {
-        return ppqPositionNotSynced;
+        auto now = std::chrono::high_resolution_clock::now();
+        std::chrono::duration<double, std::ratio<60, 1>> diff = now - ppqPositionNotSyncedTimeUpdate;
+
+        double ppq = bpm * diff.count();
+        return ppqPositionNotSynced + ppq;
     }
 
     void setPpqPositionNotSynced(double ppqPosition) {
         ppqPositionNotSynced = ppqPosition;
+        ppqPositionNotSyncedTimeUpdate = std::chrono::high_resolution_clock::now();
     }
 
+    bool bpmChanged(double bpm) const
+    {
+        return this->bpm != bpm;
+    }
+
+    void setBpm(double bpm)
+    {
+        this->bpm = bpm;
+    }
 private:
     int numerator;
     int denominator;
@@ -75,8 +90,9 @@ private:
     double ppqStartLoopPosition = 0.0;
     double ppqEndLoopPosition = 16.0;
     double ppqPositionNotSynced = 0.0;
+    double bpm = 120.0;
+    std::chrono::high_resolution_clock::time_point ppqPositionNotSyncedTimeUpdate{std::chrono::high_resolution_clock::now()} ;
 
-    //TODO: we also need to know whether the transport is playing or not
 };
 
 #endif //PRACTICEPLAYINGINDAW_DAWTRANSPORTDATA_H

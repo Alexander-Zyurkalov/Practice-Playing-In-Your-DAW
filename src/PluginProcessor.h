@@ -55,7 +55,7 @@ public:
 
 private:
     DAWTransportData dawTransportData;
-    std::mutex timeSignatureMutex;
+    std::mutex dawTransportDataMutex;
     juce::MPEInstrument mpeInstrument;
     MyMPEInstrumentListener mpeInstrumentListener{&dawTransportData};
 
