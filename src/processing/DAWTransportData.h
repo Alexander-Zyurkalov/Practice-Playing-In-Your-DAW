@@ -60,13 +60,21 @@ public:
         return ppqEndLoopPosition;
     }
 
+    double getPpqPositionNotSynced() const {
+        return ppqPositionNotSynced;
+    }
+
+    void setPpqPositionNotSynced(double ppqPosition) {
+        ppqPositionNotSynced = ppqPosition;
+    }
+
 private:
     int numerator;
     int denominator;
     double ppqPosition = 0.0;
     double ppqStartLoopPosition = 0.0;
     double ppqEndLoopPosition = 16.0;
-
+    double ppqPositionNotSynced = 0.0;
 
     //TODO: we also need to know whether the transport is playing or not
 };

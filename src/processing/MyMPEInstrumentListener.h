@@ -32,7 +32,7 @@ public:
 
     std::vector<MPENoteEvent> createNoteEventVector();
 
-    void updateNotes();
+    void updateNotes(double ppqPosition);
 
     void toggleRecording();
     bool isRecording() const;

@@ -181,6 +181,7 @@ void AudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
             ppqEnd = positionInfo->getLoopPoints()->ppqEnd;
         }
         ppqPosition = *positionInfo->getPpqPosition();
+        dawTransportData.setPpqPositionNotSynced(ppqPosition);
 
         if (positionChangeCounter > 5 &&
             dawTransportData.changed(ppqPosition, ppqStart, ppqEnd))
@@ -212,7 +213,7 @@ void AudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
         if (isRecording() && (cursorReachedLoopEnd || cursorReachedTheEndOfTheBar) && !mpeInstrumentListener.isJustStartedRecording())
             toggleRecording();
         prevPpqPosition = ppqPosition;
-        mpeInstrumentListener.updateNotes();
+        mpeInstrumentListener.updateNotes(ppqPosition);
     }
 }
 

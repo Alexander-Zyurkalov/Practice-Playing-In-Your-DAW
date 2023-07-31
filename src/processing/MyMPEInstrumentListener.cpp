@@ -10,7 +10,7 @@ void MyMPEInstrumentListener::noteAdded(juce::MPENote newNote) {
     if (!recording)
         return;
     MPENoteEvent mpeNoteEvent{newNote, noteEventVector.size()};
-    mpeNoteEvent.setPpqStartPosition(dawTransportData->getPpqPosition());
+    mpeNoteEvent.setPpqStartPosition(dawTransportData->getPpqPositionNotSynced());
     if (unfinishedNotes.find(newNote.noteID) != unfinishedNotes.end()) {
         noteReleased(unfinishedNotes.find(newNote.noteID)->second.getMpeNote());
     }
@@ -49,16 +49,15 @@ std::vector<MPENoteEvent> MyMPEInstrumentListener::createNoteEventVector() {
     return noteEventVector;
 }
 
-void MyMPEInstrumentListener::updateNotes() {
+void MyMPEInstrumentListener::updateNotes(double ppqPosition) {
     if (justStartedRecording ){
         auto& td = dawTransportData;
 
         clearRecordedNotes();
         justStartedRecording = false;
     }
-    double position = dawTransportData->getPpqPosition();
     for(auto &note: unfinishedNotes) {
-            note.second.setPpqReleasePosition(position);
+            note.second.setPpqReleasePosition(ppqPosition);
             noteEventVector[note.second.getNoteIndex()] = note.second;
     }
 }
