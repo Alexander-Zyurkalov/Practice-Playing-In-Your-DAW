@@ -37,11 +37,14 @@ public:
     void toggleRecording();
     bool isRecording() const;
 
+    void clearRecordedNotes();
+
 private:
-    std::unordered_map<juce::uint16 , MPENoteEvent> recordedNotes;
+    std::unordered_map<juce::uint16 , MPENoteEvent> unfinishedNotes;
     DAWTransportData* dawTransportData;
     std::vector<MPENoteEvent> noteEventVector{};
     bool recording{false};
+    bool clearBeforeRecording{true};
 };
 
 
