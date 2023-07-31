@@ -172,19 +172,15 @@ void AudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
         juce::Optional<juce::AudioPlayHead::PositionInfo> positionInfo = playHead->getPosition();
 
 
+        if (isRecording()  && !positionInfo->getIsPlaying() && playHead->canControlTransport())
+            playHead->transportPlay(true);
 
-        ppqPosition = *positionInfo->getPpqPosition();
-        if (prevPpqPosition > ppqPosition && isRecording()) {
-            toggleRecording();
-            //TODO: clear the notes if we start recording
-        }
-        prevPpqPosition = ppqPosition;
 
         if (positionInfo->getIsLooping()) {
             ppqStart = positionInfo->getLoopPoints()->ppqStart;
             ppqEnd = positionInfo->getLoopPoints()->ppqEnd;
         }
-        mpeInstrumentListener.updateNotes();
+        ppqPosition = *positionInfo->getPpqPosition();
 
         if (positionChangeCounter > 5 &&
             dawTransportData.changed(ppqPosition, ppqStart, ppqEnd))
@@ -207,6 +203,16 @@ void AudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
             }
             sendChangeMessage();
         }
+
+
+        double maxPpq = (double) dawTransportData.getNumerator() * 4 / dawTransportData.getDenominator();
+        const bool cursorReachedLoopEnd =
+                positionInfo->getIsLooping() && prevPpqPosition > ppqPosition  && prevPpqPosition > ppqEnd - 1;
+        const bool cursorReachedTheEndOfTheBar = !positionInfo->getIsLooping() && ppqPosition >= maxPpq;
+        if (isRecording() && (cursorReachedLoopEnd || cursorReachedTheEndOfTheBar) && !mpeInstrumentListener.isJustStartedRecording())
+            toggleRecording();
+        prevPpqPosition = ppqPosition;
+        mpeInstrumentListener.updateNotes();
     }
 }
 

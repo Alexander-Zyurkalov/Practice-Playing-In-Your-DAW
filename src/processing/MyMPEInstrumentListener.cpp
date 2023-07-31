@@ -50,18 +50,11 @@ std::vector<MPENoteEvent> MyMPEInstrumentListener::createNoteEventVector() {
 }
 
 void MyMPEInstrumentListener::updateNotes() {
-    if (clearBeforeRecording){
+    if (justStartedRecording ){
         auto& td = dawTransportData;
-        auto iter = std::remove_if(noteEventVector.begin(), noteEventVector.end(),
-               [&td](auto& note)
-               {
 
-                    return (note.getPpqStartPosition() >= td->getPpqPosition()) &&
-                            (note.getPpqStartPosition() <= td->getPpqEndLoopPosition());
-               }
-        );
-        noteEventVector.erase(iter);
-        clearBeforeRecording = false;
+        clearRecordedNotes();
+        justStartedRecording = false;
     }
     double position = dawTransportData->getPpqPosition();
     for(auto &note: unfinishedNotes) {
@@ -72,7 +65,7 @@ void MyMPEInstrumentListener::updateNotes() {
 
 void MyMPEInstrumentListener::toggleRecording() {
     if (!recording)
-        clearBeforeRecording = true;
+        justStartedRecording = true;
     recording = !recording;
 }
 
@@ -84,3 +77,8 @@ void MyMPEInstrumentListener::clearRecordedNotes() {
     noteEventVector.clear();
     unfinishedNotes.clear();
 }
+
+bool MyMPEInstrumentListener::isJustStartedRecording() const {
+    return justStartedRecording;
+}
+

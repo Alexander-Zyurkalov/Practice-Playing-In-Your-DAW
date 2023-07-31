@@ -36,6 +36,7 @@ public:
 
     void toggleRecording();
     bool isRecording() const;
+    bool isJustStartedRecording() const;
 
     void clearRecordedNotes();
 
@@ -44,7 +45,7 @@ private:
     DAWTransportData* dawTransportData;
     std::vector<MPENoteEvent> noteEventVector{};
     bool recording{false};
-    bool clearBeforeRecording{true};
+    bool justStartedRecording{false};
 };
 
 
