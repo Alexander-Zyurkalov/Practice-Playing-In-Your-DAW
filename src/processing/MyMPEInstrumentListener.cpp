@@ -5,7 +5,7 @@
 #include "MyMPEInstrumentListener.h"
 
  double MyMPEInstrumentListener::roundPpqPosition(double ppqPosition)  {
-    double d = round(ppqPosition * 256) / 256;
+    double d = ceil(ppqPosition * 128.0) / 128.0;
     return d;
 }
 
