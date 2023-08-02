@@ -17,7 +17,6 @@ public:
 
     void setPlayedNoteEvent(const MPENoteEvent& noteEvent);
 
-
     void setPpqReleasePosition(const double position);
 
     double getPpqStartPosition() const;
@@ -35,6 +34,14 @@ public:
     ~MPENoteEvent() = default;
 
     MPENoteEvent& operator=(const MPENoteEvent& other);
+    
+    bool playedNoteIsTheSame() const;
+
+    float getPlayedNoteStartPositionShift() const;
+
+    bool thereIsPlayedNote() const;
+
+    const MPENoteEvent getPlayedNote() const;
 
 private:
 

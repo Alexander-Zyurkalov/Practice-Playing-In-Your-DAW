@@ -24,10 +24,18 @@ void NoteBars::paint(juce::Graphics& g)
 
         const juce::Rectangle<int>& rectangle = getNoteRectangle(note);
 
-        g.setColour( juce::Colours::lightskyblue);
+        if (note.thereIsPlayedNote())
+        {
+            float hue = (1.0f - std::abs(note.getPlayedNoteStartPositionShift())) * 120.0f;
+            g.setColour(juce::Colour::fromHSV(hue/360.0f, 1.0f, 0.7f, 1.0f));
+        }
+        else
+            g.setColour(juce::Colours::lightskyblue);
         g.fillRect(rectangle);
         g.setColour(juce::Colours::black);
         g.drawRect(rectangle, 1);
+        if (note.thereIsPlayedNote())
+            g.drawRect(getNoteRectangle(note.getPlayedNote()), 1);
 
         const juce::Rectangle<int> &widthOfText = rectangle.withWidth(rectangle.getHeight()+10);
 

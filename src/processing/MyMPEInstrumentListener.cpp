@@ -20,6 +20,7 @@ void MyMPEInstrumentListener::noteAdded(juce::MPENote newNote) {
     MPENoteEvent mpeNoteEvent{newNote, noteEventVector.size()};
     double position = dawTransportData->getPpqPositionNotSynced();
     position = roundPpqPosition(position);
+    mpeNoteEvent.setPlayedNoteEvent(mpeNoteEvent); //TODO: temporary
     mpeNoteEvent.setPpqStartPosition(position);
 
     if (unfinishedNotes.find(newNote.noteID) != unfinishedNotes.end()) {

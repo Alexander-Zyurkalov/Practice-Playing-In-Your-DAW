@@ -17,8 +17,10 @@ void MPENoteEvent::setPlayedNoteEvent(const MPENoteEvent &noteEvent)
 {
     playedNote = std::make_unique<MPENoteEvent>(noteEvent);
     // temporary just  slightly shift ppqStartPosition to the left and ppqReleasePosition to the right
-    playedNote->setPpqStartPosition(ppqStartPosition - 0.1);
-    playedNote->setPpqReleasePosition(ppqReleasePosition + 0.1);
+    //random shift to the left within quarter note
+    const double shift = juce::Random::getSystemRandom().nextDouble() * 2.0 - 1.0;
+    playedNote->setPpqStartPosition(ppqStartPosition + shift);
+    playedNote->setPpqReleasePosition(ppqStartPosition + 1.0);
 }
 
 void MPENoteEvent::setPpqReleasePosition(const double position)
@@ -27,7 +29,8 @@ void MPENoteEvent::setPpqReleasePosition(const double position)
     // temporary set ppqReleasePosition for playedNote slightly to the right
     if (playedNote)
     {
-        playedNote->setPpqReleasePosition(position + 0.1);
+        const double shift = juce::Random::getSystemRandom().nextDouble() * 2.0 - 1.0;
+        playedNote->setPpqReleasePosition(position + shift);
     }
 
 }
@@ -52,7 +55,8 @@ void MPENoteEvent::setPpqStartPosition(const double position)
     // temporary set ppqStartPosition for playedNote slightly to the left
     if (playedNote)
     {
-        playedNote->setPpqStartPosition(position - 0.1);
+        const double shift = juce::Random::getSystemRandom().nextDouble() * 2.0 - 1.0;
+        playedNote->setPpqStartPosition(position + shift);
     }
     ppqStartPosition = position;
 }
@@ -82,4 +86,30 @@ MPENoteEvent &MPENoteEvent::operator=(const MPENoteEvent &other)
         playedNote = std::make_unique<MPENoteEvent>(*other.playedNote);
     }
     return *this;
+}
+
+bool MPENoteEvent::playedNoteIsTheSame() const
+{
+    if (playedNote)
+    {
+        return playedNote->getMpeNote() == mpeNote &&
+               std::abs(playedNote->getPpqStartPosition() - ppqStartPosition) < 1.0/128.0 &&
+               std::abs(playedNote->getPpqReleasePosition() - ppqReleasePosition) < 1.0/128.0;
+    }
+    return true;
+}
+
+float MPENoteEvent::getPlayedNoteStartPositionShift() const
+{
+    return std::clamp(static_cast<float>(ppqStartPosition - playedNote->getPpqStartPosition()),-1.0f,1.0f);
+}
+
+bool MPENoteEvent::thereIsPlayedNote() const
+{
+    return playedNote != nullptr;
+}
+
+const MPENoteEvent MPENoteEvent::getPlayedNote() const
+{
+    return playedNote ? *playedNote : MPENoteEvent(mpeNote, noteIndex);
 }
