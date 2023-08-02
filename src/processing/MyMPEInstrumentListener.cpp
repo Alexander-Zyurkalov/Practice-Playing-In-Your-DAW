@@ -13,7 +13,10 @@ MyMPEInstrumentListener::MyMPEInstrumentListener(DAWTransportData *transportData
 
 void MyMPEInstrumentListener::noteAdded(juce::MPENote newNote) {
     if (!recording)
+    {
+
         return;
+    }
     MPENoteEvent mpeNoteEvent{newNote, noteEventVector.size()};
     double position = dawTransportData->getPpqPositionNotSynced();
     position = roundPpqPosition(position);
