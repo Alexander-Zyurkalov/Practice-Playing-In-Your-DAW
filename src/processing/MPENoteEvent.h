@@ -13,86 +13,28 @@ public:
 
     MPENoteEvent() = delete;
 
-    MPENoteEvent(const MPENoteEvent& other) : mpeNote(other.mpeNote), ppqStartPosition(other.ppqStartPosition),
-                                              ppqReleasePosition(other.ppqReleasePosition), noteIndex{other.noteIndex}
-    {
-        if (other.playedNote)
-        {
-            playedNote = std::make_unique<MPENoteEvent>(*other.playedNote);
-        }
-    }
+    MPENoteEvent(const MPENoteEvent& other);
 
-    void setPlayedNoteEvent(const MPENoteEvent& noteEvent)
-    {
-        playedNote = std::make_unique<MPENoteEvent>(noteEvent);
-        // temporary just  slightly shift ppqStartPosition to the left and ppqReleasePosition to the right
-        playedNote->setPpqStartPosition(ppqStartPosition - 0.1);
-        playedNote->setPpqReleasePosition(ppqReleasePosition + 0.1);
-    }
+    void setPlayedNoteEvent(const MPENoteEvent& noteEvent);
 
-    void setPpqReleasePosition(const double position)
-    {
-        ppqReleasePosition = position;
-        // temporary set ppqReleasePosition for playedNote slightly to the right
-        if (playedNote)
-        {
-            playedNote->setPpqReleasePosition(position + 0.1);
-        }
 
-    }
+    void setPpqReleasePosition(const double position);
 
-    double getPpqStartPosition() const
-    {
-        return ppqStartPosition;
-    }
+    double getPpqStartPosition() const;
 
-    double getPpqReleasePosition() const
-    {
-        return ppqReleasePosition;
-    }
+    double getPpqReleasePosition() const;
 
-    juce::MPENote getMpeNote() const
-    {
-        return mpeNote;
-    }
+    juce::MPENote getMpeNote() const;
 
-    void setPpqStartPosition(const double position)
-    {
-        // temporary set ppqStartPosition for playedNote slightly to the left
-        if (playedNote)
-        {
-            playedNote->setPpqStartPosition(position - 0.1);
-        }
-        ppqStartPosition = position;
-    }
+    void setPpqStartPosition(const double position);
 
-    juce::String getNoteName() const
-    {
-        return juce::MidiMessage::getMidiNoteName(mpeNote.initialNote, true, true, 3);
-    }
+    juce::String getNoteName() const;
 
-    size_t getNoteIndex() const {
-        return noteIndex;
-    }
+    size_t getNoteIndex() const;
 
     ~MPENoteEvent() = default;
 
-    MPENoteEvent& operator=(const MPENoteEvent& other)
-    {
-        if (this == &other)
-        {
-            return *this;
-        }
-        mpeNote = other.mpeNote;
-        ppqStartPosition = other.ppqStartPosition;
-        ppqReleasePosition = other.ppqReleasePosition;
-        noteIndex = other.noteIndex;
-        if (other.playedNote)
-        {
-            playedNote = std::make_unique<MPENoteEvent>(*other.playedNote);
-        }
-        return *this;
-    }
+    MPENoteEvent& operator=(const MPENoteEvent& other);
 
 private:
 

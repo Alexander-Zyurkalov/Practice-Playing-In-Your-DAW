@@ -27,6 +27,7 @@ target_sources(PracticePlayingInDAW PRIVATE
         src/gui/NoteBars.cpp
         src/gui/RecordButtonLookAndFeel.cpp
         src/processing/MyMPEInstrumentListener.cpp
+        src/processing/MPENoteEvent.cpp
 
 )
 
