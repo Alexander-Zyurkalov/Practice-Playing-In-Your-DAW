@@ -26,13 +26,6 @@ void MPENoteEvent::setPlayedNoteEvent(const MPENoteEvent &noteEvent)
 void MPENoteEvent::setPpqReleasePosition(const double position)
 {
     ppqReleasePosition = position;
-    // temporary set ppqReleasePosition for playedNote slightly to the right
-    if (playedNote)
-    {
-        const double shift = juce::Random::getSystemRandom().nextDouble() * 2.0 - 1.0;
-        playedNote->setPpqReleasePosition(position + shift);
-    }
-
 }
 
 double MPENoteEvent::getPpqStartPosition() const
@@ -52,12 +45,6 @@ juce::MPENote MPENoteEvent::getMpeNote() const
 
 void MPENoteEvent::setPpqStartPosition(const double position)
 {
-    // temporary set ppqStartPosition for playedNote slightly to the left
-    if (playedNote)
-    {
-        const double shift = juce::Random::getSystemRandom().nextDouble() * 2.0 - 1.0;
-        playedNote->setPpqStartPosition(position + shift);
-    }
     ppqStartPosition = position;
 }
 

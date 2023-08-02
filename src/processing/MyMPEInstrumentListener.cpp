@@ -4,7 +4,7 @@
 
 #include "MyMPEInstrumentListener.h"
 
- double MyMPEInstrumentListener::roundPpqPosition(double ppqPosition)  {
+ static double roundPpqPosition(double ppqPosition)  {
     double d = ceil(ppqPosition * 128.0) / 128.0;
     return d;
 }
@@ -14,13 +14,19 @@ MyMPEInstrumentListener::MyMPEInstrumentListener(DAWTransportData *transportData
 void MyMPEInstrumentListener::noteAdded(juce::MPENote newNote) {
     if (!recording)
     {
-
+        // find the in-time-closest note with the same id
+        MPENoteEvent *closestNote = findClosestNote(newNote);
+        if (closestNote)
+        {
+            const MPENoteEvent &playedNote = MPENoteEvent{newNote, closestNote->getNoteIndex()};
+            closestNote->setPlayedNoteEvent(playedNote);
+            unfinishedPlayedNotes.emplace(newNote.noteID, playedNote);
+        }
         return;
     }
     MPENoteEvent mpeNoteEvent{newNote, noteEventVector.size()};
     double position = dawTransportData->getPpqPositionNotSynced();
     position = roundPpqPosition(position);
-    mpeNoteEvent.setPlayedNoteEvent(mpeNoteEvent); //TODO: temporary
     mpeNoteEvent.setPpqStartPosition(position);
 
     if (unfinishedNotes.find(newNote.noteID) != unfinishedNotes.end()) {
@@ -29,6 +35,27 @@ void MyMPEInstrumentListener::noteAdded(juce::MPENote newNote) {
     unfinishedNotes.emplace(newNote.noteID, mpeNoteEvent);
     noteEventVector.push_back(mpeNoteEvent);
 
+}
+
+MPENoteEvent *MyMPEInstrumentListener::findClosestNote(const juce::MPENote &newNote)
+{
+    double position = dawTransportData->getPpqPositionNotSynced();
+    position = roundPpqPosition(position);
+    double minDistance = 1.0;
+    MPENoteEvent* closestNote = nullptr;
+    for (auto& noteEvent: noteEventVector)
+    {
+        if (noteEvent.getMpeNote().noteID == newNote.noteID)
+        {
+            double distance = std::abs(noteEvent.getPpqStartPosition() - position);
+            if (distance < minDistance)
+            {
+                minDistance = distance;
+                closestNote = &noteEvent;
+            }
+        }
+    }
+    return closestNote;
 }
 
 void MyMPEInstrumentListener::notePressureChanged(juce::MPENote changedNote) {
@@ -43,16 +70,36 @@ void MyMPEInstrumentListener::noteTimbreChanged(juce::MPENote changedNote) {
 void MyMPEInstrumentListener::noteKeyStateChanged(juce::MPENote changedNote) {
 }
 
-void MyMPEInstrumentListener::noteReleased(juce::MPENote finishedNote) {
-    if (unfinishedNotes.find(finishedNote.noteID) == unfinishedNotes.end())
-        return;
+static MPENoteEvent& processNoteRelease(std::unordered_map<juce::uint16 , MPENoteEvent>& unfinishedNotes,
+                  juce::MPENote& finishedNote,
+                  std::vector<MPENoteEvent>& noteEventVector,
+                  DAWTransportData* dawTransportData
+
+                  ) {
     MPENoteEvent &event = unfinishedNotes.at(finishedNote.noteID);
     double position = dawTransportData->getPpqPositionNotSynced();
     position = roundPpqPosition(position);
     event.setPpqReleasePosition(position);
-    if (event.getNoteIndex() < noteEventVector.size())
-        noteEventVector[event.getNoteIndex()] = event;
     unfinishedNotes.erase(finishedNote.noteID);
+    return event;
+}
+
+void MyMPEInstrumentListener::noteReleased(juce::MPENote finishedNote) {
+    if (unfinishedNotes.find(finishedNote.noteID) != unfinishedNotes.end())
+    {
+        MPENoteEvent &event = processNoteRelease(unfinishedNotes, finishedNote, noteEventVector, dawTransportData);
+        if (event.getNoteIndex() < noteEventVector.size())
+        {
+            noteEventVector[event.getNoteIndex()] = event;
+        }
+    }
+    if (unfinishedPlayedNotes.find(finishedNote.noteID) != unfinishedPlayedNotes.end())
+    {
+        MPENoteEvent &playedEvent = processNoteRelease(unfinishedPlayedNotes, finishedNote, noteEventVector,
+                                                       dawTransportData);
+        noteEventVector[playedEvent.getNoteIndex()].setPlayedNoteEvent(playedEvent);
+    }
+
 }
 
 void MyMPEInstrumentListener::zoneLayoutChanged() {

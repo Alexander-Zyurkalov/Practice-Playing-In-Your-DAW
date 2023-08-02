@@ -42,12 +42,13 @@ public:
 
 private:
     std::unordered_map<juce::uint16 , MPENoteEvent> unfinishedNotes;
+    std::unordered_map<juce::uint16 , MPENoteEvent> unfinishedPlayedNotes;
     DAWTransportData* dawTransportData;
     std::vector<MPENoteEvent> noteEventVector{};
     bool recording{false};
     bool justStartedRecording{false};
 
-    double roundPpqPosition(double ppqPosition);
+    MPENoteEvent *findClosestNote(const juce::MPENote &newNote);
 };
 
 
