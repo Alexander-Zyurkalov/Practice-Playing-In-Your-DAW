@@ -16,6 +16,7 @@ TEST_CASE("Recording", "[MyMPEInstrumentListenerTest]")
 
     double position = 0.0;
     juce::MPENote prevNote{};
+    double step = 0.25;
     do{
         juce::MPENote newNote{};
         newNote.noteID = 49;
@@ -26,13 +27,13 @@ TEST_CASE("Recording", "[MyMPEInstrumentListenerTest]")
         myMPEInstrumentListener.noteReleased(prevNote);
         myMPEInstrumentListener.noteAdded(newNote);
 
-        position += 0.25;
+        position += step;
+
+        dawTransportData.setPpqPositionNotSynced(position);
+        dawTransportData.set(position, 0.0, 2.0);
         prevNote = newNote;
     } while (position < 2.0);
 
-    position += 0.25;
-    dawTransportData.setPpqPositionNotSynced(position);
-    dawTransportData.set(position, 0.0, 2.0);
     myMPEInstrumentListener.noteReleased(prevNote);
 
     myMPEInstrumentListener.toggleRecording();
@@ -40,10 +41,13 @@ TEST_CASE("Recording", "[MyMPEInstrumentListenerTest]")
 
     std::vector<MPENoteEvent> noteEventVector = myMPEInstrumentListener.createNoteEventVector();
     REQUIRE(noteEventVector.size() == 8);
-    REQUIRE(noteEventVector[0].getPpqStartPosition() == 0.0);
-    REQUIRE(noteEventVector[0].getPpqReleasePosition() == 0.25);
-    REQUIRE(noteEventVector[0].getMpeNote().noteID == 49);
-    REQUIRE(noteEventVector[0].getNoteIndex() == 0);
+    for(size_t i = 0; i < noteEventVector.size(); i++){
+        REQUIRE(noteEventVector[i].getPpqStartPosition() == step * i);
+        REQUIRE(noteEventVector[i].getPpqReleasePosition() == step * (i + 1));
+        REQUIRE(noteEventVector[i].getMpeNote().noteID == 49);
+        REQUIRE(noteEventVector[i].getNoteIndex() == i);
+    }
+    
 //    REQUIRE(!noteEventVector[0].thereIsPlayedNote());
 
 
