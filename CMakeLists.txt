@@ -50,5 +50,24 @@ target_link_libraries(PracticePlayingInDAW
 
 add_subdirectory(./libs/catch2)
 add_executable(test
-        test/MyMPEInstrumentListenerTest.cpp)
-target_link_libraries(test PRIVATE Catch2::Catch2WithMain)
+        test/MyMPEInstrumentListenerTest.cpp
+
+        src/processing/MyMPEInstrumentListener.cpp
+        src/processing/MPENoteEvent.cpp
+)
+target_compile_definitions(test
+        PRIVATE
+                JUCE_WEB_BROWSER=0
+                JUCE_USE_CURL=0
+                JUCE_VST3_CAN_REPLACE_VST2=0)
+target_link_libraries(test
+        PRIVATE
+                Catch2::Catch2WithMain
+                juce::juce_audio_utils
+                juce::juce_dsp
+                juce::juce_gui_basics
+        PUBLIC
+                juce::juce_recommended_config_flags
+                juce::juce_recommended_lto_flags
+                juce::juce_recommended_warning_flags
+)

@@ -123,6 +123,10 @@ void MyMPEInstrumentListener::updateNotes(double ppqPosition) {
             note.second.setPpqReleasePosition(ppqPosition);
             noteEventVector[note.second.getNoteIndex()] = note.second;
     }
+    for(auto &note: unfinishedPlayedNotes) {
+        note.second.setPpqReleasePosition(ppqPosition);
+        noteEventVector[note.second.getNoteIndex()].setPlayedNoteEvent(note.second);
+    }
 }
 
 
