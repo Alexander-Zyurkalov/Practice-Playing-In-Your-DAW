@@ -31,9 +31,11 @@ void MyMPEInstrumentListener::noteAdded(juce::MPENote newNote) {
 
     mpeNoteEvent.setPpqStartPosition(position);
 
+    // if note is already playing, release it
     if (unfinishedNotes.find(newNote.noteID) != unfinishedNotes.end()) {
         noteReleased(unfinishedNotes.find(newNote.noteID)->second.getMpeNote());
     }
+
     unfinishedNotes.emplace(newNote.noteID, mpeNoteEvent);
     noteEventVector.push_back(mpeNoteEvent);
 
@@ -78,7 +80,7 @@ static MPENoteEvent& processNoteRelease(std::unordered_map<juce::uint16 , MPENot
                   DAWTransportData* dawTransportData
 
                   ) {
-    MPENoteEvent &event = unfinishedNotes.at(finishedNote.noteID);
+    MPENoteEvent event = unfinishedNotes.at(finishedNote.noteID);
     double position = dawTransportData->getPpqPositionNotSynced();
     position = roundPpqPosition(position);
     event.setPpqReleasePosition(position);
@@ -108,13 +110,11 @@ void MyMPEInstrumentListener::zoneLayoutChanged() {
 }
 
 std::vector<MPENoteEvent> MyMPEInstrumentListener::createNoteEventVector() {
-    return noteEventVector;
+    return noteEventVector; //TODO: replace with deep copy
 }
 
 void MyMPEInstrumentListener::updateNotes(double ppqPosition) {
     if (justStartedRecording ){
-        auto& td = dawTransportData;
-
         clearRecordedNotes();
         justStartedRecording = false;
     }
@@ -143,6 +143,7 @@ bool MyMPEInstrumentListener::isRecording() const {
 void MyMPEInstrumentListener::clearRecordedNotes() {
     noteEventVector.clear();
     unfinishedNotes.clear();
+    unfinishedPlayedNotes.clear();
 }
 
 bool MyMPEInstrumentListener::isJustStartedRecording() const {

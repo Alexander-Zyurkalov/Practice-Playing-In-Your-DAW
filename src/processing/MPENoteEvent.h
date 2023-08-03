@@ -9,7 +9,9 @@
 class MPENoteEvent
 {
 public:
-    explicit MPENoteEvent(const juce::MPENote& note, size_t index) : mpeNote(note), noteIndex{index} {}
+    explicit MPENoteEvent(const juce::MPENote& note, size_t index) : mpeNote(note), noteIndex{index} {
+
+    }
 
     MPENoteEvent() = delete;
 

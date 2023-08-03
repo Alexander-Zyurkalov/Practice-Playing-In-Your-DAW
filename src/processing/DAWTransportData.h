@@ -65,7 +65,7 @@ public:
         auto now = std::chrono::high_resolution_clock::now();
         std::chrono::duration<double, std::ratio<60, 1>> diff = now - ppqPositionNotSyncedTimeUpdate;
 
-        double ppq = bpm * diff.count();
+        double ppq = 0 ; // bpm * diff.count();
         return ppqPositionNotSynced + ppq;
     }
 
