@@ -12,21 +12,23 @@
 MyMPEInstrumentListener::MyMPEInstrumentListener(DAWTransportData *transportData): dawTransportData(transportData) {}
 
 void MyMPEInstrumentListener::noteAdded(juce::MPENote newNote) {
+    double position = dawTransportData->getPpqPositionNotSynced();
+    position = roundPpqPosition(position);
+
     if (!recording)
     {
-        // find the in-time-closest note with the same id
         MPENoteEvent *closestNote = findClosestNote(newNote);
         if (closestNote)
         {
-            const MPENoteEvent &playedNote = MPENoteEvent{newNote, closestNote->getNoteIndex()};
+            MPENoteEvent playedNote = MPENoteEvent{newNote, closestNote->getNoteIndex()};
+            playedNote.setPpqStartPosition(position);
             closestNote->setPlayedNoteEvent(playedNote);
             unfinishedPlayedNotes.emplace(newNote.noteID, playedNote);
         }
         return;
     }
     MPENoteEvent mpeNoteEvent{newNote, noteEventVector.size()};
-    double position = dawTransportData->getPpqPositionNotSynced();
-    position = roundPpqPosition(position);
+
     mpeNoteEvent.setPpqStartPosition(position);
 
     if (unfinishedNotes.find(newNote.noteID) != unfinishedNotes.end()) {

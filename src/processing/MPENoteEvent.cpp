@@ -16,11 +16,6 @@ MPENoteEvent::MPENoteEvent(const MPENoteEvent& other): mpeNote(other.mpeNote), p
 void MPENoteEvent::setPlayedNoteEvent(const MPENoteEvent &noteEvent)
 {
     playedNote = std::make_unique<MPENoteEvent>(noteEvent);
-    // temporary just  slightly shift ppqStartPosition to the left and ppqReleasePosition to the right
-    //random shift to the left within quarter note
-    const double shift = juce::Random::getSystemRandom().nextDouble() * 2.0 - 1.0;
-    playedNote->setPpqStartPosition(ppqStartPosition + shift);
-    playedNote->setPpqReleasePosition(ppqStartPosition + 1.0);
 }
 
 void MPENoteEvent::setPpqReleasePosition(const double position)
