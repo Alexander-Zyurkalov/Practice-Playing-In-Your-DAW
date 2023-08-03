@@ -46,3 +46,9 @@ target_link_libraries(PracticePlayingInDAW
             juce::juce_recommended_lto_flags
             juce::juce_recommended_warning_flags
         )
+
+
+add_subdirectory(./libs/catch2)
+add_executable(test
+        test/MyMPEInstrumentListenerTest.cpp)
+target_link_libraries(test PRIVATE Catch2::Catch2WithMain)
