@@ -46,11 +46,8 @@ TEST_CASE("Recording", "[MyMPEInstrumentListenerTest]")
         REQUIRE(noteEventVector[i].getPpqReleasePosition() == step * (i + 1));
         REQUIRE(noteEventVector[i].getMpeNote().noteID == 49);
         REQUIRE(noteEventVector[i].getNoteIndex() == i);
+        REQUIRE(!noteEventVector[i].thereIsPlayedNote());
     }
-    
-//    REQUIRE(!noteEventVector[0].thereIsPlayedNote());
-
-
 
 
 

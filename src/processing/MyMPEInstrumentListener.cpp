@@ -74,34 +74,32 @@ void MyMPEInstrumentListener::noteTimbreChanged(juce::MPENote changedNote) {
 void MyMPEInstrumentListener::noteKeyStateChanged(juce::MPENote changedNote) {
 }
 
-static MPENoteEvent& processNoteRelease(std::unordered_map<juce::uint16 , MPENoteEvent>& unfinishedNotes,
-                  juce::MPENote& finishedNote,
-                  std::vector<MPENoteEvent>& noteEventVector,
-                  DAWTransportData* dawTransportData
+static MPENoteEvent& findMPENoteEvent(std::unordered_map<juce::uint16 , MPENoteEvent>& unfinishedNotes,
+                                      juce::uint16 noteID,
+                                      std::vector<MPENoteEvent>& noteEventVector,
+                                      DAWTransportData* dawTransportData
 
                   ) {
-    MPENoteEvent event = unfinishedNotes.at(finishedNote.noteID);
-    double position = dawTransportData->getPpqPositionNotSynced();
-    position = roundPpqPosition(position);
-    event.setPpqReleasePosition(position);
-    unfinishedNotes.erase(finishedNote.noteID);
+    size_t noteIndex = unfinishedNotes.at(noteID).getNoteIndex();
+    MPENoteEvent& event = noteEventVector[noteIndex];
+    unfinishedNotes.erase(noteID);
     return event;
 }
 
 void MyMPEInstrumentListener::noteReleased(juce::MPENote finishedNote) {
+    double position = dawTransportData->getPpqPositionNotSynced();
     if (unfinishedNotes.find(finishedNote.noteID) != unfinishedNotes.end())
     {
-        MPENoteEvent &event = processNoteRelease(unfinishedNotes, finishedNote, noteEventVector, dawTransportData);
-        if (event.getNoteIndex() < noteEventVector.size())
-        {
-            noteEventVector[event.getNoteIndex()] = event;
-        }
+        MPENoteEvent &event = findMPENoteEvent(unfinishedNotes, finishedNote.noteID, noteEventVector, dawTransportData);
+        event.setPpqReleasePosition(position);
     }
     if (unfinishedPlayedNotes.find(finishedNote.noteID) != unfinishedPlayedNotes.end())
     {
-        MPENoteEvent &playedEvent = processNoteRelease(unfinishedPlayedNotes, finishedNote, noteEventVector,
-                                                       dawTransportData);
-        noteEventVector[playedEvent.getNoteIndex()].setPlayedNoteEvent(playedEvent);
+        MPENoteEvent &event = findMPENoteEvent(unfinishedPlayedNotes, finishedNote.noteID, noteEventVector,
+                                               dawTransportData);
+        MPENoteEvent playedEvent = event.getPlayedNote();
+        playedEvent.setPpqReleasePosition(position);
+        event.setPlayedNoteEvent(playedEvent);
     }
 
 }

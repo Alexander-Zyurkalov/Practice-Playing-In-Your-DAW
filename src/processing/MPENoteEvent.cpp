@@ -7,10 +7,8 @@
 MPENoteEvent::MPENoteEvent(const MPENoteEvent& other): mpeNote(other.mpeNote), ppqStartPosition(other.ppqStartPosition),
                                                        ppqReleasePosition(other.ppqReleasePosition), noteIndex{other.noteIndex}
 {
-    if (other.playedNote)
-    {
+    if (other.playedNote != nullptr)
         playedNote = std::make_unique<MPENoteEvent>(*other.playedNote);
-    }
 }
 
 void MPENoteEvent::setPlayedNoteEvent(const MPENoteEvent &noteEvent)
@@ -63,21 +61,17 @@ MPENoteEvent &MPENoteEvent::operator=(const MPENoteEvent &other)
     ppqStartPosition = other.ppqStartPosition;
     ppqReleasePosition = other.ppqReleasePosition;
     noteIndex = other.noteIndex;
-    if (other.playedNote)
-    {
+    if (other.playedNote != nullptr)
         playedNote = std::make_unique<MPENoteEvent>(*other.playedNote);
-    }
     return *this;
 }
 
 bool MPENoteEvent::playedNoteIsTheSame() const
 {
-    if (playedNote)
-    {
+    if (playedNote != nullptr)
         return playedNote->getMpeNote() == mpeNote &&
                std::abs(playedNote->getPpqStartPosition() - ppqStartPosition) < 1.0/128.0 &&
                std::abs(playedNote->getPpqReleasePosition() - ppqReleasePosition) < 1.0/128.0;
-    }
     return true;
 }
 
