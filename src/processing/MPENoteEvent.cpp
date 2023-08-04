@@ -77,7 +77,8 @@ bool MPENoteEvent::playedNoteIsTheSame() const
 
 float MPENoteEvent::getPlayedNoteStartPositionShift() const
 {
-    return std::clamp(static_cast<float>(ppqStartPosition - playedNote->getPpqStartPosition()),-1.0f,1.0f);
+    float limit = 1/8.0f;
+    return std::clamp(static_cast<float>(std::abs(ppqStartPosition - playedNote->getPpqStartPosition())), 0.0f, limit) * 1/limit;
 }
 
 bool MPENoteEvent::thereIsPlayedNote() const
