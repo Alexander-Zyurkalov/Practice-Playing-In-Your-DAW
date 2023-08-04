@@ -11,7 +11,7 @@
 class MPENoteEvent
 {
 public:
-    static constexpr float maxNoteShift = 1.0f / 8.0f;
+    static constexpr float MAX_NOTE_SHIFT = 1.0f / 8.0f;
 
     explicit MPENoteEvent(const juce::MPENote& note, size_t index) : mpeNote(note), noteIndex{index} {}
 

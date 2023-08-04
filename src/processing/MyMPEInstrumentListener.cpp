@@ -45,7 +45,7 @@ MPENoteEvent *MyMPEInstrumentListener::findClosestNote(const juce::MPENote &newN
 {
     double position = dawTransportData->getPpqPositionNotSynced();
     position = roundPpqPosition(position);
-    double minDistance = 1.0;
+    double minDistance = MPENoteEvent::MAX_NOTE_SHIFT;
     MPENoteEvent* closestNote = nullptr;
     for (auto& noteEvent: noteEventVector)
     {

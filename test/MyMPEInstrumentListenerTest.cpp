@@ -30,7 +30,7 @@ TEST_CASE("Recording", "[MyMPEInstrumentListenerTest]"){
     for(size_t i = 0; i < noteEventVector.size(); i++){
         REQUIRE(noteEventVector[i].getPpqStartPosition() == step * i);
         REQUIRE(noteEventVector[i].getPpqReleasePosition() == step * (i + 1));
-        REQUIRE(noteEventVector[i].getMpeNote().noteID == 49);
+        REQUIRE(noteEventVector[i].getMpeNote().noteID == 49 + i);
         REQUIRE(noteEventVector[i].getNoteIndex() == i);
         REQUIRE(!noteEventVector[i].thereIsPlayedNote());
         REQUIRE(!noteEventVector[i].getPlayedNote().thereIsPlayedNote());
@@ -46,12 +46,12 @@ TEST_CASE("Recording", "[MyMPEInstrumentListenerTest]"){
         {
             REQUIRE(noteEventVector[i].getPpqStartPosition() == step * i);
             REQUIRE(noteEventVector[i].getPpqReleasePosition() == step * (i + 1));
-            REQUIRE(noteEventVector[i].getMpeNote().noteID == 49);
+            REQUIRE(noteEventVector[i].getMpeNote().noteID == 49 + i);
             REQUIRE(noteEventVector[i].getNoteIndex() == i);
             REQUIRE(noteEventVector[i].thereIsPlayedNote());
             REQUIRE(noteEventVector[i].getPlayedNote().getPpqStartPosition() == step * i);
             REQUIRE(noteEventVector[i].getPlayedNote().getPpqReleasePosition() == step * (i + 1));
-            REQUIRE(noteEventVector[i].getPlayedNote().getMpeNote().noteID == 49);
+            REQUIRE(noteEventVector[i].getPlayedNote().getMpeNote().noteID == 49 + i);
             REQUIRE(noteEventVector[i].getPlayedNote().getNoteIndex() == i);
             REQUIRE(!noteEventVector[i].getPlayedNote().thereIsPlayedNote());
         }
@@ -62,22 +62,39 @@ TEST_CASE("Recording", "[MyMPEInstrumentListenerTest]"){
     {
         REQUIRE(!myMPEInstrumentListener.isRecording());
         constexpr double d = 1 / 16.0;
-        playNotes(dawTransportData, myMPEInstrumentListener, step, [d]() { return d; });
+        playNotes(dawTransportData, myMPEInstrumentListener, step, []() { return d; });
         noteEventVector = myMPEInstrumentListener.createNoteEventVector();
         REQUIRE(noteEventVector.size() == 8);
         for (size_t i = 0; i < noteEventVector.size(); i++)
         {
             REQUIRE(noteEventVector[i].getPpqStartPosition() == step * i);
             REQUIRE(noteEventVector[i].getPpqReleasePosition() == step * (i + 1));
-            REQUIRE(noteEventVector[i].getMpeNote().noteID == 49);
+            REQUIRE(noteEventVector[i].getMpeNote().noteID == 49 + i);
             REQUIRE(noteEventVector[i].getNoteIndex() == i);
             REQUIRE(noteEventVector[i].thereIsPlayedNote());
             REQUIRE(noteEventVector[i].getPlayedNoteStartPositionShift() == d * 8.0f);
             REQUIRE(noteEventVector[i].getPlayedNote().getPpqStartPosition() == step * i + d);
             REQUIRE(noteEventVector[i].getPlayedNote().getPpqReleasePosition() == step * (i + 1) + d);
-            REQUIRE(noteEventVector[i].getPlayedNote().getMpeNote().noteID == 49);
+            REQUIRE(noteEventVector[i].getPlayedNote().getMpeNote().noteID == 49 + i);
             REQUIRE(noteEventVector[i].getPlayedNote().getNoteIndex() == i);
             REQUIRE(!noteEventVector[i].getPlayedNote().thereIsPlayedNote());
+        }
+    }
+
+    SECTION("Let's play with a too big shift")
+    {
+        REQUIRE(!myMPEInstrumentListener.isRecording());
+        constexpr double d = 1 / 8.0 ;
+        playNotes(dawTransportData, myMPEInstrumentListener, step, []() { return d; });
+        noteEventVector = myMPEInstrumentListener.createNoteEventVector();
+        REQUIRE(noteEventVector.size() == 8);
+        for (size_t i = 0; i < noteEventVector.size(); i++)
+        {
+            REQUIRE(noteEventVector[i].getPpqStartPosition() == step * i);
+            REQUIRE(noteEventVector[i].getPpqReleasePosition() == step * (i + 1));
+            REQUIRE(noteEventVector[i].getMpeNote().noteID == 49 + i);
+            REQUIRE(noteEventVector[i].getNoteIndex() == i);
+            REQUIRE(!noteEventVector[i].thereIsPlayedNote());
         }
     }
 }
@@ -87,10 +104,10 @@ static void playNotes(DAWTransportData &dawTransportData, MyMPEInstrumentListene
 {
     double position = 0.0;
     juce::MPENote prevNote{};
-
+    size_t i = 0;
     do{
         juce::MPENote newNote{};
-        newNote.noteID = 49;
+        newNote.noteID = 49 + i;
 
         dawTransportData.setPpqPositionNotSynced(position + shift());
         dawTransportData.set(position + shift(), 0.0, 2.0);
@@ -103,6 +120,7 @@ static void playNotes(DAWTransportData &dawTransportData, MyMPEInstrumentListene
         dawTransportData.setPpqPositionNotSynced(position + shift());
         dawTransportData.set(position+ shift(), 0.0, 2.0);
         prevNote = newNote;
+        i++;
     } while (position < 2.0);
 
     myMPEInstrumentListener.noteReleased(prevNote);
