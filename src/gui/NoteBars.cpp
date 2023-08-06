@@ -26,12 +26,13 @@ void NoteBars::paint(juce::Graphics& g)
 
         if (note.thereIsPlayedNote())
         {
-            int dist = static_cast<int>(std::round(std::abs(note.getPlayedNoteStartPositionShift()) * 3));
+            int dist = static_cast<int>(std::floor(std::abs(note.getPlayedNoteStartPositionShift()) * 4));
             switch (dist)
             {
                 case 0: g.setColour(juce::Colours::green); break;
-                case 1: g.setColour(juce::Colours::yellow); break;
-                case 2: g.setColour(juce::Colours::orange); break;
+                case 1:
+                case 2:
+                case 3: g.setColour(juce::Colours::yellow); break;
                 default: g.setColour(juce::Colours::red); break;
             }
         }
