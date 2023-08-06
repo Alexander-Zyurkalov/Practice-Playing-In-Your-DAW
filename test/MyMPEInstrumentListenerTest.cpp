@@ -52,7 +52,7 @@ TEST_CASE("Recording", "[MyMPEInstrumentListenerTest]")
         }
     }
 
-    SECTION("Let's play precisely once and after that don't play!")
+    SECTION("Let's play precisely once and after that not to play!")
     {
 
         recordInitialNotes(dawTransportData, myMPEInstrumentListener, step);
@@ -86,14 +86,49 @@ TEST_CASE("Recording", "[MyMPEInstrumentListenerTest]")
             REQUIRE(noteEventVector[i].getNoteIndex() == i);
             REQUIRE(noteEventVector[i].thereIsPlayedNote());
             REQUIRE(!noteEventVector[i].isPlayed());
-            REQUIRE(noteEventVector[i].getPlayedNote().getPpqStartPosition() == step * i);
-            REQUIRE(noteEventVector[i].getPlayedNote().getPpqReleasePosition() == step * (i + 1));
+            REQUIRE(noteEventVector[i].getPlayedNote().getPpqStartPosition() == noteEventVector[i].getPpqReleasePosition());
+            REQUIRE(noteEventVector[i].getPlayedNote().getPpqReleasePosition() == noteEventVector[i].getPpqReleasePosition());
             REQUIRE(noteEventVector[i].getPlayedNote().getMpeNote().noteID == 49 + i);
             REQUIRE(noteEventVector[i].getPlayedNote().getNoteIndex() == i);
             REQUIRE(!noteEventVector[i].getPlayedNote().thereIsPlayedNote());
         }
     }
 
+    SECTION("Let's record and not to play!")
+    {
+
+        recordInitialNotes(dawTransportData, myMPEInstrumentListener, step);
+        REQUIRE(!myMPEInstrumentListener.isRecording());
+        std::vector<MPENoteEvent> noteEventVector = myMPEInstrumentListener.createNoteEventVector();
+        REQUIRE(noteEventVector.size() == 8);
+        for (size_t i = 0; i < noteEventVector.size(); i++)
+        {
+            REQUIRE(noteEventVector[i].getPpqStartPosition() == step * i);
+            REQUIRE(noteEventVector[i].getPpqReleasePosition() == step * (i + 1));
+            REQUIRE(noteEventVector[i].getMpeNote().noteID == 49 + i);
+            REQUIRE(noteEventVector[i].getNoteIndex() == i);
+            REQUIRE(!noteEventVector[i].thereIsPlayedNote());
+            REQUIRE(!noteEventVector[i].isPlayed());
+        }
+        myMPEInstrumentListener.resetPlayedNotes();
+
+        playNotes(dawTransportData, myMPEInstrumentListener, step, []() { return 0.0; }, [](size_t i) { return 21; });
+        noteEventVector = myMPEInstrumentListener.createNoteEventVector();
+        for (size_t i = 0; i < noteEventVector.size(); i++)
+        {
+            REQUIRE(noteEventVector[i].getPpqStartPosition() == step * i);
+            REQUIRE(noteEventVector[i].getPpqReleasePosition() == step * (i + 1));
+            REQUIRE(noteEventVector[i].getMpeNote().noteID == 49 + i);
+            REQUIRE(noteEventVector[i].getNoteIndex() == i);
+            REQUIRE(noteEventVector[i].thereIsPlayedNote());
+            REQUIRE(!noteEventVector[i].isPlayed());
+            REQUIRE(noteEventVector[i].getPlayedNote().getPpqStartPosition() == noteEventVector[i].getPpqReleasePosition());
+            REQUIRE(noteEventVector[i].getPlayedNote().getPpqReleasePosition() == noteEventVector[i].getPpqReleasePosition());
+            REQUIRE(noteEventVector[i].getPlayedNote().getMpeNote().noteID == 49 + i);
+            REQUIRE(noteEventVector[i].getPlayedNote().getNoteIndex() == i);
+            REQUIRE(!noteEventVector[i].getPlayedNote().thereIsPlayedNote());
+        }
+    }
 
     SECTION("Let's play with a shift")
     {
@@ -158,7 +193,6 @@ TEST_CASE("Recording", "[MyMPEInstrumentListenerTest]")
             REQUIRE(noteEventVector[i].getPpqReleasePosition() == step * (i + 1));
             REQUIRE(noteEventVector[i].getMpeNote().noteID == 49 + i);
             REQUIRE(noteEventVector[i].getNoteIndex() == i);
-            REQUIRE(!noteEventVector[i].thereIsPlayedNote());
         }
     }
 }
@@ -181,13 +215,14 @@ static void playNotes(DAWTransportData &dawTransportData, MyMPEInstrumentListene
         myMPEInstrumentListener.noteAdded(newNote);
 
         position += step;
+        myMPEInstrumentListener.updateNotes(position + shift());
 
         dawTransportData.setPpqPositionNotSynced(position + shift());
         dawTransportData.set(position+ shift(), 0.0, 2.0);
         prevNote = newNote;
         i++;
     } while (position < 2.0);
-
+    myMPEInstrumentListener.updateNotes(position + shift());
     myMPEInstrumentListener.noteReleased(prevNote);
 }
 
@@ -206,7 +241,6 @@ static void recordInitialNotes(DAWTransportData &dawTransportData, MyMPEInstrume
         REQUIRE(noteEventVector[i].getPpqReleasePosition() == step * (i + 1));
         REQUIRE(noteEventVector[i].getMpeNote().noteID == noteGenerator(i));
         REQUIRE(noteEventVector[i].getNoteIndex() == i);
-        REQUIRE(!noteEventVector[i].thereIsPlayedNote());
         REQUIRE(!noteEventVector[i].getPlayedNote().thereIsPlayedNote());
     }
 }
