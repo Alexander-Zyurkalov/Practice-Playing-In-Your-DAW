@@ -47,6 +47,8 @@ public:
 
     const MPENoteEvent getPlayedNote() const;
 
+    void clearPlayedNote();
+
 private:
 
     juce::MPENote mpeNote;

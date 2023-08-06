@@ -90,3 +90,8 @@ const MPENoteEvent MPENoteEvent::getPlayedNote() const
 {
     return playedNote ? *playedNote : MPENoteEvent(mpeNote, noteIndex);
 }
+
+void MPENoteEvent::clearPlayedNote()
+{
+    playedNote.reset();
+}
