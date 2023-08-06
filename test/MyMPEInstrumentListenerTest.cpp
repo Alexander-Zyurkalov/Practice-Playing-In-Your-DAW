@@ -145,7 +145,7 @@ TEST_CASE("Recording", "[MyMPEInstrumentListenerTest]")
             REQUIRE(noteEventVector[i].getMpeNote().noteID == 49 + i);
             REQUIRE(noteEventVector[i].getNoteIndex() == i);
             REQUIRE(noteEventVector[i].thereIsPlayedNote());
-            REQUIRE(noteEventVector[i].getPlayedNoteStartPositionShift() == d * 8.0f);
+            REQUIRE(noteEventVector[i].getPlayedNoteStartPositionShift() == d/MPENoteEvent::MAX_NOTE_SHIFT);
             REQUIRE(noteEventVector[i].getPlayedNote().getPpqStartPosition() == step * i + d);
             REQUIRE(noteEventVector[i].getPlayedNote().getPpqReleasePosition() == step * (i + 1) + d);
             REQUIRE(noteEventVector[i].getPlayedNote().getMpeNote().noteID == 49 + i);
@@ -170,7 +170,7 @@ TEST_CASE("Recording", "[MyMPEInstrumentListenerTest]")
             REQUIRE(noteEventVector[i].getMpeNote().noteID == 49);
             REQUIRE(noteEventVector[i].getNoteIndex() == i);
             REQUIRE(noteEventVector[i].thereIsPlayedNote());
-            REQUIRE(noteEventVector[i].getPlayedNoteStartPositionShift() == d * 8.0f);
+            REQUIRE(noteEventVector[i].getPlayedNoteStartPositionShift() == d/MPENoteEvent::MAX_NOTE_SHIFT);
             REQUIRE(noteEventVector[i].getPlayedNote().getPpqStartPosition() == step * i + d);
             REQUIRE(noteEventVector[i].getPlayedNote().getPpqReleasePosition() == step * (i + 1) + d);
             REQUIRE(noteEventVector[i].getPlayedNote().getMpeNote().noteID == 49);
