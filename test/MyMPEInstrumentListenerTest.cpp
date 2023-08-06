@@ -77,6 +77,31 @@ TEST_CASE("Recording", "[MyMPEInstrumentListenerTest]")
         }
     }
 
+    SECTION("Let's play with a shift but with the only note ID")
+    {
+        int (*noteGenerator)(size_t) = [](size_t i) { return 49; };
+        recordInitialNotes(dawTransportData, myMPEInstrumentListener, step, noteGenerator);
+        REQUIRE(!myMPEInstrumentListener.isRecording());
+        constexpr double d = 1 / 16.0;
+        playNotes(dawTransportData, myMPEInstrumentListener, step, []() { return d; }, noteGenerator);
+        std::vector<MPENoteEvent> noteEventVector = myMPEInstrumentListener.createNoteEventVector();
+        REQUIRE(noteEventVector.size() == 8);
+        for (size_t i = 0; i < noteEventVector.size(); i++)
+        {
+            REQUIRE(noteEventVector[i].getPpqStartPosition() == step * i);
+            REQUIRE(noteEventVector[i].getPpqReleasePosition() == step * (i + 1));
+            REQUIRE(noteEventVector[i].getMpeNote().noteID == 49);
+            REQUIRE(noteEventVector[i].getNoteIndex() == i);
+            REQUIRE(noteEventVector[i].thereIsPlayedNote());
+            REQUIRE(noteEventVector[i].getPlayedNoteStartPositionShift() == d * 8.0f);
+            REQUIRE(noteEventVector[i].getPlayedNote().getPpqStartPosition() == step * i + d);
+            REQUIRE(noteEventVector[i].getPlayedNote().getPpqReleasePosition() == step * (i + 1) + d);
+            REQUIRE(noteEventVector[i].getPlayedNote().getMpeNote().noteID == 49);
+            REQUIRE(noteEventVector[i].getPlayedNote().getNoteIndex() == i);
+            REQUIRE(!noteEventVector[i].getPlayedNote().thereIsPlayedNote());
+        }
+    }
+
     SECTION("Let's play with a too big shift")
     {
         recordInitialNotes(dawTransportData, myMPEInstrumentListener, step);
