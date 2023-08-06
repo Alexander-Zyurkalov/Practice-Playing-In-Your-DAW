@@ -4,9 +4,12 @@
 
 static void playNotes(DAWTransportData &dawTransportData, MyMPEInstrumentListener &myMPEInstrumentListener,
                       double step,
-                      std::function<double()> shift);
+                      std::function<double()> shift,
+                      std::function<double(size_t)> noteGenerator = [](size_t i) { return 49 + i; });
 
-static void recordInitialNotes(DAWTransportData &dawTransportData, MyMPEInstrumentListener &myMPEInstrumentListener, double step);
+static void recordInitialNotes(DAWTransportData &dawTransportData, MyMPEInstrumentListener &myMPEInstrumentListener,
+                               double step,
+                               std::function<double(size_t)> noteGenerator = [](size_t i) { return 49 + i; });
 
 
 TEST_CASE("Recording", "[MyMPEInstrumentListenerTest]")
@@ -94,14 +97,15 @@ TEST_CASE("Recording", "[MyMPEInstrumentListenerTest]")
 }
 
 static void playNotes(DAWTransportData &dawTransportData, MyMPEInstrumentListener &myMPEInstrumentListener,
-                      double step, std::function<double()> shift)
+                      double step, std::function<double()> shift,
+                      std::function<double(size_t)> noteGenerator)
 {
     double position = 0.0;
     juce::MPENote prevNote{};
     size_t i = 0;
     do{
         juce::MPENote newNote{};
-        newNote.noteID = 49 + i;
+        newNote.noteID =noteGenerator(i);
 
         dawTransportData.setPpqPositionNotSynced(position + shift());
         dawTransportData.set(position + shift(), 0.0, 2.0);
@@ -120,9 +124,10 @@ static void playNotes(DAWTransportData &dawTransportData, MyMPEInstrumentListene
     myMPEInstrumentListener.noteReleased(prevNote);
 }
 
-static void recordInitialNotes(DAWTransportData &dawTransportData, MyMPEInstrumentListener &myMPEInstrumentListener, double step)
+static void recordInitialNotes(DAWTransportData &dawTransportData, MyMPEInstrumentListener &myMPEInstrumentListener,
+                               double step, std::function<double(size_t)> noteGenerator)
 {
-    playNotes(dawTransportData, myMPEInstrumentListener, step, [](){return 0.0;});
+    playNotes(dawTransportData, myMPEInstrumentListener, step, [](){return 0.0;}, noteGenerator);
 
     myMPEInstrumentListener.toggleRecording();
     REQUIRE(!myMPEInstrumentListener.isRecording());
@@ -132,7 +137,7 @@ static void recordInitialNotes(DAWTransportData &dawTransportData, MyMPEInstrume
     for(size_t i = 0; i < noteEventVector.size(); i++){
         REQUIRE(noteEventVector[i].getPpqStartPosition() == step * i);
         REQUIRE(noteEventVector[i].getPpqReleasePosition() == step * (i + 1));
-        REQUIRE(noteEventVector[i].getMpeNote().noteID == 49 + i);
+        REQUIRE(noteEventVector[i].getMpeNote().noteID == noteGenerator(i));
         REQUIRE(noteEventVector[i].getNoteIndex() == i);
         REQUIRE(!noteEventVector[i].thereIsPlayedNote());
         REQUIRE(!noteEventVector[i].getPlayedNote().thereIsPlayedNote());
