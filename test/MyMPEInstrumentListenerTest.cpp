@@ -52,6 +52,48 @@ TEST_CASE("Recording", "[MyMPEInstrumentListenerTest]")
         }
     }
 
+    SECTION("Let's play precisely once and after that don't play!")
+    {
+
+        recordInitialNotes(dawTransportData, myMPEInstrumentListener, step);
+        REQUIRE(!myMPEInstrumentListener.isRecording());
+        playNotes(dawTransportData, myMPEInstrumentListener, step, []() { return 0.0; });
+        std::vector<MPENoteEvent> noteEventVector = myMPEInstrumentListener.createNoteEventVector();
+        REQUIRE(noteEventVector.size() == 8);
+        for (size_t i = 0; i < noteEventVector.size(); i++)
+        {
+            REQUIRE(noteEventVector[i].getPpqStartPosition() == step * i);
+            REQUIRE(noteEventVector[i].getPpqReleasePosition() == step * (i + 1));
+            REQUIRE(noteEventVector[i].getMpeNote().noteID == 49 + i);
+            REQUIRE(noteEventVector[i].getNoteIndex() == i);
+            REQUIRE(noteEventVector[i].thereIsPlayedNote());
+            REQUIRE(noteEventVector[i].isPlayed());
+            REQUIRE(noteEventVector[i].getPlayedNote().getPpqStartPosition() == step * i);
+            REQUIRE(noteEventVector[i].getPlayedNote().getPpqReleasePosition() == step * (i + 1));
+            REQUIRE(noteEventVector[i].getPlayedNote().getMpeNote().noteID == 49 + i);
+            REQUIRE(noteEventVector[i].getPlayedNote().getNoteIndex() == i);
+            REQUIRE(!noteEventVector[i].getPlayedNote().thereIsPlayedNote());
+        }
+        myMPEInstrumentListener.resetPlayedNotes();
+
+        playNotes(dawTransportData, myMPEInstrumentListener, step, []() { return 0.0; }, [](size_t i) { return 21; });
+        noteEventVector = myMPEInstrumentListener.createNoteEventVector();
+        for (size_t i = 0; i < noteEventVector.size(); i++)
+        {
+            REQUIRE(noteEventVector[i].getPpqStartPosition() == step * i);
+            REQUIRE(noteEventVector[i].getPpqReleasePosition() == step * (i + 1));
+            REQUIRE(noteEventVector[i].getMpeNote().noteID == 49 + i);
+            REQUIRE(noteEventVector[i].getNoteIndex() == i);
+            REQUIRE(noteEventVector[i].thereIsPlayedNote());
+            REQUIRE(!noteEventVector[i].isPlayed());
+            REQUIRE(noteEventVector[i].getPlayedNote().getPpqStartPosition() == step * i);
+            REQUIRE(noteEventVector[i].getPlayedNote().getPpqReleasePosition() == step * (i + 1));
+            REQUIRE(noteEventVector[i].getPlayedNote().getMpeNote().noteID == 49 + i);
+            REQUIRE(noteEventVector[i].getPlayedNote().getNoteIndex() == i);
+            REQUIRE(!noteEventVector[i].getPlayedNote().thereIsPlayedNote());
+        }
+    }
+
 
     SECTION("Let's play with a shift")
     {

@@ -23,6 +23,7 @@ void MyMPEInstrumentListener::noteAdded(juce::MPENote newNote) {
             MPENoteEvent playedNote = MPENoteEvent{newNote, closestNote->getNoteIndex()};
             playedNote.setPpqStartPosition(position);
             closestNote->setPlayedNoteEvent(playedNote);
+            closestNote->setIsPlayed(true);
             unfinishedPlayedNotes.emplace(newNote.noteID, playedNote);
         }
         return;
@@ -125,15 +126,6 @@ void MyMPEInstrumentListener::updateNotes(double ppqPosition) {
         note.second.setPpqReleasePosition(ppqPosition);
         noteEventVector[note.second.getNoteIndex()].setPlayedNoteEvent(note.second);
     }
-    for (auto &note: noteEventVector)
-    {
-        if (note.getPpqStartPosition() > ppqPosition)
-        {
-            if (note.thereIsPlayedNote())
-                note.clearPlayedNote();
-            break;
-        }
-    }
 }
 
 
@@ -155,5 +147,13 @@ void MyMPEInstrumentListener::clearRecordedNotes() {
 
 bool MyMPEInstrumentListener::isJustStartedRecording() const {
     return justStartedRecording;
+}
+
+void MyMPEInstrumentListener::resetPlayedNotes()
+{
+    for(auto &note: noteEventVector)
+    {
+        note.setIsPlayed(false);
+    }
 }
 

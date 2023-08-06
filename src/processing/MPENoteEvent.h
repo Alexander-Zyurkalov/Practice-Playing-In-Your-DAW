@@ -39,8 +39,6 @@ public:
 
     MPENoteEvent& operator=(const MPENoteEvent& other);
     
-    bool playedNoteIsTheSame() const;
-
     float getPlayedNoteStartPositionShift() const;
 
     bool thereIsPlayedNote() const;
@@ -49,8 +47,12 @@ public:
 
     void clearPlayedNote();
 
-private:
+    bool isPlayed() const;
 
+    void setIsPlayed(bool isPlayedNote);
+
+private:
+    bool isPlayedNote{false};
     juce::MPENote mpeNote;
     double ppqStartPosition{0};
     double ppqReleasePosition{0};

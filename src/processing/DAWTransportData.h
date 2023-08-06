@@ -8,7 +8,8 @@
 #include <juce_audio_processors/juce_audio_processors.h>
 #include <chrono>
 
-class DAWTransportData
+class
+DAWTransportData
 {
 public:
     explicit DAWTransportData(int num=4, int denom=4) :

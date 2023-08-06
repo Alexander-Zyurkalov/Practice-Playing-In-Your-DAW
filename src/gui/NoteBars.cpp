@@ -34,6 +34,8 @@ void NoteBars::paint(juce::Graphics& g)
                 case 2: g.setColour(juce::Colours::orange); break;
                 default: g.setColour(juce::Colours::red); break;
             }
+            if (!note.isPlayed())
+                g.setColour(juce::Colours::red);
         }
         else
             g.setColour(juce::Colours::lightskyblue);

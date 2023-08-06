@@ -40,6 +40,8 @@ public:
 
     void clearRecordedNotes();
 
+    void resetPlayedNotes();
+
 private:
     std::unordered_map<juce::uint16 , MPENoteEvent> unfinishedNotes;
     std::unordered_map<juce::uint16 , MPENoteEvent> unfinishedPlayedNotes;
