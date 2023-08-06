@@ -6,7 +6,11 @@ static void playNotes(DAWTransportData &dawTransportData, MyMPEInstrumentListene
                       double step,
                       std::function<double()> shift);
 
-TEST_CASE("Recording", "[MyMPEInstrumentListenerTest]"){
+static void recordInitialNotes(DAWTransportData &dawTransportData, MyMPEInstrumentListener &myMPEInstrumentListener, double step);
+
+
+TEST_CASE("Recording", "[MyMPEInstrumentListenerTest]")
+{
     DAWTransportData dawTransportData{};
     dawTransportData.set(0.0, 0.0, 2.0);
     dawTransportData.setBpm(120.0);
@@ -20,27 +24,15 @@ TEST_CASE("Recording", "[MyMPEInstrumentListenerTest]"){
     REQUIRE(!myMPEInstrumentListener.isJustStartedRecording());
 
     double step = 0.25;
-    playNotes(dawTransportData, myMPEInstrumentListener, step, [](){return 0.0;});
 
-    myMPEInstrumentListener.toggleRecording();
-    REQUIRE(!myMPEInstrumentListener.isRecording());
-
-    std::vector<MPENoteEvent> noteEventVector = myMPEInstrumentListener.createNoteEventVector();
-    REQUIRE(noteEventVector.size() == 8);
-    for(size_t i = 0; i < noteEventVector.size(); i++){
-        REQUIRE(noteEventVector[i].getPpqStartPosition() == step * i);
-        REQUIRE(noteEventVector[i].getPpqReleasePosition() == step * (i + 1));
-        REQUIRE(noteEventVector[i].getMpeNote().noteID == 49 + i);
-        REQUIRE(noteEventVector[i].getNoteIndex() == i);
-        REQUIRE(!noteEventVector[i].thereIsPlayedNote());
-        REQUIRE(!noteEventVector[i].getPlayedNote().thereIsPlayedNote());
-    }
 
     SECTION("Let's play precisely!")
     {
+
+        recordInitialNotes(dawTransportData, myMPEInstrumentListener, step);
         REQUIRE(!myMPEInstrumentListener.isRecording());
         playNotes(dawTransportData, myMPEInstrumentListener, step, []() { return 0.0; });
-        noteEventVector = myMPEInstrumentListener.createNoteEventVector();
+        std::vector<MPENoteEvent> noteEventVector = myMPEInstrumentListener.createNoteEventVector();
         REQUIRE(noteEventVector.size() == 8);
         for (size_t i = 0; i < noteEventVector.size(); i++)
         {
@@ -60,10 +52,11 @@ TEST_CASE("Recording", "[MyMPEInstrumentListenerTest]"){
 
     SECTION("Let's play with a shift")
     {
+        recordInitialNotes(dawTransportData, myMPEInstrumentListener, step);
         REQUIRE(!myMPEInstrumentListener.isRecording());
         constexpr double d = 1 / 16.0;
         playNotes(dawTransportData, myMPEInstrumentListener, step, []() { return d; });
-        noteEventVector = myMPEInstrumentListener.createNoteEventVector();
+        std::vector<MPENoteEvent> noteEventVector = myMPEInstrumentListener.createNoteEventVector();
         REQUIRE(noteEventVector.size() == 8);
         for (size_t i = 0; i < noteEventVector.size(); i++)
         {
@@ -83,10 +76,11 @@ TEST_CASE("Recording", "[MyMPEInstrumentListenerTest]"){
 
     SECTION("Let's play with a too big shift")
     {
+        recordInitialNotes(dawTransportData, myMPEInstrumentListener, step);
         REQUIRE(!myMPEInstrumentListener.isRecording());
         constexpr double d = 1 / 8.0 ;
         playNotes(dawTransportData, myMPEInstrumentListener, step, []() { return d; });
-        noteEventVector = myMPEInstrumentListener.createNoteEventVector();
+        std::vector<MPENoteEvent> noteEventVector = myMPEInstrumentListener.createNoteEventVector();
         REQUIRE(noteEventVector.size() == 8);
         for (size_t i = 0; i < noteEventVector.size(); i++)
         {
@@ -124,4 +118,23 @@ static void playNotes(DAWTransportData &dawTransportData, MyMPEInstrumentListene
     } while (position < 2.0);
 
     myMPEInstrumentListener.noteReleased(prevNote);
+}
+
+static void recordInitialNotes(DAWTransportData &dawTransportData, MyMPEInstrumentListener &myMPEInstrumentListener, double step)
+{
+    playNotes(dawTransportData, myMPEInstrumentListener, step, [](){return 0.0;});
+
+    myMPEInstrumentListener.toggleRecording();
+    REQUIRE(!myMPEInstrumentListener.isRecording());
+
+    std::vector<MPENoteEvent> noteEventVector = myMPEInstrumentListener.createNoteEventVector();
+    REQUIRE(noteEventVector.size() == 8);
+    for(size_t i = 0; i < noteEventVector.size(); i++){
+        REQUIRE(noteEventVector[i].getPpqStartPosition() == step * i);
+        REQUIRE(noteEventVector[i].getPpqReleasePosition() == step * (i + 1));
+        REQUIRE(noteEventVector[i].getMpeNote().noteID == 49 + i);
+        REQUIRE(noteEventVector[i].getNoteIndex() == i);
+        REQUIRE(!noteEventVector[i].thereIsPlayedNote());
+        REQUIRE(!noteEventVector[i].getPlayedNote().thereIsPlayedNote());
+    }
 }
