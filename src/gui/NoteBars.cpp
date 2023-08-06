@@ -26,8 +26,14 @@ void NoteBars::paint(juce::Graphics& g)
 
         if (note.thereIsPlayedNote())
         {
-            float hue = (1.0f - std::abs(note.getPlayedNoteStartPositionShift())) * 120.0f;
-            g.setColour(juce::Colour::fromHSV(hue/360.0f, 1.0f, 0.7f, 1.0f));
+            int dist = static_cast<int>(std::round(std::abs(note.getPlayedNoteStartPositionShift()) * 3));
+            switch (dist)
+            {
+                case 0: g.setColour(juce::Colours::green); break;
+                case 1: g.setColour(juce::Colours::yellow); break;
+                case 2: g.setColour(juce::Colours::orange); break;
+                default: g.setColour(juce::Colours::red); break;
+            }
         }
         else
             g.setColour(juce::Colours::lightskyblue);
