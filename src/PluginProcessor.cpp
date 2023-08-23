@@ -10,7 +10,7 @@ AudioPluginAudioProcessor::AudioPluginAudioProcessor()
                       #endif
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
                      #endif
-                       )
+                       ), parameters(*this, nullptr, "PARAMETERS", createParameterLayout() )
 {
     mpeInstrument.enableLegacyMode(24);
     mpeInstrument.addListener(&mpeInstrumentListener);
@@ -282,5 +282,13 @@ void AudioPluginAudioProcessor::toggleRecording() {
 
 bool AudioPluginAudioProcessor::isRecording() const {
     return mpeInstrumentListener.isRecording();
+}
+
+juce::AudioProcessorValueTreeState::ParameterLayout AudioPluginAudioProcessor::createParameterLayout()
+{
+    return
+            {
+                    std::make_unique<juce::AudioParameterFloat>("windowWidth", "Window Width", 400.0f, 3000.0f, 800.0f),
+            };
 }
 
