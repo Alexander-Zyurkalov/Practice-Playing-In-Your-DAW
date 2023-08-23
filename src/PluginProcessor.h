@@ -53,6 +53,9 @@ public:
     void toggleRecording();
     bool isRecording() const;
 
+    int getWindowWidth() const;
+    void setWindowWidth(int width);
+
 private:
     juce::AudioProcessorValueTreeState parameters;
     DAWTransportData dawTransportData;
