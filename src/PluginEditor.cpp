@@ -13,10 +13,12 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor (AudioPluginAud
     viewport.setViewedComponent(&noteGrid, false);
     addAndMakeVisible(viewport);
     addAndMakeVisible(timeSigPanel);
+    startTimer(500);
 }
 
 AudioPluginAudioProcessorEditor::~AudioPluginAudioProcessorEditor()
 {
+    stopTimer();
     processorRef.removeChangeListener(this);
 }
 
@@ -61,4 +63,9 @@ void AudioPluginAudioProcessorEditor::changeListenerCallback(juce::ChangeBroadca
     timeSigPanel.newTimeSignature(dawTransportData.getNumerator(), dawTransportData.getDenominator());
     timeSigPanel.newNumBars(dawTransportData.getNumBars());
     timeSigPanel.updateButtonState();
+}
+
+void AudioPluginAudioProcessorEditor::timerCallback()
+{
+    setSize(processorRef.getWindowWidth(), getHeight());
 }

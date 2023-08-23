@@ -6,7 +6,8 @@
 #include "juce_audio_utils/juce_audio_utils.h"
 
 //==============================================================================
-class AudioPluginAudioProcessorEditor  : public juce::AudioProcessorEditor, public juce::ChangeListener
+class AudioPluginAudioProcessorEditor  : public juce::AudioProcessorEditor, public juce::ChangeListener,
+        private juce::Timer
 {
 public:
     explicit AudioPluginAudioProcessorEditor (AudioPluginAudioProcessor&);
@@ -24,5 +25,6 @@ private:
     TimeSignaturePanel timeSigPanel;
     juce::Viewport viewport;
     juce::ListBox trackListBox;
+    void timerCallback() override;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AudioPluginAudioProcessorEditor)
 };
