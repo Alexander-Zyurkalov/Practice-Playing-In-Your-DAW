@@ -102,6 +102,8 @@ void NoteGrid::paint(juce::Graphics& g)
         juce::Line<float> line{cursorX, 0, cursorX, static_cast<float>(getHeight())};
         g.drawLine(line, 2.0f);
     }
+    //scroll in accordance with cursorX
+    viewport->setViewPositionProportionately(cursorX / static_cast<float>(getWidth()), 0.0f);
 
 
 }
