@@ -291,6 +291,7 @@ juce::AudioProcessorValueTreeState::ParameterLayout AudioPluginAudioProcessor::c
     return
             {
                     std::make_unique<juce::AudioParameterFloat>("windowWidth", "Window Width", 0.0f, 3440.0f, 1200.0f),
+                    std::make_unique<juce::AudioParameterFloat>("windowHeight", "Window Height", 0.0f, 1440.0f, 600.0f),
             };
 }
 
@@ -304,3 +305,12 @@ void AudioPluginAudioProcessor::setWindowWidth(int width)
     parameters.getParameter("windowWidth")->setValueNotifyingHost(static_cast<float>(width) / 3440.0f);
 }
 
+int AudioPluginAudioProcessor::getWindowHeight() const
+{
+    return static_cast<int>(std::round(*parameters.getRawParameterValue("windowHeight")));
+}
+
+void AudioPluginAudioProcessor::setWindowHeight(int height)
+{
+    parameters.getParameter("windowHeight")->setValueNotifyingHost(static_cast<float>(height) / 1440.0f);
+}

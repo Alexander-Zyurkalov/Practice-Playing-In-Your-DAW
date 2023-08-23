@@ -55,6 +55,8 @@ public:
 
     int getWindowWidth() const;
     void setWindowWidth(int width);
+    int getWindowHeight() const;
+    void setWindowHeight(int height);
 
 private:
     juce::AudioProcessorValueTreeState parameters;

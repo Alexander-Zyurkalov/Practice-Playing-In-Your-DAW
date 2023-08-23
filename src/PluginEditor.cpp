@@ -7,7 +7,7 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor (AudioPluginAud
     : AudioProcessorEditor (&p), processorRef (p), noteGrid(viewport), timeSigPanel(noteGrid, &p)
 {
     juce::ignoreUnused (processorRef);
-    setSize (processorRef.getWindowWidth(), 600);
+    setSize (processorRef.getWindowWidth(), processorRef.getWindowHeight());
     setResizable(true, true);
     processorRef.addChangeListener(this);
     viewport.setViewedComponent(&noteGrid, false);
@@ -53,6 +53,7 @@ void AudioPluginAudioProcessorEditor::resized()
     grid.performLayout(getLocalBounds());
     changeListenerCallback(nullptr);
     processorRef.setWindowWidth(getWidth());
+    processorRef.setWindowHeight(getHeight());
 }
 
 
@@ -67,5 +68,5 @@ void AudioPluginAudioProcessorEditor::changeListenerCallback(juce::ChangeBroadca
 
 void AudioPluginAudioProcessorEditor::timerCallback()
 {
-    setSize(processorRef.getWindowWidth(), getHeight());
+    setSize(processorRef.getWindowWidth(), processorRef.getWindowHeight());
 }
