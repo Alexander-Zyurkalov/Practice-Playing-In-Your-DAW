@@ -5,13 +5,14 @@
 #include "NoteBars.h"
 #include <juce_audio_basics/juce_audio_basics.h>
 
-NoteBars::NoteBars()
+NoteBars::NoteBars(NoteGridViewPort& viewport): viewport(&viewport)
 {
     setOpaque(false);
 }
 
 void NoteBars::paint(juce::Graphics& g)
 {
+    juce::Rectangle<float> visibleArea = viewport->getViewArea().toFloat();
     int pixelsPerQuarterNote = 100; //TODO: it is the second place where we use this constant. Do something with that, DRY!!!
     double ppqLeftPosition = dawTransportData.getPpqStartLoopPosition();
     double ppqRightPosition = dawTransportData.getPpqEndLoopPosition() + (double)getHeight()/pixelsPerQuarterNote;
@@ -26,6 +27,8 @@ void NoteBars::paint(juce::Graphics& g)
             continue;
 
         const juce::Rectangle<int>& rectangle = getNoteRectangle(note);
+        if (!visibleArea.intersects(rectangle.toFloat()))
+            continue;
 
         if (minPitchPosition > rectangle.getPosition().y)
             minPitchPosition = rectangle.getPosition().y;

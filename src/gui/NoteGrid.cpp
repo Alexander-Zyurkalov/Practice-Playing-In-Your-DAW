@@ -10,7 +10,7 @@ bool isSharp(int pitch)
     return pitchClass == 1 || pitchClass == 3 || pitchClass == 6 || pitchClass == 8 || pitchClass == 10;
 }
 
-NoteGrid::NoteGrid(NoteGridViewPort& viewport) : viewport(&viewport)
+NoteGrid::NoteGrid(NoteGridViewPort& viewport) : viewport(&viewport), noteBars(viewport)
 {
     this->setSize(3000, 3000);
     this->addAndMakeVisible(noteBars);

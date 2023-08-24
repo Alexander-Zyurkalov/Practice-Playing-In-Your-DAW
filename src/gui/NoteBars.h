@@ -13,7 +13,7 @@
 class NoteBars: public juce::Component
 {
 public:
-    NoteBars();
+    NoteBars(NoteGridViewPort& viewport);
     ~NoteBars() override = default;
 
     void paint(juce::Graphics& g) override;
@@ -29,6 +29,7 @@ public:
 
     float getMiddleYPosition() const;
 private:
+    NoteGridViewPort* viewport;
     DAWTransportData dawTransportData;
     float middleYPosition = 0.0f;
 
