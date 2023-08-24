@@ -46,9 +46,6 @@ void NoteGrid::paint(juce::Graphics& g)
     const int numPitches = 128;
     const float pitchHeight = (float)getHeight() / numPitches;
 
-    float minPitchPosition = 0.0f;
-    auto maxPitchPosition = (float)getHeight();
-
     for (int pitch = 0; pitch < numPitches; ++pitch)
     {
         float pitchPosition = (float)(numPitches - pitch - 1) * pitchHeight;
@@ -63,17 +60,12 @@ void NoteGrid::paint(juce::Graphics& g)
                 // Fill the area with a darker color for sharps
                 g.setColour(juce::Colour(199, 199, 199));
                 g.fillRect(pitchArea);
-                if (minPitchPosition > pitchPosition)
-                    minPitchPosition = pitchPosition;
-                if (maxPitchPosition < pitchPosition + pitchHeight)
-                    maxPitchPosition = pitchPosition + pitchHeight;
             }
             g.setColour(juce::Colour(180, 180, 180));
             int thickness = (pitch+1) % 12 == 0 ? 5 : 1;
             g.drawLine(pitchLine, thickness);
         }
     }
-    float middleYPosition = (maxPitchPosition - minPitchPosition) / 2.0f + minPitchPosition;
 
     // Set the color for the grid lines
     g.setColour(juce::Colours::grey);
@@ -110,9 +102,8 @@ void NoteGrid::paint(juce::Graphics& g)
         juce::Line<float> line{cursorX, 0, cursorX, static_cast<float>(getHeight())};
         g.drawLine(line, 2.0f);
     }
-    if (!viewport->isManuallyScrolled())
-        viewport->setViewPositionProportionately(
-                cursorX / static_cast<float>(getWidth()), middleYPosition / static_cast<float>(getHeight()));
+    viewport->setViewPositionProportionately(
+            cursorX / static_cast<float>(getWidth()), noteBars.getMiddleYPosition() / static_cast<float>(getHeight()));
 
 
 }

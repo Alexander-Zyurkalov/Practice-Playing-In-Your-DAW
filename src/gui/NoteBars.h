@@ -8,6 +8,7 @@
 #include "juce_gui_basics/juce_gui_basics.h"
 #include "../processing/MPENoteEvent.h"
 #include "../processing/DAWTransportData.h"
+#include "NoteGridViewPort.h"
 
 class NoteBars: public juce::Component
 {
@@ -25,8 +26,11 @@ public:
     }
 
     std::vector<MPENoteEvent> notes;
+
+    float getMiddleYPosition() const;
 private:
     DAWTransportData dawTransportData;
+    float middleYPosition = 0.0f;
 
     juce::Rectangle<int> getNoteRectangle(const MPENoteEvent& note);
 

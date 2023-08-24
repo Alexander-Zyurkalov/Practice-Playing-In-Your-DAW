@@ -15,6 +15,9 @@ void NoteBars::paint(juce::Graphics& g)
     int pixelsPerQuarterNote = 100; //TODO: it is the second place where we use this constant. Do something with that, DRY!!!
     double ppqLeftPosition = dawTransportData.getPpqStartLoopPosition();
     double ppqRightPosition = dawTransportData.getPpqEndLoopPosition() + (double)getHeight()/pixelsPerQuarterNote;
+
+    int minPitchPosition = getHeight();
+    int maxPitchPosition = 0.0f;
     for (auto& note : notes)
     {
         if (ppqLeftPosition < note.getPpqStartPosition() && ppqRightPosition < note.getPpqStartPosition())
@@ -23,6 +26,11 @@ void NoteBars::paint(juce::Graphics& g)
             continue;
 
         const juce::Rectangle<int>& rectangle = getNoteRectangle(note);
+
+        if (minPitchPosition > rectangle.getPosition().y)
+            minPitchPosition = rectangle.getPosition().y;
+        if (maxPitchPosition < rectangle.getPosition().y + rectangle.getHeight())
+            maxPitchPosition = rectangle.getPosition().y + rectangle.getHeight();
 
         if (note.thereIsPlayedNote())
         {
@@ -49,6 +57,8 @@ void NoteBars::paint(juce::Graphics& g)
         g.setColour(juce::Colours::black);
         g.drawText(note.getNoteName(), widthOfText, juce::Justification::left);
     }
+    middleYPosition = juce::jlimit<float>(0.0f, getHeight(), (maxPitchPosition - minPitchPosition) / 2.0f + minPitchPosition);
+
 }
 
 
@@ -72,4 +82,9 @@ juce::Rectangle<int> NoteBars::getNoteRectangle(const MPENoteEvent &note)
     float noteY = static_cast<float>(numPitches - note.getMpeNote().initialNote - 1.0) * noteHeight;
     auto noteWidth = static_cast<float>(noteLength * pixelsPerQuarterNote);
     return juce::Rectangle<int>{static_cast<int>(noteX), static_cast<int>(noteY), static_cast<int>(noteWidth), static_cast<int>(noteHeight)};
+}
+
+float NoteBars::getMiddleYPosition() const
+{
+    return middleYPosition;
 }
