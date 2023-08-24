@@ -11,6 +11,7 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor (AudioPluginAud
     setResizable(true, true);
     processorRef.addChangeListener(this);
     viewport.setViewedComponent(&noteGrid, false);
+
     addAndMakeVisible(viewport);
     addAndMakeVisible(timeSigPanel);
     startTimer(500);

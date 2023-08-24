@@ -9,12 +9,13 @@
 #include "../PluginProcessor.h"
 #include "../processing/DAWTransportData.h"
 #include "NoteBars.h"
+#include "NoteGridViewPort.h"
 #include <memory>
 
 class NoteGrid : public juce::Component
 {
 public:
-    NoteGrid(juce::Viewport& viewport);
+    NoteGrid(NoteGridViewPort& viewport);
     ~NoteGrid() override;
 
     void paint(juce::Graphics& g) override;
@@ -24,7 +25,7 @@ public:
 
     NoteBars noteBars;
 private:
-    juce::Viewport* viewport;
+    NoteGridViewPort* viewport;
     DAWTransportData dawTransportData;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(NoteGrid)

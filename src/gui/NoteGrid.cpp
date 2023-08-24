@@ -10,7 +10,7 @@ bool isSharp(int pitch)
     return pitchClass == 1 || pitchClass == 3 || pitchClass == 6 || pitchClass == 8 || pitchClass == 10;
 }
 
-NoteGrid::NoteGrid(juce::Viewport& viewport) : viewport(&viewport)
+NoteGrid::NoteGrid(NoteGridViewPort& viewport) : viewport(&viewport)
 {
     this->setSize(3000, 3000);
     this->addAndMakeVisible(noteBars);
@@ -110,9 +110,9 @@ void NoteGrid::paint(juce::Graphics& g)
         juce::Line<float> line{cursorX, 0, cursorX, static_cast<float>(getHeight())};
         g.drawLine(line, 2.0f);
     }
-    //scroll in accordance with cursorX
-    viewport->setViewPositionProportionately(
-            cursorX / static_cast<float>(getWidth()), middleYPosition / static_cast<float>(getHeight()));
+    if (!viewport->isManuallyScrolled())
+        viewport->setViewPositionProportionately(
+                cursorX / static_cast<float>(getWidth()), middleYPosition / static_cast<float>(getHeight()));
 
 
 }

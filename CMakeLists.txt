@@ -26,6 +26,7 @@ target_sources(PracticePlayingInDAW PRIVATE
         src/gui/TimeSignaturePanel.cpp
         src/gui/NoteBars.cpp
         src/gui/RecordButtonLookAndFeel.cpp
+        src/gui/NoteGridViewPort.cpp
         src/processing/MyMPEInstrumentListener.cpp
         src/processing/MPENoteEvent.cpp
 
@@ -51,7 +52,6 @@ target_link_libraries(PracticePlayingInDAW
 add_subdirectory(./libs/catch2)
 add_executable(test
         test/MyMPEInstrumentListenerTest.cpp
-
         src/processing/MyMPEInstrumentListener.cpp
         src/processing/MPENoteEvent.cpp
 )
