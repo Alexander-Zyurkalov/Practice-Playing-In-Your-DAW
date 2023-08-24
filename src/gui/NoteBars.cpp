@@ -12,7 +12,7 @@ NoteBars::NoteBars(NoteGridViewPort& viewport): viewport(&viewport)
 
 void NoteBars::paint(juce::Graphics& g)
 {
-    juce::Rectangle<float> visibleArea = viewport->getViewArea().toFloat();
+    juce::Rectangle<float> visibleArea = viewport->getViewArea().withBottomY(0).withTop(viewport->getHeight()).toFloat();
     int pixelsPerQuarterNote = 100; //TODO: it is the second place where we use this constant. Do something with that, DRY!!!
     double ppqLeftPosition = dawTransportData.getPpqStartLoopPosition();
     double ppqRightPosition = dawTransportData.getPpqEndLoopPosition() + (double)getHeight()/pixelsPerQuarterNote;

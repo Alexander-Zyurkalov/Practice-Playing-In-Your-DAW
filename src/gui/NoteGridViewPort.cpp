@@ -40,9 +40,10 @@ void NoteGridViewPort::setViewPositionProportionately(const double x, const doub
         xLag.setTarget(x);
         yLag.setTarget(y);
         xLag.update();
-        double xlaged = xLag.getValue();
-        double ylaged = yLag.getValue();
-        Viewport::setViewPositionProportionately(x, y);
+        yLag.update();
+        double xLaged = xLag.getValue();
+        double yLaged = yLag.getValue();
+        Viewport::setViewPositionProportionately(xLaged, yLaged);
         manuallyScrolled = false;
     }
 
