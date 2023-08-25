@@ -8,7 +8,7 @@
 class Lag
 {
 public:
-    Lag(double initial = -1.0f, double rate = 0.02f);
+    Lag(double initial = -1.0f, double rate = 0.04f);
     void setTarget(double newTarget);
     void update();
     double getValue() const;
