@@ -96,15 +96,51 @@ void NoteGrid::paint(juce::Graphics& g)
     }
 
     auto cursorX = static_cast<float>(dawTransportData.getPpqPosition() * pixelsPerQuarterNote);
-    if (cursorX >=0 && cursorX <= static_cast<float>(getWidth()))
+    float contentHeight = static_cast<float>(viewport->getViewedComponent()->getHeight());
+    if (cursorX >= 0 && cursorX <= static_cast<float>(getWidth()))
     {
         g.setColour(juce::Colours::red);
-        juce::Line<float> line{cursorX, 0, cursorX, static_cast<float>(getHeight())};
+        juce::Line<float> line{cursorX, 0, cursorX, contentHeight};
         g.drawLine(line, 2.0f);
     }
-    viewport->setViewPositionProportionately(
-            cursorX / static_cast<float>(getWidth()), noteBars.getMiddleYPosition() / static_cast<float>(getHeight()));
+    float viewportHeight = static_cast<float>(viewport->getViewHeight());
+    float xProportion = cursorX / static_cast<float>(getWidth());
+    float yProportion = (noteBars.getMiddleYPosition()- viewportHeight / 2.0f) / contentHeight;
 
+
+    // draw the value of yProportion
+    g.setColour(juce::Colours::red);
+    g.drawText(
+            std::string("yProportion: ") + std::to_string(yProportion),
+            cursorX, yProportion * contentHeight,
+            500, 100,
+            juce::Justification::centred
+    );
+    g.drawLine(juce::Line<float>{
+            0, yProportion * contentHeight,
+            static_cast<float>(getWidth()), yProportion * contentHeight}
+            , 2.0f);
+
+
+    viewport->setViewPositionProportionately(xProportion, yProportion);
+
+
+
+    auto  realYProportion = static_cast<float>(viewport->getViewPositionY()) / contentHeight ;
+    g.setColour(juce::Colours::blue);
+    g.drawLine(juce::Line<float>{
+            0, noteBars.getMiddleYPosition(),
+            static_cast<float>(getWidth()), noteBars.getMiddleYPosition()}, 2.0f);
+    g.drawText(
+            std::string("realYProportion: ") + std::to_string(realYProportion),
+            cursorX, realYProportion * contentHeight + 10,
+            500, 100,
+            juce::Justification::centred
+    );
+    g.drawLine(juce::Line<float>{
+                       0, realYProportion * contentHeight,
+                       static_cast<float>(getWidth()), realYProportion * contentHeight}
+            , 2.0f);
 
 }
 
