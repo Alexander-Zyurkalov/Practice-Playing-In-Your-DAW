@@ -66,3 +66,27 @@ TEST_CASE("getNextBarPpqPosition", "[DAWTransportData]")
         REQUIRE(dawTransportData.getNextBarPpqPosition(barPPQPositions[numberOfBars]) == barPPQPositions[1]);
     }
 }
+
+TEST_CASE("getNextBeatPpqPosition", "[DAWTransportData]")
+{
+    std::vector<std::pair<DAWTransportData, std::vector<double>>> measures{
+            {DAWTransportData{2, 4}, {0, 1, 2, 3, 4, 5, 6, 7, 8}},
+            {DAWTransportData{2, 8}, {0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4}},
+            {DAWTransportData{3, 2}, {0, 2, 4, 6, 8, 10, 12, 14, 16}},
+            {DAWTransportData{2, 16}, {0, 0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2}},
+    };
+    int numberOfBars = 2;
+    for (auto& measure : measures)
+    {
+        DAWTransportData &dawTransportData = measure.first;
+        std::vector<double> &beatPpqPositions = measure.second;
+        int numberOfBeats = numberOfBars * dawTransportData.getNumerator();
+        dawTransportData.set(0, 0, beatPpqPositions[numberOfBeats]);
+        for (int i = 0; i <  numberOfBeats - 2; ++i)
+        {
+            REQUIRE(dawTransportData.getNextBeatPpqPosition(beatPpqPositions[i]) == beatPpqPositions[i + 1]);
+        }
+        REQUIRE(dawTransportData.getNextBeatPpqPosition(beatPpqPositions[numberOfBeats-1]) == beatPpqPositions[0]);
+    }
+
+}
