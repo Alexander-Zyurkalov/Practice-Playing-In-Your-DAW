@@ -23,6 +23,7 @@ NoteGrid::~NoteGrid()
     // Destructor: Clean up your component here
 }
 
+
 void NoteGrid::paint(juce::Graphics& g)
 {
     juce::Rectangle<float> visibleArea = viewport->getViewArea().toFloat();
@@ -73,6 +74,9 @@ void NoteGrid::paint(juce::Graphics& g)
     noteBars.setSize(static_cast<int>(noteGridWidth), getHeight());
 
     auto bounds = getLocalBounds();
+    double ppqPosition = dawTransportData.getPpqStartLoopPosition();
+    
+
 
     for (int bar = 0; bar < totalBarsInSong; ++bar)
     {
@@ -80,20 +84,8 @@ void NoteGrid::paint(juce::Graphics& g)
         {
             // Calculate the x position for this beat
             int beatPosition = static_cast<int>(beatWidth * beat + bar * barWidth);
-            juce::Line<float> line(static_cast<float>(beatPosition), 0, static_cast<float>(beatPosition),
-                                   static_cast<float>(bounds.getHeight()));
-            if (!visibleArea.intersects(line))
-                continue;
-
-            // Draw a line at this x position
-            g.drawLine(line, 1.0f);
-
-            if (beat == 0)
-            {
-                // Draw a thicker line at the start of each bar
-                g.setColour(juce::Colour(180, 180, 180));
-                g.drawLine(line, 5.0f);
-            }
+            bool isBar = beat == 0;
+            drawTheCell(beatPosition, isBar, g, visibleArea, bounds);
         }
     }
 
@@ -115,6 +107,8 @@ void NoteGrid::paint(juce::Graphics& g)
 }
 
 
+
+
 void NoteGrid::resized()
 {
     // This method is where you'll handle resizing of your component.
@@ -125,6 +119,26 @@ void NoteGrid::updateDAWTransportData(DAWTransportData transportData)
     dawTransportData = transportData;
     noteBars.updateDAWTransportData(transportData);
     repaint();
+}
+
+void NoteGrid::drawTheCell(int beatPosition, bool isBar, juce::Graphics &g, juce::Rectangle<float> &visibleArea,
+                           juce::Rectangle<int> bounds)
+{
+    juce::Line<float> line(static_cast<float>(beatPosition), 0, static_cast<float>(beatPosition),
+                           static_cast<float>(bounds.getHeight()));
+    if (!visibleArea.intersects(line))
+        return;
+
+    // Draw a line at this x position
+    g.drawLine(line, 1.0f);
+
+    if (isBar)
+    {
+        // Draw a thicker line at the start of each bar
+        g.setColour(juce::Colour(180, 180, 180));
+        g.drawLine(line, 5.0f);
+    }
+
 }
 
 

@@ -29,6 +29,9 @@ private:
     DAWTransportData dawTransportData;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(NoteGrid)
+
+    void drawTheCell(int beatPosition, bool isBar, juce::Graphics &g, juce::Rectangle<float> &visibleArea,
+                     juce::Rectangle<int> bound);
 };
 
 
