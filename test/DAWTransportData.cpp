@@ -17,4 +17,10 @@ TEST_CASE("numberOfBars", "[DAWTransportData]")
         REQUIRE(dawTransportData.getNumBars() == i);
     }
 
+    for (int i = 1; i < numberOfBars; ++i)
+    {
+        dawTransportData.set(0, 1, barPPQPositions[i]);
+        REQUIRE(dawTransportData.getNumBars() == i-1);
+    }
+
 }
