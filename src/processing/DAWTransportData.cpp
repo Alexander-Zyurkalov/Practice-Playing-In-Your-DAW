@@ -6,13 +6,13 @@
 
 bool DAWTransportData::changed(int num, int denom) const
 {
-    return this->numerator != num || this->denominator != denom;
+    return this->measure.numerator != num || this->measure.denominator != denom;
 }
 
 void DAWTransportData::set(int num, int denom)
 {
-    this->numerator = num;
-    this->denominator = denom;
+    this->measure.numerator = num;
+    this->measure.denominator = denom;
 }
 
 bool DAWTransportData::changed(double ppqPos, double ppqStartLoopPos, double ppqEndLoopPos) const
@@ -31,8 +31,8 @@ void DAWTransportData::set(double ppqPos, double ppqStartLoopPos, double ppqEndL
 
 int DAWTransportData::getNumBars() const {
     double ppqLoopLength = (ppqEndLoopPosition - ppqStartLoopPosition);
-    double quarterNotesPerBeat = 4.0 / denominator;
-    double ppqPerBeat = quarterNotesPerBeat * numerator;
+    double quarterNotesPerBeat = 4.0 / measure.denominator;
+    double ppqPerBeat = quarterNotesPerBeat * measure.numerator;
     double numBars = ppqLoopLength / ppqPerBeat;
     return static_cast<int>(numBars);
 }
@@ -41,13 +41,13 @@ double DAWTransportData::getPpqPosition() const {
     return ppqPosition - ppqStartLoopPosition;
 }
 
-void DAWTransportData::setBpm(double bpm) {
-    this->bpm = bpm;
+void DAWTransportData::setBpm(double bpm_) {
+    this->bpm = bpm_;
 }
 
-bool DAWTransportData::bpmChanged(double bpm) const
+bool DAWTransportData::bpmChanged(double bpm_) const
 {
-    return this->bpm != bpm;
+    return this->bpm != bpm_;
 }
 
 
@@ -67,7 +67,7 @@ double DAWTransportData::getPpqStartLoopPosition() const {
     return ppqStartLoopPosition;
 }
 
-void DAWTransportData::setPpqPositionNotSynced(double ppqPosition) {
-    ppqPositionNotSynced = ppqPosition;
+void DAWTransportData::setPpqPositionNotSynced(double ppqPosition_) {
+    ppqPositionNotSynced = ppqPosition_;
     ppqPositionNotSyncedTimeUpdate = std::chrono::high_resolution_clock::now();
 }

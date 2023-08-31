@@ -8,16 +8,20 @@
 #include <juce_audio_processors/juce_audio_processors.h>
 #include <chrono>
 
-class
-DAWTransportData
+struct Measure
+{
+    int numerator;
+    int denominator;
+};
+
+class DAWTransportData
 {
 public:
-    explicit DAWTransportData(int num=4, int denom=4) :
-            numerator{num}, denominator{denom}
+    explicit DAWTransportData(int num=4, int denom=4) : measure{num, denom}
     {}
 
-    int getNumerator() const { return numerator; }
-    int getDenominator() const { return denominator; }
+    int getNumerator() const { return measure.numerator; }
+    int getDenominator() const { return measure.denominator; }
     bool changed(int num, int denom) const;
 
     void set(int num, int denom);
@@ -39,13 +43,12 @@ public:
 
     void setPpqPositionNotSynced(double ppqPosition);
 
-    bool bpmChanged(double bpm) const;
+    bool bpmChanged(double bpm_) const;
 
-    void setBpm(double bpm);
+    void setBpm(double bpm_);
 
 private:
-    int numerator;
-    int denominator;
+    Measure measure;
     double ppqPosition = 0.0;
     double ppqStartLoopPosition = 0.0;
     double ppqEndLoopPosition = 16.0;
