@@ -82,10 +82,12 @@ void NoteGrid::paint(juce::Graphics& g)
     {
         for (int beat = 0; beat < dawTransportData.getNumerator(); ++beat)
         {
-            // Calculate the x position for this beat
-            int beatPosition = static_cast<int>(beatWidth * beat + bar * barWidth);
+            int beatPosition = static_cast<int>(round(ppqPosition - dawTransportData.getPpqStartLoopPosition()) * pixelsPerQuarterNote);
             bool isBar = beat == 0;
             drawTheCell(beatPosition, isBar, g, visibleArea, bounds);
+            ppqPosition = dawTransportData.getNextBeatPpqPosition(ppqPosition);
+            if (ppqPosition == dawTransportData.getPpqStartLoopPosition())
+                ppqPosition = dawTransportData.getPpqEndLoopPosition();
         }
     }
 
