@@ -55,5 +55,11 @@ TEST_CASE("getNextBarPpqPosition", "[DAWTransportData]")
             REQUIRE(dawTransportData.getNextBarPpqPosition(barPPQPositions[i]) == barPPQPositions[i + 1]);
             REQUIRE(dawTransportData.getNextBarPpqPosition(barPPQPositions[i] + 1) == barPPQPositions[i + 1]);
         }
+        dawTransportData.set(0, barPPQPositions[1], barPPQPositions[numberOfBars]);
+        for (int i = 1; i < numberOfBars; ++i)
+        {
+            REQUIRE(dawTransportData.getNextBarPpqPosition(barPPQPositions[i]) == barPPQPositions[i + 1]);
+            REQUIRE(dawTransportData.getNextBarPpqPosition(barPPQPositions[i] + 1) == barPPQPositions[i + 1]);
+        }
     }
 }
