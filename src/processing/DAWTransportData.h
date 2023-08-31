@@ -47,6 +47,9 @@ public:
 
     void setBpm(double bpm_);
 
+    double getNextBarPpqPosition(double ppq ) const;
+    double getNextBeatPpqPosition(double ppq ) const;
+
 private:
     Measure measure;
     double ppqPosition = 0.0;
@@ -54,6 +57,7 @@ private:
     double ppqEndLoopPosition = 16.0;
     double ppqPositionNotSynced = 0.0;
     double bpm = 120.0;
+    std::map<double, Measure> measures;
     std::chrono::high_resolution_clock::time_point ppqPositionNotSyncedTimeUpdate{std::chrono::high_resolution_clock::now()} ;
 
 };

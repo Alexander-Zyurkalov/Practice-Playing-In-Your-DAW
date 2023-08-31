@@ -6,7 +6,7 @@
 
 bool DAWTransportData::changed(int num, int denom) const
 {
-    return this->measure.numerator != num || this->measure.denominator != denom;
+    return getNumerator() != num || getDenominator() != denom;
 }
 
 void DAWTransportData::set(int num, int denom)
@@ -31,8 +31,8 @@ void DAWTransportData::set(double ppqPos, double ppqStartLoopPos, double ppqEndL
 
 int DAWTransportData::getNumBars() const {
     double ppqLoopLength = (ppqEndLoopPosition - ppqStartLoopPosition);
-    double quarterNotesPerBeat = 4.0 / measure.denominator;
-    double ppqPerBeat = quarterNotesPerBeat * measure.numerator;
+    double quarterNotesPerBeat = 4.0 / getDenominator();
+    double ppqPerBeat = quarterNotesPerBeat * getNumerator();
     double numBars = ppqLoopLength / ppqPerBeat;
     return static_cast<int>(numBars);
 }

@@ -28,14 +28,7 @@ void NoteGrid::paint(juce::Graphics& g)
     juce::Rectangle<float> visibleArea = viewport->getViewArea().toFloat();
     int pixelsPerQuarterNote = 100; //TODO: define it as constant or do scaling with this variable
 
-    int totalBarsInSong = dawTransportData.getNumBars();
-    totalBarsInSong = totalBarsInSong == 0 ? 1 : totalBarsInSong;
-    double quarterNotesPerBeat = 4.0 / dawTransportData.getDenominator();
-    double beatWidth = quarterNotesPerBeat * pixelsPerQuarterNote;
-    double barWidth = beatWidth * dawTransportData.getNumerator();
-    double noteGridWidth = barWidth * totalBarsInSong;
-    setSize(static_cast<int>(noteGridWidth), getHeight());
-    noteBars.setSize(static_cast<int>(noteGridWidth), getHeight());
+
 
     // Set a background color
     g.fillAll(juce::Colours::lightgrey);
@@ -69,6 +62,15 @@ void NoteGrid::paint(juce::Graphics& g)
 
     // Set the color for the grid lines
     g.setColour(juce::Colours::grey);
+
+    int totalBarsInSong = dawTransportData.getNumBars();
+    totalBarsInSong = totalBarsInSong == 0 ? 1 : totalBarsInSong;
+    double quarterNotesPerBeat = 4.0 / dawTransportData.getDenominator();
+    double beatWidth = quarterNotesPerBeat * pixelsPerQuarterNote;
+    double barWidth = beatWidth * dawTransportData.getNumerator();
+    double noteGridWidth = barWidth * totalBarsInSong;
+    setSize(static_cast<int>(noteGridWidth), getHeight());
+    noteBars.setSize(static_cast<int>(noteGridWidth), getHeight());
 
     auto bounds = getLocalBounds();
 
