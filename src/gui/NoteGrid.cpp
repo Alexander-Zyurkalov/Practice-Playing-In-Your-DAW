@@ -105,42 +105,10 @@ void NoteGrid::paint(juce::Graphics& g)
     }
     float viewportHeight = static_cast<float>(viewport->getViewHeight());
     float xProportion = cursorX / static_cast<float>(getWidth());
-    float yProportion = (noteBars.getMiddleYPosition()- viewportHeight / 2.0f) / contentHeight;
-
-
-    // draw the value of yProportion
-    g.setColour(juce::Colours::red);
-    g.drawText(
-            std::string("yProportion: ") + std::to_string(yProportion),
-            cursorX, yProportion * contentHeight,
-            500, 100,
-            juce::Justification::centred
-    );
-    g.drawLine(juce::Line<float>{
-            0, yProportion * contentHeight,
-            static_cast<float>(getWidth()), yProportion * contentHeight}
-            , 2.0f);
-
+    float yProportion = noteBars.getMiddleYPosition() / contentHeight;
 
     viewport->setViewPositionProportionately(xProportion, yProportion);
 
-
-
-    auto  realYProportion = static_cast<float>(viewport->getViewPositionY()) / contentHeight ;
-    g.setColour(juce::Colours::blue);
-    g.drawLine(juce::Line<float>{
-            0, noteBars.getMiddleYPosition(),
-            static_cast<float>(getWidth()), noteBars.getMiddleYPosition()}, 2.0f);
-    g.drawText(
-            std::string("realYProportion: ") + std::to_string(realYProportion),
-            cursorX, realYProportion * contentHeight + 10,
-            500, 100,
-            juce::Justification::centred
-    );
-    g.drawLine(juce::Line<float>{
-                       0, realYProportion * contentHeight,
-                       static_cast<float>(getWidth()), realYProportion * contentHeight}
-            , 2.0f);
 
 }
 
