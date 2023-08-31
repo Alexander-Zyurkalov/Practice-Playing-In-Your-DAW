@@ -18,72 +18,31 @@ public:
 
     int getNumerator() const { return numerator; }
     int getDenominator() const { return denominator; }
-    bool changed(int num, int denom) const
-    {
-        return this->numerator != num || this->denominator != denom;
-    }
-    void set(int num, int denom)
-    {
-        this->numerator = num;
-        this->denominator = denom;
-    }
+    bool changed(int num, int denom) const;
 
-    bool changed(double ppqPos, double ppqStartLoopPos, double ppqEndLoopPos) const
-    {
-        return this->ppqPosition != ppqPos ||
-               this->ppqStartLoopPosition != ppqStartLoopPos ||
-               this->ppqEndLoopPosition != ppqEndLoopPos;
-    }
+    void set(int num, int denom);
 
-    void set(double ppqPos, double ppqStartLoopPos, double ppqEndLoopPos)
-    {
-        this->ppqPosition = ppqPos;
-        this->ppqStartLoopPosition = ppqStartLoopPos;
-        this->ppqEndLoopPosition = ppqEndLoopPos;
-    }
 
-    int getNumBars() const {
-        double ppqLoopLength = (ppqEndLoopPosition - ppqStartLoopPosition);
-        double quarterNotesPerBeat = 4.0 / denominator;
-        double ppqPerBeat = quarterNotesPerBeat * numerator;
-        double numBars = ppqLoopLength / ppqPerBeat;
-        return static_cast<int>(numBars);
-    }
+    bool changed(double ppqPos, double ppqStartLoopPos, double ppqEndLoopPos) const;
 
-    double getPpqPosition() const {
-        return ppqPosition - ppqStartLoopPosition;
-    }
+    void set(double ppqPos, double ppqStartLoopPos, double ppqEndLoopPos);
 
-    double getPpqStartLoopPosition() const {
-        return ppqStartLoopPosition;
-    }
+    int getNumBars() const;
 
-    double getPpqEndLoopPosition() const {
-        return ppqEndLoopPosition;
-    }
+    double getPpqPosition() const;
 
-    double getPpqPositionNotSynced() const {
-        auto now = std::chrono::high_resolution_clock::now();
-        std::chrono::duration<double, std::ratio<60, 1>> diff = now - ppqPositionNotSyncedTimeUpdate;
+    double getPpqStartLoopPosition() const ;
 
-        double ppq = 0 ; // bpm * diff.count();
-        return ppqPositionNotSynced + ppq;
-    }
+    double getPpqEndLoopPosition() const;
 
-    void setPpqPositionNotSynced(double ppqPosition) {
-        ppqPositionNotSynced = ppqPosition;
-        ppqPositionNotSyncedTimeUpdate = std::chrono::high_resolution_clock::now();
-    }
+    double getPpqPositionNotSynced() const;
 
-    bool bpmChanged(double bpm) const
-    {
-        return this->bpm != bpm;
-    }
+    void setPpqPositionNotSynced(double ppqPosition);
 
-    void setBpm(double bpm)
-    {
-        this->bpm = bpm;
-    }
+    bool bpmChanged(double bpm) const;
+
+    void setBpm(double bpm);
+
 private:
     int numerator;
     int denominator;

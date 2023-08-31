@@ -29,6 +29,7 @@ target_sources(PracticePlayingInDAW PRIVATE
         src/gui/NoteGridViewPort.cpp
         src/processing/MyMPEInstrumentListener.cpp
         src/processing/MPENoteEvent.cpp
+        src/processing/DAWTransportData.cpp
 
 )
 
@@ -54,6 +55,7 @@ add_executable(test
         test/MyMPEInstrumentListenerTest.cpp
         src/processing/MyMPEInstrumentListener.cpp
         src/processing/MPENoteEvent.cpp
+        src/processing/DAWTransportData.cpp
 )
 target_compile_definitions(test
         PRIVATE
