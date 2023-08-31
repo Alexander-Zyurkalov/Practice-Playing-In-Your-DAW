@@ -71,3 +71,14 @@ void DAWTransportData::setPpqPositionNotSynced(double ppqPosition_) {
     ppqPositionNotSynced = ppqPosition_;
     ppqPositionNotSyncedTimeUpdate = std::chrono::high_resolution_clock::now();
 }
+
+double DAWTransportData::getNextBarPpqPosition(double ppq) const
+{
+    double ppqLoopLength = (ppqEndLoopPosition - ppqStartLoopPosition);
+    double numBars = getNumBars();
+    double ppqPerBar = ppqLoopLength / numBars;
+    double ppqPositionInLoop = ppq - ppqStartLoopPosition;
+    double ppqPositionInBar = std::fmod(ppqPositionInLoop, ppqPerBar);
+    double ppqPositionInNextBar = ppqPerBar - ppqPositionInBar;
+    return ppq + ppqPositionInNextBar;
+}
