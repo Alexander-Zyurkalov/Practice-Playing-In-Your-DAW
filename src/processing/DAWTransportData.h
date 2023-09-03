@@ -49,6 +49,7 @@ public:
 
     double getNextBarPpqPosition(double ppq ) const;
     double getNextBeatPpqPosition(double ppq ) const;
+    bool isBarBorder(double ppq) const;
 
 private:
     Measure measure;

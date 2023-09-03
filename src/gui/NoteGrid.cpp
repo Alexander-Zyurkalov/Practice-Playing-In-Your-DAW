@@ -75,31 +75,27 @@ void NoteGrid::paint(juce::Graphics& g)
 
     auto bounds = getLocalBounds();
     double ppqPosition = dawTransportData.getPpqStartLoopPosition();
-    
 
 
-    for (int bar = 0; bar < totalBarsInSong; ++bar)
+    double ppqEndLoopPosition = dawTransportData.getPpqEndLoopPosition();
+    if (ppqEndLoopPosition == 0)
+        ppqEndLoopPosition = static_cast<float>(getWidth()) / static_cast<float>(pixelsPerQuarterNote);
+    while  (dawTransportData.getNextBeatPpqPosition(ppqPosition) <= ppqEndLoopPosition)
     {
-        for (int beat = 0; beat < dawTransportData.getNumerator(); ++beat)
-        {
-            int beatPosition = static_cast<int>(round(ppqPosition - dawTransportData.getPpqStartLoopPosition()) * pixelsPerQuarterNote);
-            bool isBar = beat == 0;
-            drawTheCell(beatPosition, isBar, g, visibleArea, bounds);
-            ppqPosition = dawTransportData.getNextBeatPpqPosition(ppqPosition);
-            if (ppqPosition == dawTransportData.getPpqStartLoopPosition())
-                ppqPosition = dawTransportData.getPpqEndLoopPosition();
-        }
+        int beatPosition = static_cast<int>(round(ppqPosition - dawTransportData.getPpqStartLoopPosition()) *
+                                            pixelsPerQuarterNote);
+        drawTheCell(beatPosition, dawTransportData.isBarBorder(ppqPosition), g, visibleArea, bounds);
+        ppqPosition = dawTransportData.getNextBeatPpqPosition(ppqPosition);
     }
 
     auto cursorX = static_cast<float>(dawTransportData.getPpqPosition() * pixelsPerQuarterNote);
-    float contentHeight = static_cast<float>(viewport->getViewedComponent()->getHeight());
+    auto contentHeight = static_cast<float>(viewport->getViewedComponent()->getHeight());
     if (cursorX >= 0 && cursorX <= static_cast<float>(getWidth()))
     {
         g.setColour(juce::Colours::red);
         juce::Line<float> line{cursorX, 0, cursorX, contentHeight};
         g.drawLine(line, 2.0f);
     }
-    float viewportHeight = static_cast<float>(viewport->getViewHeight());
     float xProportion = cursorX / static_cast<float>(getWidth());
     float yProportion = noteBars.getMiddleYPosition() / contentHeight;
 

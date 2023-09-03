@@ -72,6 +72,8 @@ TEST_CASE("getNextBeatPpqPosition", "[DAWTransportData]")
             {DAWTransportData{2, 8}, {0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4}},
             {DAWTransportData{3, 2}, {0, 2, 4, 6, 8, 10, 12, 14, 16}},
             {DAWTransportData{2, 16}, {0, 0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2}},
+            {DAWTransportData{6, 8}, {0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5,
+                                      5.5, 6, 6.5, 7, 7.5, 8, 8.5}},
     };
     int numberOfBars = 2;
     for (auto& measure : measures)
@@ -83,6 +85,7 @@ TEST_CASE("getNextBeatPpqPosition", "[DAWTransportData]")
         for (int i = 0; i <  numberOfBeats - 1; ++i)
         {
             REQUIRE(dawTransportData.getNextBeatPpqPosition(beatPpqPositions[i]) == beatPpqPositions[i + 1]);
+            REQUIRE(dawTransportData.isBarBorder(beatPpqPositions[i]) == (i % dawTransportData.getNumerator() == 0));
         }
     }
 

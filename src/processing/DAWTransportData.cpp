@@ -93,3 +93,7 @@ double DAWTransportData::getNextBeatPpqPosition(double ppq) const {
     double nextBeatPpqPosition = ppq + ppqPositionInNextBeat;
     return nextBeatPpqPosition;
 }
+
+bool DAWTransportData::isBarBorder(double ppq) const {
+    return ppq == getPpqStartLoopPosition() || getNextBarPpqPosition(ppq-0.000001) == ppq;
+}
