@@ -81,8 +81,6 @@ double DAWTransportData::getNextBarPpqPosition(double ppq) const
     double ppqPositionInBar = std::fmod(ppqPositionInLoop, ppqPerBar);
     double ppqPositionInNextBar = ppqPerBar - ppqPositionInBar;
     double nextBarPpqPosition = ppq + ppqPositionInNextBar;
-    if (nextBarPpqPosition >= ppqEndLoopPosition)
-        nextBarPpqPosition = ppqStartLoopPosition;
     return nextBarPpqPosition;
 }
 
@@ -93,7 +91,5 @@ double DAWTransportData::getNextBeatPpqPosition(double ppq) const {
     double ppqPositionInBar = std::fmod(ppqPositionInLoop, ppqPerBar);
     double ppqPositionInNextBeat = ppqBerBeat - std::fmod(ppqPositionInBar, ppqBerBeat);
     double nextBeatPpqPosition = ppq + ppqPositionInNextBeat;
-    if (nextBeatPpqPosition >= ppqEndLoopPosition)
-        nextBeatPpqPosition = ppqStartLoopPosition;
     return nextBeatPpqPosition;
 }
