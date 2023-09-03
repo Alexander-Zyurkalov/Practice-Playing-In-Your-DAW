@@ -22,9 +22,9 @@ public:
 
     int getNumerator() const { return measure.numerator; }
     int getDenominator() const { return measure.denominator; }
-    bool changed(int num, int denom) const;
+    bool changed(double ppq, int num, int denom) const;
 
-    void set(int num, int denom);
+    void set(double ppq, int num, int denom);
 
 
     bool changed(double ppqPos, double ppqStartLoopPos, double ppqEndLoopPos) const;
@@ -61,6 +61,7 @@ private:
     std::map<double, Measure> measures;
     std::chrono::high_resolution_clock::time_point ppqPositionNotSyncedTimeUpdate{std::chrono::high_resolution_clock::now()} ;
 
+    double getBPMStartPpqPosition(double ppq) const;
 };
 
 #endif //PRACTICEPLAYINGINDAW_DAWTRANSPORTDATA_H

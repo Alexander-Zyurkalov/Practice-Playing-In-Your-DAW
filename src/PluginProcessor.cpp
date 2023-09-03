@@ -198,11 +198,11 @@ void AudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
         }
 
 
-        if (dawTransportData.changed(positionInfo->getTimeSignature()->numerator, positionInfo->getTimeSignature()->denominator))
+        if (dawTransportData.changed(ppqPosition, positionInfo->getTimeSignature()->numerator, positionInfo->getTimeSignature()->denominator))
         {
             {
                 std::lock_guard<std::mutex> lock(dawTransportDataMutex);
-                dawTransportData.set(positionInfo->getTimeSignature()->numerator,
+                dawTransportData.set(ppqPosition, positionInfo->getTimeSignature()->numerator,
                                      positionInfo->getTimeSignature()->denominator);
             }
             sendChangeMessage();
