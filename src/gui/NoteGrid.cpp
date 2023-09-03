@@ -80,10 +80,11 @@ void NoteGrid::paint(juce::Graphics& g)
     double ppqEndLoopPosition = dawTransportData.getPpqEndLoopPosition();
     if (ppqEndLoopPosition == 0)
         ppqEndLoopPosition = static_cast<float>(getWidth()) / static_cast<float>(pixelsPerQuarterNote);
-    while  (dawTransportData.getNextBeatPpqPosition(ppqPosition) <= ppqEndLoopPosition)
+    while  (ppqPosition < ppqEndLoopPosition)
     {
-        int beatPosition = static_cast<int>(round(ppqPosition - dawTransportData.getPpqStartLoopPosition()) *
-                                            pixelsPerQuarterNote);
+        int beatPosition = static_cast<int>(round(
+                (ppqPosition - dawTransportData.getPpqStartLoopPosition()) * pixelsPerQuarterNote
+        ));
         drawTheCell(beatPosition, dawTransportData.isBarBorder(ppqPosition), g, visibleArea, bounds);
         ppqPosition = dawTransportData.getNextBeatPpqPosition(ppqPosition);
     }
