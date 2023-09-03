@@ -6,13 +6,12 @@
 
 bool DAWTransportData::changed(double ppq, int num, int denom) const
 {
-    return getNumerator() != num || getDenominator() != denom;
+    return getNumerator(ppq) != num || getDenominator(ppq) != denom;
 }
 
 void DAWTransportData::set(double ppq, int num, int denom)
 {
-    this->measure.numerator = num;
-    this->measure.denominator = denom;
+    measures[ppq] = {num, denom};
 }
 
 bool DAWTransportData::changed(double ppqPos, double ppqStartLoopPos, double ppqEndLoopPos) const
@@ -31,8 +30,8 @@ void DAWTransportData::set(double ppqPos, double ppqStartLoopPos, double ppqEndL
 
 int DAWTransportData::getNumBars() const {
     double ppqLoopLength = (ppqEndLoopPosition - ppqStartLoopPosition);
-    double ppqBerBeat = 4.0 / getDenominator();
-    double ppqPerBar = ppqBerBeat * getNumerator();
+    double ppqBerBeat = 4.0 / getDenominator(0);
+    double ppqPerBar = ppqBerBeat * getNumerator(0);
     double numBars = ppqLoopLength / ppqPerBar;
     return static_cast<int>(numBars);
 }
@@ -85,8 +84,8 @@ double DAWTransportData::getNextBarPpqPosition(double ppq) const
 }
 
 double DAWTransportData::getNextBeatPpqPosition(double ppq) const {
-    double ppqBerBeat = 4.0 / getDenominator();
-    double ppqPerBar = ppqBerBeat * getNumerator();
+    double ppqBerBeat = 4.0 / getDenominator(ppq);
+    double ppqPerBar = ppqBerBeat * getNumerator(ppq);
     double ppqPositionInLoop = ppq - getBPMStartPpqPosition(ppq);
     double ppqPositionInBar = std::fmod(ppqPositionInLoop, ppqPerBar);
     double ppqPositionInNextBeat = ppqBerBeat - std::fmod(ppqPositionInBar, ppqBerBeat);
@@ -100,5 +99,22 @@ bool DAWTransportData::isBarBorder(double ppq) const {
 
 double DAWTransportData::getBPMStartPpqPosition(double ppq) const
 {
-    return getPpqStartLoopPosition();
+    auto it = measures.upper_bound(ppq);
+    if (it != measures.begin())
+        --it;
+    if (it == measures.begin() || it == measures.end())
+        return 0;
+    return it->first;
+}
+
+int DAWTransportData::getNumerator(double ppq) const
+{
+    double position = getBPMStartPpqPosition(ppq);
+    return measures.at(position).numerator;
+}
+
+int DAWTransportData::getDenominator(double ppq) const
+{
+    double position = getBPMStartPpqPosition(ppq);
+    return measures.at(position).denominator;
 }

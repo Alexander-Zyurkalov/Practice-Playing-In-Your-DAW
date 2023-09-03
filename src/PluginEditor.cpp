@@ -62,7 +62,8 @@ void AudioPluginAudioProcessorEditor::changeListenerCallback(juce::ChangeBroadca
     const DAWTransportData &dawTransportData = processorRef.getDAWTransportData();
     noteGrid.noteBars.notes = processorRef.getNoteEventVector();
     noteGrid.updateDAWTransportData(dawTransportData);
-    timeSigPanel.newTimeSignature(dawTransportData.getNumerator(), dawTransportData.getDenominator());
+    timeSigPanel.newTimeSignature(dawTransportData.getNumerator(dawTransportData.getPpqPosition()),
+                                  dawTransportData.getDenominator(dawTransportData.getPpqPosition()));
     timeSigPanel.newNumBars(dawTransportData.getNumBars());
     timeSigPanel.updateButtonState();
 }

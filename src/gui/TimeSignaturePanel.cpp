@@ -83,7 +83,7 @@ void TimeSignaturePanel::timeSignatureChanged()
     DAWTransportData newTimeSignature{
             static_cast<int>(timeSigNumeratorBox.getValue()),
             denominator};
-    double endLoopPos = numBarsBox.getValue() * newTimeSignature.getNumerator() * 4/newTimeSignature.getDenominator();
+    double endLoopPos = numBarsBox.getValue() * newTimeSignature.getNumerator(0) * 4/newTimeSignature.getDenominator(0);
     newTimeSignature.set(0.0, 0.0, endLoopPos);
     noteGrid.updateDAWTransportData(newTimeSignature);
 }

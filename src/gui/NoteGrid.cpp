@@ -66,9 +66,9 @@ void NoteGrid::paint(juce::Graphics& g)
 
     int totalBarsInSong = dawTransportData.getNumBars();
     totalBarsInSong = totalBarsInSong == 0 ? 1 : totalBarsInSong;
-    double quarterNotesPerBeat = 4.0 / dawTransportData.getDenominator();
+    double quarterNotesPerBeat = 4.0 / dawTransportData.getDenominator(0);
     double beatWidth = quarterNotesPerBeat * pixelsPerQuarterNote;
-    double barWidth = beatWidth * dawTransportData.getNumerator();
+    double barWidth = beatWidth * dawTransportData.getNumerator(0);
     double noteGridWidth = barWidth * totalBarsInSong;
     setSize(static_cast<int>(noteGridWidth), getHeight());
     noteBars.setSize(static_cast<int>(noteGridWidth), getHeight());

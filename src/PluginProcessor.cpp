@@ -218,7 +218,7 @@ void AudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
         }
 
 
-        double maxPpq = (double) dawTransportData.getNumerator() * 4 / dawTransportData.getDenominator();
+        double maxPpq = (double) dawTransportData.getNumerator(ppqPosition) * 4 / dawTransportData.getDenominator(ppqPosition);
         const bool cursorReachedLoopEnd = positionInfo->getIsPlaying() && positionInfo->getIsLooping() && ceil(ppqPosition*64.0)/64.0 >= ppqEnd;
         const bool cursorReachedTheEndOfTheBar = positionInfo->getIsPlaying() && !positionInfo->getIsLooping() && ceil(ppqPosition*64.0)/64.0 >= maxPpq;
         if (cursorReachedLoopEnd || cursorReachedTheEndOfTheBar)

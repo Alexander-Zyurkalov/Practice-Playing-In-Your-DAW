@@ -80,12 +80,12 @@ TEST_CASE("getNextBeatPpqPosition", "[DAWTransportData]")
     {
         DAWTransportData &dawTransportData = measure.first;
         std::vector<double> &beatPpqPositions = measure.second;
-        int numberOfBeats = numberOfBars * dawTransportData.getNumerator();
+        int numberOfBeats = numberOfBars * dawTransportData.getNumerator(0);
         dawTransportData.set(0.0, 0.0, beatPpqPositions[numberOfBeats]);
         for (int i = 0; i <  numberOfBeats - 1; ++i)
         {
             REQUIRE(dawTransportData.getNextBeatPpqPosition(beatPpqPositions[i]) == beatPpqPositions[i + 1]);
-            REQUIRE(dawTransportData.isBarBorder(beatPpqPositions[i]) == (i % dawTransportData.getNumerator() == 0));
+            REQUIRE(dawTransportData.isBarBorder(beatPpqPositions[i]) == (i % dawTransportData.getNumerator(beatPpqPositions[i]) == 0));
         }
     }
 

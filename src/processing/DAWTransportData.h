@@ -17,11 +17,11 @@ struct Measure
 class DAWTransportData
 {
 public:
-    explicit DAWTransportData(int num=4, int denom=4) : measure{num, denom}
+    explicit DAWTransportData(int num=4, int denom=4) : measures{{0.0, {num, denom}}}
     {}
 
-    int getNumerator() const { return measure.numerator; }
-    int getDenominator() const { return measure.denominator; }
+    int getNumerator(double ppq) const;
+    int getDenominator(double ppq) const;
     bool changed(double ppq, int num, int denom) const;
 
     void set(double ppq, int num, int denom);
@@ -52,7 +52,6 @@ public:
     bool isBarBorder(double ppq) const;
 
 private:
-    Measure measure;
     double ppqPosition = 0.0;
     double ppqStartLoopPosition = 0.0;
     double ppqEndLoopPosition = 16.0;
