@@ -60,7 +60,7 @@ private:
     std::map<double, Measure> measures;
     std::chrono::high_resolution_clock::time_point ppqPositionNotSyncedTimeUpdate{std::chrono::high_resolution_clock::now()} ;
 
-    double getBPMStartPpqPosition(double ppq) const;
+    double getMeasureChangeStartPpqPosition(double ppq) const;
 };
 
 #endif //PRACTICEPLAYINGINDAW_DAWTRANSPORTDATA_H

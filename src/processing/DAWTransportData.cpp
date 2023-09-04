@@ -30,7 +30,7 @@ void DAWTransportData::set(double ppqPos, double ppqStartLoopPos, double ppqEndL
 
 int DAWTransportData::getNumBars(double ppq) const {
     double ppqLoopLength = (ppqEndLoopPosition -
-            std::max(getBPMStartPpqPosition(ppq), ppqStartLoopPosition));
+            std::max(getMeasureChangeStartPpqPosition(ppq), ppqStartLoopPosition));
     double ppqBerBeat = 4.0 / getDenominator(ppq);
     double ppqPerBar = ppqBerBeat * getNumerator(ppq);
     double numBars = ppqLoopLength / ppqPerBar;
@@ -75,10 +75,10 @@ void DAWTransportData::setPpqPositionNotSynced(double ppqPosition_) {
 double DAWTransportData::getNextBarPpqPosition(double ppq) const
 {
     double ppqLoopLength = (ppqEndLoopPosition -
-                            std::max(getBPMStartPpqPosition(ppq), ppqStartLoopPosition));
+                            std::max(getMeasureChangeStartPpqPosition(ppq), ppqStartLoopPosition));
     double numBars = getNumBars(ppq);
     double ppqPerBar = ppqLoopLength / numBars;
-    double ppqPositionInLoop = ppq - getBPMStartPpqPosition(ppq);
+    double ppqPositionInLoop = ppq - getMeasureChangeStartPpqPosition(ppq);
     double ppqPositionInBar = std::fmod(ppqPositionInLoop, ppqPerBar);
     double ppqPositionInNextBar = ppqPerBar - ppqPositionInBar;
     double nextBarPpqPosition = ppq + ppqPositionInNextBar;
@@ -88,7 +88,7 @@ double DAWTransportData::getNextBarPpqPosition(double ppq) const
 double DAWTransportData::getNextBeatPpqPosition(double ppq) const {
     double ppqBerBeat = 4.0 / getDenominator(ppq);
     double ppqPerBar = ppqBerBeat * getNumerator(ppq);
-    double ppqPositionInLoop = ppq - getBPMStartPpqPosition(ppq);
+    double ppqPositionInLoop = ppq - getMeasureChangeStartPpqPosition(ppq);
     double ppqPositionInBar = std::fmod(ppqPositionInLoop, ppqPerBar);
     double ppqPositionInNextBeat = ppqBerBeat - std::fmod(ppqPositionInBar, ppqBerBeat);
     double nextBeatPpqPosition = ppq + ppqPositionInNextBeat;
@@ -96,10 +96,11 @@ double DAWTransportData::getNextBeatPpqPosition(double ppq) const {
 }
 
 bool DAWTransportData::isBarBorder(double ppq) const {
-    return ppq == getPpqStartLoopPosition() || getNextBarPpqPosition(ppq-0.000001) == ppq;
+    return ppq == getPpqStartLoopPosition() || getMeasureChangeStartPpqPosition(ppq) == ppq ||
+            getNextBarPpqPosition(ppq-0.000001) == ppq;
 }
 
-double DAWTransportData::getBPMStartPpqPosition(double ppq) const
+double DAWTransportData::getMeasureChangeStartPpqPosition(double ppq) const
 {
     auto it = measures.upper_bound(ppq);
     if (it != measures.begin())
@@ -111,12 +112,12 @@ double DAWTransportData::getBPMStartPpqPosition(double ppq) const
 
 int DAWTransportData::getNumerator(double ppq) const
 {
-    double position = getBPMStartPpqPosition(ppq);
+    double position = getMeasureChangeStartPpqPosition(ppq);
     return measures.at(position).numerator;
 }
 
 int DAWTransportData::getDenominator(double ppq) const
 {
-    double position = getBPMStartPpqPosition(ppq);
+    double position = getMeasureChangeStartPpqPosition(ppq);
     return measures.at(position).denominator;
 }
