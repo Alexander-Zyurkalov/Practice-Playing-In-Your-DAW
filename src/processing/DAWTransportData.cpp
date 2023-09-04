@@ -28,10 +28,11 @@ void DAWTransportData::set(double ppqPos, double ppqStartLoopPos, double ppqEndL
     this->ppqEndLoopPosition = ppqEndLoopPos;
 }
 
-int DAWTransportData::getNumBars() const {
-    double ppqLoopLength = (ppqEndLoopPosition - ppqStartLoopPosition);
-    double ppqBerBeat = 4.0 / getDenominator(0);
-    double ppqPerBar = ppqBerBeat * getNumerator(0);
+int DAWTransportData::getNumBars(double ppq) const {
+    double ppqLoopLength = (ppqEndLoopPosition -
+            std::max(getBPMStartPpqPosition(ppq), ppqStartLoopPosition));
+    double ppqBerBeat = 4.0 / getDenominator(ppq);
+    double ppqPerBar = ppqBerBeat * getNumerator(ppq);
     double numBars = ppqLoopLength / ppqPerBar;
     return static_cast<int>(numBars);
 }
@@ -73,8 +74,9 @@ void DAWTransportData::setPpqPositionNotSynced(double ppqPosition_) {
 
 double DAWTransportData::getNextBarPpqPosition(double ppq) const
 {
-    double ppqLoopLength = (ppqEndLoopPosition - ppqStartLoopPosition);
-    double numBars = getNumBars();
+    double ppqLoopLength = (ppqEndLoopPosition -
+                            std::max(getBPMStartPpqPosition(ppq), ppqStartLoopPosition));
+    double numBars = getNumBars(ppq);
     double ppqPerBar = ppqLoopLength / numBars;
     double ppqPositionInLoop = ppq - getBPMStartPpqPosition(ppq);
     double ppqPositionInBar = std::fmod(ppqPositionInLoop, ppqPerBar);

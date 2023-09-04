@@ -31,7 +31,7 @@ public:
 
     void set(double ppqPos, double ppqStartLoopPos, double ppqEndLoopPos);
 
-    int getNumBars() const;
+    int getNumBars(double ppq) const;
 
     double getPpqPosition() const;
 

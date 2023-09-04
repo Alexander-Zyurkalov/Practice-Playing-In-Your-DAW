@@ -24,13 +24,13 @@ TEST_CASE("numberOfBars", "[DAWTransportData]")
         for (int i = 1; i < numberOfBars; ++i)
         {
             dawTransportData.set(0.0, 0.0, barPPQPositions[i]);
-            REQUIRE(dawTransportData.getNumBars() == i);
+            REQUIRE(dawTransportData.getNumBars(barPPQPositions[i]) == i);
         }
 
         for (int i = 1; i < numberOfBars; ++i)
         {
             dawTransportData.set(0.0, 1.0, barPPQPositions[i]);
-            REQUIRE(dawTransportData.getNumBars() == i - 1);
+            REQUIRE(dawTransportData.getNumBars(1.0) == i - 1);
         }
     }
 }
@@ -109,7 +109,7 @@ TEST_CASE("measures", "[DAWTransportData]")
         },
         .beats{1, 2, 3, 4, 5, 6, 7,
                8, 8.5, 9, 9.5, 10, 10.5, 11, 11.5, 12, 12.5, 13, 13.5, 14, 14.5, 15, 15.5, 16},
-        .bars{8, 10, 12, 14, 16}
+        .bars{4, 8, 10, 12, 14, 16}
     };
     for (std::pair<double, Measure> measureChange: measuresTestRecord.measureChanges)
     {
@@ -117,12 +117,18 @@ TEST_CASE("measures", "[DAWTransportData]")
                                                 measureChange.second.numerator,
                                                 measureChange.second.denominator);
     }
-    measuresTestRecord.dawTransportData.set(0, measuresTestRecord.bars.front(), measuresTestRecord.bars.back());
+    measuresTestRecord.dawTransportData.set(0.0, 0.0, measuresTestRecord.bars.back());
 
     double beat = 0;
     for(double nextBeat: measuresTestRecord.beats)
     {
         REQUIRE(measuresTestRecord.dawTransportData.getNextBeatPpqPosition(beat) == nextBeat);
         beat = nextBeat;
+    }
+    double bar = 0;
+    for(double nextBar: measuresTestRecord.bars)
+    {
+        REQUIRE(measuresTestRecord.dawTransportData.getNextBarPpqPosition(bar) == nextBar);
+        bar = nextBar;
     }
 }
