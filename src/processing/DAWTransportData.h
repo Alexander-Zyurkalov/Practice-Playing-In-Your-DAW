@@ -8,7 +8,7 @@
 #include <juce_audio_processors/juce_audio_processors.h>
 #include <chrono>
 
-struct Measure
+struct TimeSignature
 {
     int numerator;
     int denominator;
@@ -17,7 +17,7 @@ struct Measure
 class DAWTransportData
 {
 public:
-    explicit DAWTransportData(int num=4, int denom=4) : measures{{0.0, {num, denom}}}
+    explicit DAWTransportData(int num=4, int denom=4) : timeSignatures{{0.0, {num, denom}}}
     {}
 
     int getNumerator(double ppq) const;
@@ -57,10 +57,10 @@ private:
     double ppqEndLoopPosition = 16.0;
     double ppqPositionNotSynced = 0.0;
     double bpm = 120.0;
-    std::map<double, Measure> measures;
+    std::map<double, TimeSignature> timeSignatures;
     std::chrono::high_resolution_clock::time_point ppqPositionNotSyncedTimeUpdate{std::chrono::high_resolution_clock::now()} ;
 
-    double getMeasureChangeStartPpqPosition(double ppq) const;
+    double getTimeSignatureChangeStartPpqPosition(double ppq) const;
 };
 
 #endif //PRACTICEPLAYINGINDAW_DAWTRANSPORTDATA_H

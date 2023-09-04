@@ -91,22 +91,22 @@ TEST_CASE("getNextBeatPpqPosition", "[DAWTransportData]")
 
 }
 
-struct MeasuresTestRecord
+struct TimeSignaturesTestRecord
 {
 
     DAWTransportData dawTransportData;
-    std::vector<std::pair<double, Measure>> measureChanges;
+    std::vector<std::pair<double, TimeSignature>> timeSignatureChanges;
     std::vector<double> beats;
     std::vector<double> bars;
 };
 
 TEST_CASE("measures", "[DAWTransportData]")
 {
-    std::vector<MeasuresTestRecord> measuresTestRecords{
+    std::vector<TimeSignaturesTestRecord> timeSignatureTestRecords{
             {
                     .dawTransportData{4,4},
-                    .measureChanges{
-                            {8.0, Measure{4,8}},
+                    .timeSignatureChanges{
+                            {8.0, TimeSignature{4, 8}},
                     },
                     .beats{1, 2, 3, 4, 5, 6, 7,
                            8, 8.5, 9, 9.5, 10, 10.5, 11, 11.5, 12, 12.5, 13, 13.5, 14, 14.5, 15, 15.5, 16},
@@ -114,26 +114,26 @@ TEST_CASE("measures", "[DAWTransportData]")
             }
     };
 
-    for (MeasuresTestRecord& measuresTestRecord: measuresTestRecords)
+    for (TimeSignaturesTestRecord& timeSignatureTestRecord: timeSignatureTestRecords)
     {
-        for (std::pair<double, Measure> measureChange: measuresTestRecord.measureChanges)
+        for (std::pair<double, TimeSignature> measureChange: timeSignatureTestRecord.timeSignatureChanges)
         {
-            measuresTestRecord.dawTransportData.set(measureChange.first,
-                                                    measureChange.second.numerator,
-                                                    measureChange.second.denominator);
+            timeSignatureTestRecord.dawTransportData.set(measureChange.first,
+                                                         measureChange.second.numerator,
+                                                         measureChange.second.denominator);
         }
-        measuresTestRecord.dawTransportData.set(0.0, 0.0, measuresTestRecord.bars.back());
+        timeSignatureTestRecord.dawTransportData.set(0.0, 0.0, timeSignatureTestRecord.bars.back());
 
         double beat = 0;
-        for (double nextBeat: measuresTestRecord.beats)
+        for (double nextBeat: timeSignatureTestRecord.beats)
         {
-            REQUIRE(measuresTestRecord.dawTransportData.getNextBeatPpqPosition(beat) == nextBeat);
+            REQUIRE(timeSignatureTestRecord.dawTransportData.getNextBeatPpqPosition(beat) == nextBeat);
             beat = nextBeat;
         }
         double bar = 0;
-        for (double nextBar: measuresTestRecord.bars)
+        for (double nextBar: timeSignatureTestRecord.bars)
         {
-            REQUIRE(measuresTestRecord.dawTransportData.getNextBarPpqPosition(bar) == nextBar);
+            REQUIRE(timeSignatureTestRecord.dawTransportData.getNextBarPpqPosition(bar) == nextBar);
             bar = nextBar;
         }
     }
