@@ -23,13 +23,13 @@ TEST_CASE("numberOfBars", "[DAWTransportData]")
 
         for (int i = 1; i < numberOfBars; ++i)
         {
-            dawTransportData.set(0.0, 0.0, barPPQPositions[i]);
+            dawTransportData.setLoop(0.0, 0.0, barPPQPositions[i]);
             REQUIRE(dawTransportData.getNumBars(barPPQPositions[i]) == i);
         }
 
         for (int i = 1; i < numberOfBars; ++i)
         {
-            dawTransportData.set(0.0, 1.0, barPPQPositions[i]);
+            dawTransportData.setLoop(0.0, 1.0, barPPQPositions[i]);
             REQUIRE(dawTransportData.getNumBars(1.0) == i - 1);
         }
     }
@@ -49,14 +49,14 @@ TEST_CASE("getNextBarPpqPosition", "[DAWTransportData]")
         DAWTransportData &dawTransportData = measure.first;
         std::vector<double> &barPPQPositions = measure.second;
         int numberOfBars = static_cast<int>(barPPQPositions.size()) - 1;
-        dawTransportData.set(0.0, 0.0, barPPQPositions[numberOfBars]);
+        dawTransportData.setLoop(0.0, 0.0, barPPQPositions[numberOfBars]);
         for (int i = 0; i < numberOfBars; ++i)
         {
             REQUIRE(dawTransportData.getNextBarPpqPosition(barPPQPositions[i]) == barPPQPositions[i + 1]);
             REQUIRE(dawTransportData.getNextBarPpqPosition(barPPQPositions[i] + 1) == barPPQPositions[i + 1]);
         }
 
-        dawTransportData.set(0, barPPQPositions[1], barPPQPositions[numberOfBars]);
+        dawTransportData.setLoop(0, barPPQPositions[1], barPPQPositions[numberOfBars]);
         for (int i = 1; i < numberOfBars; ++i)
         {
             REQUIRE(dawTransportData.getNextBarPpqPosition(barPPQPositions[i]) == barPPQPositions[i + 1]);
@@ -81,7 +81,7 @@ TEST_CASE("getNextBeatPpqPosition", "[DAWTransportData]")
         DAWTransportData &dawTransportData = measure.first;
         std::vector<double> &beatPpqPositions = measure.second;
         int numberOfBeats = numberOfBars * dawTransportData.getNumerator(0);
-        dawTransportData.set(0.0, 0.0, beatPpqPositions[numberOfBeats]);
+        dawTransportData.setLoop(0.0, 0.0, beatPpqPositions[numberOfBeats]);
         for (int i = 0; i <  numberOfBeats - 1; ++i)
         {
             REQUIRE(dawTransportData.getNextBeatPpqPosition(beatPpqPositions[i]) == beatPpqPositions[i + 1]);
@@ -118,9 +118,9 @@ TEST_CASE("timeSignatures", "[DAWTransportData]")
 
     for (TimeSignaturesTestRecord& timeSignatureTestRecord: timeSignatureTestRecords)
     {
-        timeSignatureTestRecord.dawTransportData.set(0.0,
-                                                     timeSignatureTestRecord.barsForTheInitialTimeSignature.front(),
-                                                     timeSignatureTestRecord.barsForTheInitialTimeSignature.back());
+        timeSignatureTestRecord.dawTransportData.setLoop(0.0,
+                                                         timeSignatureTestRecord.barsForTheInitialTimeSignature.front(),
+                                                         timeSignatureTestRecord.barsForTheInitialTimeSignature.back());
 
         size_t numberOfBars = timeSignatureTestRecord.barsForTheInitialTimeSignature.size();
         for (size_t i = 0; i < numberOfBars-1; ++i)
@@ -132,9 +132,9 @@ TEST_CASE("timeSignatures", "[DAWTransportData]")
         }
         for (std::pair<double, TimeSignature> measureChange: timeSignatureTestRecord.timeSignatureChanges)
         {
-            timeSignatureTestRecord.dawTransportData.set(measureChange.first,
-                                                         measureChange.second.numerator,
-                                                         measureChange.second.denominator);
+            timeSignatureTestRecord.dawTransportData.setTimeSignature(measureChange.first,
+                                                                      measureChange.second.numerator,
+                                                                      measureChange.second.denominator);
         }
         double beat = 0;
         for (double nextBeat: timeSignatureTestRecord.beats)

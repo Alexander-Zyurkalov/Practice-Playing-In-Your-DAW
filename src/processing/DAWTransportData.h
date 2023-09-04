@@ -24,12 +24,12 @@ public:
     int getDenominator(double ppq) const;
     bool changed(double ppq, int num, int denom) const;
 
-    void set(double ppq, int num, int denom);
+    void setTimeSignature(double ppq, int num, int denom);
 
 
     bool changed(double ppqPos, double ppqStartLoopPos, double ppqEndLoopPos) const;
 
-    void set(double ppqPos, double ppqStartLoopPos, double ppqEndLoopPos);
+    void setLoop(double ppqPos, double ppqStartLoopPos, double ppqEndLoopPos);
 
     int getNumBars(double ppq) const;
 

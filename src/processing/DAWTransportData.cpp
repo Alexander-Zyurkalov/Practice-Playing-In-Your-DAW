@@ -9,7 +9,7 @@ bool DAWTransportData::changed(double ppq, int num, int denom) const
     return getNumerator(ppq) != num || getDenominator(ppq) != denom;
 }
 
-void DAWTransportData::set(double ppq, int num, int denom)
+void DAWTransportData::setTimeSignature(double ppq, int num, int denom)
 {
     timeSignatures[ppq] = {num, denom};
 }
@@ -21,7 +21,7 @@ bool DAWTransportData::changed(double ppqPos, double ppqStartLoopPos, double ppq
            this->ppqEndLoopPosition != ppqEndLoopPos;
 }
 
-void DAWTransportData::set(double ppqPos, double ppqStartLoopPos, double ppqEndLoopPos)
+void DAWTransportData::setLoop(double ppqPos, double ppqStartLoopPos, double ppqEndLoopPos)
 {
     this->ppqPosition = ppqPos;
     this->ppqStartLoopPosition = ppqStartLoopPos;
