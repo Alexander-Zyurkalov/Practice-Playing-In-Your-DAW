@@ -28,7 +28,7 @@ void NoteGrid::paint(juce::Graphics& g)
     juce::Rectangle<float> visibleArea = viewport->getViewArea().toFloat();
     int pixelsPerQuarterNote = 100; //TODO: define it as constant or do scaling with this variable
 
-    int totalBarsInSong = dawTransportData.getNumBars();
+    double totalBarsInSong = dawTransportData.getNumBars();
     totalBarsInSong = totalBarsInSong == 0 ? 1 : totalBarsInSong;
     double quarterNotesPerBeat = 4.0 / dawTransportData.getDenominator();
     double beatWidth = quarterNotesPerBeat * pixelsPerQuarterNote;
@@ -103,7 +103,6 @@ void NoteGrid::paint(juce::Graphics& g)
         juce::Line<float> line{cursorX, 0, cursorX, contentHeight};
         g.drawLine(line, 2.0f);
     }
-    float viewportHeight = static_cast<float>(viewport->getViewHeight());
     float xProportion = cursorX / static_cast<float>(getWidth());
     float yProportion = noteBars.getMiddleYPosition() / contentHeight;
 

@@ -202,7 +202,7 @@ void AudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
         {
             {
                 std::lock_guard<std::mutex> lock(dawTransportDataMutex);
-                dawTransportData.setTimeSignature(positionInfo->getTimeSignature()->numerator,
+                dawTransportData.setTimeSignature(ppqPosition, positionInfo->getTimeSignature()->numerator,
                                      positionInfo->getTimeSignature()->denominator);
             }
             sendChangeMessage();

@@ -18,16 +18,17 @@ public:
 
     int getNumerator() const { return numerator; }
     int getDenominator() const { return denominator; }
+    double getTimeSignatureChangePosition() const;
     bool changed(int num, int denom) const;
 
-    void setTimeSignature(int num, int denom);
+    void setTimeSignature(double ppq, int num, int denom);
 
 
     bool changed(double ppqPos, double ppqStartLoopPos, double ppqEndLoopPos) const;
 
     void setLoop(double ppqPos, double ppqStartLoopPos, double ppqEndLoopPos);
 
-    int getNumBars() const;
+    double getNumBars() const;
 
     double getPpqPosition() const;
 
@@ -43,9 +44,12 @@ public:
 
     void setBpm(double bpm);
 
+    int getBeatNum(double ppq) const;
+
 private:
     int numerator;
     int denominator;
+    double timeSignatureChange = 0;
     double ppqPosition = 0.0;
     double ppqStartLoopPosition = 0.0;
     double ppqEndLoopPosition = 16.0;

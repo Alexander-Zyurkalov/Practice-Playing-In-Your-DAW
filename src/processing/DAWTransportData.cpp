@@ -9,10 +9,11 @@ bool DAWTransportData::changed(int num, int denom) const
     return this->numerator != num || this->denominator != denom;
 }
 
-void DAWTransportData::setTimeSignature(int num, int denom)
+void DAWTransportData::setTimeSignature(double ppq, int num, int denom)
 {
     this->numerator = num;
     this->denominator = denom;
+    this->timeSignatureChange = ppq;
 }
 
 bool DAWTransportData::changed(double ppqPos, double ppqStartLoopPos, double ppqEndLoopPos) const
@@ -29,8 +30,9 @@ void DAWTransportData::setLoop(double ppqPos, double ppqStartLoopPos, double ppq
     this->ppqEndLoopPosition = ppqEndLoopPos;
 }
 
-int DAWTransportData::getNumBars() const {
-    double ppqLoopLength = (ppqEndLoopPosition - ppqStartLoopPosition);
+double DAWTransportData::getNumBars() const {
+    double start = std::max(ppqStartLoopPosition, getTimeSignatureChangePosition());
+    double ppqLoopLength = (ppqEndLoopPosition - start);
     double quarterNotesPerBeat = 4.0 / denominator;
     double ppqPerBeat = quarterNotesPerBeat * numerator;
     double numBars = ppqLoopLength / ppqPerBeat;
@@ -70,4 +72,12 @@ double DAWTransportData::getPpqStartLoopPosition() const {
 void DAWTransportData::setPpqPositionNotSynced(double ppqPosition) {
     ppqPositionNotSynced = ppqPosition;
     ppqPositionNotSyncedTimeUpdate = std::chrono::high_resolution_clock::now();
+}
+
+double DAWTransportData::getTimeSignatureChangePosition() const {
+    return timeSignatureChange;
+}
+
+int DAWTransportData::getBeatNum(double ppq) const
+{
 }
