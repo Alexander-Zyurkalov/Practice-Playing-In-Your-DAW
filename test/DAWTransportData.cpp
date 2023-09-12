@@ -138,7 +138,8 @@ TEST_CASE("timeSignatures", "[DAWTransportData]")
         while (ppq<timeSignatureTestRecord.dawTransportData.getPpqEndLoopPosition())
         {
             REQUIRE(
-                timeSignatureTestRecord.dawTransportData.getTimeSignatureChangePosition(ppq) == 0.0
+                timeSignatureTestRecord.dawTransportData.getTimeSignatureChangePosition(ppq) ==
+                    timeSignatureTestRecord.dawTransportData.getPpqStartLoopPosition()
             );
             ppq+=0.01;
         }
@@ -150,6 +151,17 @@ TEST_CASE("timeSignatures", "[DAWTransportData]")
                                                                       measureChange.second.numerator,
                                                                       measureChange.second.denominator);
         }
+
+        // checking the further time signature
+        ppq=timeSignatureTestRecord.dawTransportData.getPpqStartLoopPosition();
+        while (ppq<timeSignatureTestRecord.dawTransportData.getPpqEndLoopPosition())
+        {
+            double signatureChangePosition =
+                    timeSignatureTestRecord.dawTransportData.getTimeSignatureChangePosition(ppq);
+            REQUIRE(signatureChangePosition <= ppq);
+            ppq+=0.01;
+        }
+
 
         // checking the beats
         double beat = 0;
