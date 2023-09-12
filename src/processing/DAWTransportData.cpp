@@ -31,11 +31,10 @@ void DAWTransportData::setLoop(double ppqPos, double ppqStartLoopPos, double ppq
 }
 
 double DAWTransportData::getNumBars() const {
-    double start = std::max(ppqStartLoopPosition, getTimeSignatureChangePosition());
-    double ppqLoopLength = (ppqEndLoopPosition - start);
+    double ppqLoopLength = (ppqEndLoopPosition - ppqStartLoopPosition);
     double quarterNotesPerBeat = 4.0 / denominator;
-    double ppqPerBeat = quarterNotesPerBeat * numerator;
-    double numBars = ppqLoopLength / ppqPerBeat;
+    double ppqPerBar = quarterNotesPerBeat * numerator;
+    double numBars = ppqLoopLength / ppqPerBar;
     return static_cast<int>(numBars);
 }
 
@@ -78,6 +77,10 @@ double DAWTransportData::getTimeSignatureChangePosition() const {
     return timeSignatureChange;
 }
 
-int DAWTransportData::getBeatNum(double ppq) const
+double DAWTransportData::getBarShift() const
 {
+    double quarterNotesPerBeat = 4.0 / denominator;
+    double ppqPerBar = quarterNotesPerBeat * numerator;
+    double rest = std::fmod(getTimeSignatureChangePosition(),ppqPerBar);
+    return rest;
 }

@@ -77,7 +77,8 @@ void NoteGrid::paint(juce::Graphics& g)
         for (int beat = 0; beat < dawTransportData.getNumerator(); ++beat)
         {
             // Calculate the x position for this beat
-            int beatPosition = static_cast<int>(beatWidth * beat + bar * barWidth);
+            int beatPosition = static_cast<int>(beatWidth * beat + bar * barWidth +
+                    dawTransportData.getBarShift() * pixelsPerQuarterNote);
             juce::Line<float> line(static_cast<float>(beatPosition), 0, static_cast<float>(beatPosition),
                                    static_cast<float>(bounds.getHeight()));
             if (!visibleArea.intersects(line))
