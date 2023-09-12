@@ -20,7 +20,7 @@ public:
     int getDenominator() const { return denominator; }
     bool changed(int num, int denom) const;
 
-    void set(int num, int denom);
+    void setTimeSignature(int num, int denom);
 
 
     bool changed(double ppqPos, double ppqStartLoopPos, double ppqEndLoopPos) const;

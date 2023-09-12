@@ -9,7 +9,7 @@ bool DAWTransportData::changed(int num, int denom) const
     return this->numerator != num || this->denominator != denom;
 }
 
-void DAWTransportData::set(int num, int denom)
+void DAWTransportData::setTimeSignature(int num, int denom)
 {
     this->numerator = num;
     this->denominator = denom;
