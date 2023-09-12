@@ -50,6 +50,7 @@ public:
     double getNextBarPpqPosition(double ppq ) const;
     double getNextBeatPpqPosition(double ppq ) const;
     bool isBarBorder(double ppq) const;
+    double getTimeSignatureChangePosition(double ppq) const;
 
 private:
     double ppqPosition = 0.0;
@@ -60,7 +61,6 @@ private:
     std::map<double, TimeSignature> timeSignatures;
     std::chrono::high_resolution_clock::time_point ppqPositionNotSyncedTimeUpdate{std::chrono::high_resolution_clock::now()} ;
 
-    double getTimeSignatureChangeStartPpqPosition(double ppq) const;
 };
 
 #endif //PRACTICEPLAYINGINDAW_DAWTRANSPORTDATA_H

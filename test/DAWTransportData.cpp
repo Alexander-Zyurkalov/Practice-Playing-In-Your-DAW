@@ -118,10 +118,12 @@ TEST_CASE("timeSignatures", "[DAWTransportData]")
 
     for (TimeSignaturesTestRecord& timeSignatureTestRecord: timeSignatureTestRecords)
     {
+        // setting the initial loop
         timeSignatureTestRecord.dawTransportData.setLoop(0.0,
                                                          timeSignatureTestRecord.barsForTheInitialTimeSignature.front(),
                                                          timeSignatureTestRecord.barsForTheInitialTimeSignature.back());
 
+        // checking the initial bars
         size_t numberOfBars = timeSignatureTestRecord.barsForTheInitialTimeSignature.size();
         for (size_t i = 0; i < numberOfBars-1; ++i)
         {
@@ -130,18 +132,34 @@ TEST_CASE("timeSignatures", "[DAWTransportData]")
                             timeSignatureTestRecord.barsForTheInitialTimeSignature[i + 1]
             );
         }
+
+        // checking the initial time signature
+        double ppq=timeSignatureTestRecord.dawTransportData.getPpqStartLoopPosition();
+        while (ppq<timeSignatureTestRecord.dawTransportData.getPpqEndLoopPosition())
+        {
+            REQUIRE(
+                timeSignatureTestRecord.dawTransportData.getTimeSignatureChangePosition(ppq) == 0.0
+            );
+            ppq+=0.01;
+        }
+
+        //setting the new time signatures
         for (std::pair<double, TimeSignature> measureChange: timeSignatureTestRecord.timeSignatureChanges)
         {
             timeSignatureTestRecord.dawTransportData.setTimeSignature(measureChange.first,
                                                                       measureChange.second.numerator,
                                                                       measureChange.second.denominator);
         }
+
+        // checking the beats
         double beat = 0;
         for (double nextBeat: timeSignatureTestRecord.beats)
         {
             REQUIRE(timeSignatureTestRecord.dawTransportData.getNextBeatPpqPosition(beat) == nextBeat);
             beat = nextBeat;
         }
+
+        // checking the bars
         double bar = 0;
         for (double nextBar: timeSignatureTestRecord.bars)
         {
