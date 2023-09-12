@@ -191,7 +191,7 @@ void AudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
         {
             {
                 std::lock_guard<std::mutex> lock(dawTransportDataMutex);
-                dawTransportData.set(ppqPosition, ppqStart, ppqEnd);
+                dawTransportData.setLoop(ppqPosition, ppqStart, ppqEnd);
             }
             sendChangeMessage();
             positionChangeCounter = 0;

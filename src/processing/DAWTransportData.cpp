@@ -22,7 +22,7 @@ bool DAWTransportData::changed(double ppqPos, double ppqStartLoopPos, double ppq
            this->ppqEndLoopPosition != ppqEndLoopPos;
 }
 
-void DAWTransportData::set(double ppqPos, double ppqStartLoopPos, double ppqEndLoopPos)
+void DAWTransportData::setLoop(double ppqPos, double ppqStartLoopPos, double ppqEndLoopPos)
 {
     this->ppqPosition = ppqPos;
     this->ppqStartLoopPosition = ppqStartLoopPos;

@@ -25,7 +25,7 @@ public:
 
     bool changed(double ppqPos, double ppqStartLoopPos, double ppqEndLoopPos) const;
 
-    void set(double ppqPos, double ppqStartLoopPos, double ppqEndLoopPos);
+    void setLoop(double ppqPos, double ppqStartLoopPos, double ppqEndLoopPos);
 
     int getNumBars() const;
 

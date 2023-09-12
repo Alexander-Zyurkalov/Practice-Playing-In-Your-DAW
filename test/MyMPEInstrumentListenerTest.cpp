@@ -15,7 +15,7 @@ static void recordInitialNotes(DAWTransportData &dawTransportData, MyMPEInstrume
 TEST_CASE("Recording", "[MyMPEInstrumentListenerTest]")
 {
     DAWTransportData dawTransportData{};
-    dawTransportData.set(0.0, 0.0, 2.0);
+    dawTransportData.setLoop(0.0, 0.0, 2.0);
     dawTransportData.setBpm(120.0);
 
 
@@ -209,7 +209,7 @@ static void playNotes(DAWTransportData &dawTransportData, MyMPEInstrumentListene
         newNote.noteID =noteGenerator(i);
 
         dawTransportData.setPpqPositionNotSynced(position + shift());
-        dawTransportData.set(position + shift(), 0.0, 2.0);
+        dawTransportData.setLoop(position + shift(), 0.0, 2.0);
 
         myMPEInstrumentListener.noteReleased(prevNote);
         myMPEInstrumentListener.noteAdded(newNote);
@@ -218,7 +218,7 @@ static void playNotes(DAWTransportData &dawTransportData, MyMPEInstrumentListene
         myMPEInstrumentListener.updateNotes(position + shift());
 
         dawTransportData.setPpqPositionNotSynced(position + shift());
-        dawTransportData.set(position+ shift(), 0.0, 2.0);
+        dawTransportData.setLoop(position+ shift(), 0.0, 2.0);
         prevNote = newNote;
         i++;
     } while (position < 2.0);
