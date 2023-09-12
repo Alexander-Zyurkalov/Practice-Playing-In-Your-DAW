@@ -65,7 +65,7 @@ void NoteGrid::paint(juce::Graphics& g)
     g.setColour(juce::Colours::grey);
 
     double ppqPosition = dawTransportData.getPpqStartLoopPosition();
-    int totalBarsInSong = dawTransportData.getNumBars(ppqPosition);
+    double totalBarsInSong = dawTransportData.getNumBars(ppqPosition);
     totalBarsInSong = totalBarsInSong == 0 ? 1 : totalBarsInSong;
     double quarterNotesPerBeat = 4.0 / dawTransportData.getDenominator(0);
     double beatWidth = quarterNotesPerBeat * pixelsPerQuarterNote;

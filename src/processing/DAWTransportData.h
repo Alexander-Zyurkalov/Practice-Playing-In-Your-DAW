@@ -31,7 +31,7 @@ public:
 
     void setLoop(double ppqPos, double ppqStartLoopPos, double ppqEndLoopPos);
 
-    int getNumBars(double ppq) const;
+    double getNumBars(double ppq) const;
 
     double getPpqPosition() const;
 
@@ -51,6 +51,7 @@ public:
     double getNextBeatPpqPosition(double ppq ) const;
     bool isBarBorder(double ppq) const;
     double getTimeSignatureChangePosition(double ppq) const;
+    double getNextTimeSignatureChangePosition(double ppq) const;
 
 private:
     double ppqPosition = 0.0;

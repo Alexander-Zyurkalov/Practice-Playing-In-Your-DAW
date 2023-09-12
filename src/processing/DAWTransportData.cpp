@@ -28,13 +28,13 @@ void DAWTransportData::setLoop(double ppqPos, double ppqStartLoopPos, double ppq
     this->ppqEndLoopPosition = ppqEndLoopPos;
 }
 
-int DAWTransportData::getNumBars(double ppq) const {
+double DAWTransportData::getNumBars(double ppq) const {
     double ppqLoopLength = (ppqEndLoopPosition -
             std::max(getTimeSignatureChangePosition(ppq), ppqStartLoopPosition));
     double ppqBerBeat = 4.0 / getDenominator(ppq);
     double ppqPerBar = ppqBerBeat * getNumerator(ppq);
     double numBars = ppqLoopLength / ppqPerBar;
-    return static_cast<int>(numBars);
+    return numBars;
 }
 
 double DAWTransportData::getPpqPosition() const {
@@ -82,6 +82,8 @@ double DAWTransportData::getNextBarPpqPosition(double ppq) const
     double ppqPositionInBar = std::fmod(ppqPositionInLoop, ppqPerBar);
     double ppqPositionInNextBar = ppqPerBar - ppqPositionInBar;
     double nextBarPpqPosition = ppq + ppqPositionInNextBar;
+    if (nextBarPpqPosition > getNextTimeSignatureChangePosition(ppq))
+        nextBarPpqPosition = getNextTimeSignatureChangePosition(ppq);
     return nextBarPpqPosition;
 }
 
@@ -120,4 +122,12 @@ int DAWTransportData::getDenominator(double ppq) const
 {
     double position = getTimeSignatureChangePosition(ppq);
     return timeSignatures.at(position).denominator;
+}
+
+double DAWTransportData::getNextTimeSignatureChangePosition(double ppq) const
+{
+    auto it = timeSignatures.upper_bound(ppq);
+    if (it == timeSignatures.end())
+        return std::numeric_limits<double>::max();
+    return it->first;
 }

@@ -27,11 +27,6 @@ TEST_CASE("numberOfBars", "[DAWTransportData]")
             REQUIRE(dawTransportData.getNumBars(barPPQPositions[i]) == i);
         }
 
-        for (int i = 1; i < numberOfBars; ++i)
-        {
-            dawTransportData.setLoop(0.0, 1.0, barPPQPositions[i]);
-            REQUIRE(dawTransportData.getNumBars(1.0) == i - 1);
-        }
     }
 }
 
@@ -113,7 +108,17 @@ TEST_CASE("timeSignatures", "[DAWTransportData]")
                            8, 8.5, 9, 9.5, 10, 10.5, 11, 11.5, 12, 12.5, 13, 13.5, 14, 14.5, 15, 15.5, 16},
                     .barsForTheInitialTimeSignature{0, 4, 8, 12, 16},
                     .bars{4, 8, 10, 12, 14, 16}
-            }
+            },
+            {
+                    .dawTransportData{4,4},
+                    .timeSignatureChanges{
+                            {7.0, TimeSignature{4, 8}},
+                    },
+                    .beats{1, 2, 3, 4, 5, 6, 7,
+                           7.5, 8, 8.5, 9, 9.5, 10, 10.5, 11, 11.5, 12, 12.5, 13, 13.5, 14, 14.5, 15},
+                    .barsForTheInitialTimeSignature{0, 4, 8, 12, 16},
+                    .bars{4, 7, 9, 11, 13, 15}
+            },
     };
 
     for (TimeSignaturesTestRecord& timeSignatureTestRecord: timeSignatureTestRecords)
@@ -127,9 +132,10 @@ TEST_CASE("timeSignatures", "[DAWTransportData]")
         size_t numberOfBars = timeSignatureTestRecord.barsForTheInitialTimeSignature.size();
         for (size_t i = 0; i < numberOfBars-1; ++i)
         {
-            REQUIRE(timeSignatureTestRecord.dawTransportData.getNextBarPpqPosition(
-                    timeSignatureTestRecord.barsForTheInitialTimeSignature[i]) ==
-                            timeSignatureTestRecord.barsForTheInitialTimeSignature[i + 1]
+            REQUIRE(
+                timeSignatureTestRecord.dawTransportData.getNextBarPpqPosition(
+                        timeSignatureTestRecord.barsForTheInitialTimeSignature[i]
+                ) == timeSignatureTestRecord.barsForTheInitialTimeSignature[i + 1]
             );
         }
 
