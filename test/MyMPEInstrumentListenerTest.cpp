@@ -130,7 +130,7 @@ TEST_CASE("Recording", "[MyMPEInstrumentListenerTest]")
         }
     }
 
-    SECTION("Let's play with a shift")
+    SECTION("Let's play with a delay")
     {
         recordInitialNotes(dawTransportData, myMPEInstrumentListener, step);
         REQUIRE(!myMPEInstrumentListener.isRecording());
@@ -154,7 +154,7 @@ TEST_CASE("Recording", "[MyMPEInstrumentListenerTest]")
         }
     }
 
-    SECTION("Let's play with a shift but with the only note ID")
+    SECTION("Let's play with a delay but with the only note ID")
     {
         int (*noteGenerator)(size_t) = [](size_t i) { return 49; };
         recordInitialNotes(dawTransportData, myMPEInstrumentListener, step, noteGenerator);
@@ -179,7 +179,7 @@ TEST_CASE("Recording", "[MyMPEInstrumentListenerTest]")
         }
     }
 
-    SECTION("Let's play with a too big shift")
+    SECTION("Let's play with a too long delay")
     {
         recordInitialNotes(dawTransportData, myMPEInstrumentListener, step);
         REQUIRE(!myMPEInstrumentListener.isRecording());
