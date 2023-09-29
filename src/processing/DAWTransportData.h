@@ -8,21 +8,18 @@
 #include <juce_audio_processors/juce_audio_processors.h>
 #include <chrono>
 
-struct TimeSignature
-{
-    int numerator;
-    int denominator;
-};
-
-class DAWTransportData
+class
+DAWTransportData
 {
 public:
-    explicit DAWTransportData(int num=4, int denom=4) : timeSignatures{{0.0, {num, denom}}}
+    explicit DAWTransportData(int num=4, int denom=4) :
+            numerator{num}, denominator{denom}
     {}
 
-    int getNumerator(double ppq) const;
-    int getDenominator(double ppq) const;
-    bool changed(double ppq, int num, int denom) const;
+    int getNumerator() const { return numerator; }
+    int getDenominator() const { return denominator; }
+    double getTimeSignatureChangePosition() const;
+    bool changed(int num, int denom) const;
 
     void setTimeSignature(double ppq, int num, int denom);
 
@@ -31,7 +28,7 @@ public:
 
     void setLoop(double ppqPos, double ppqStartLoopPos, double ppqEndLoopPos);
 
-    double getNumBars(double ppq) const;
+    double getNumBars() const;
 
     double getPpqPosition() const;
 
@@ -43,23 +40,23 @@ public:
 
     void setPpqPositionNotSynced(double ppqPosition);
 
-    bool bpmChanged(double bpm_) const;
+    bool bpmChanged(double bpm) const;
 
-    void setBpm(double bpm_);
+    void setBpm(double bpm);
 
-    double getNextBarPpqPosition(double ppq ) const;
-    double getNextBeatPpqPosition(double ppq ) const;
-    bool isBarBorder(double ppq) const;
-    double getTimeSignatureChangePosition(double ppq) const;
-    double getNextTimeSignatureChangePosition(double ppq) const;
+    double getBarShift() const;
 
+    double getBarPosition(double barNumber) const;
+    double getBeatPosition(double beatNumber) const;
 private:
+    int numerator;
+    int denominator;
+    double timeSignatureChange = 0;
     double ppqPosition = 0.0;
     double ppqStartLoopPosition = 0.0;
     double ppqEndLoopPosition = 16.0;
     double ppqPositionNotSynced = 0.0;
     double bpm = 120.0;
-    std::map<double, TimeSignature> timeSignatures;
     std::chrono::high_resolution_clock::time_point ppqPositionNotSyncedTimeUpdate{std::chrono::high_resolution_clock::now()} ;
 
 };

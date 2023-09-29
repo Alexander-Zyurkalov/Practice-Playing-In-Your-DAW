@@ -198,12 +198,12 @@ void AudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
         }
 
 
-        if (dawTransportData.changed(ppqPosition, positionInfo->getTimeSignature()->numerator, positionInfo->getTimeSignature()->denominator))
+        if (dawTransportData.changed(positionInfo->getTimeSignature()->numerator, positionInfo->getTimeSignature()->denominator))
         {
             {
                 std::lock_guard<std::mutex> lock(dawTransportDataMutex);
-                dawTransportData.setLoop(ppqPosition, positionInfo->getTimeSignature()->numerator,
-                                         positionInfo->getTimeSignature()->denominator);
+                dawTransportData.setTimeSignature(ppqPosition, positionInfo->getTimeSignature()->numerator,
+                                     positionInfo->getTimeSignature()->denominator);
             }
             sendChangeMessage();
         }
@@ -218,7 +218,7 @@ void AudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
         }
 
 
-        double maxPpq = (double) dawTransportData.getNumerator(ppqPosition) * 4 / dawTransportData.getDenominator(ppqPosition);
+        double maxPpq = (double) dawTransportData.getNumerator() * 4 / dawTransportData.getDenominator();
         const bool cursorReachedLoopEnd = positionInfo->getIsPlaying() && positionInfo->getIsLooping() && ceil(ppqPosition*64.0)/64.0 >= ppqEnd;
         const bool cursorReachedTheEndOfTheBar = positionInfo->getIsPlaying() && !positionInfo->getIsLooping() && ceil(ppqPosition*64.0)/64.0 >= maxPpq;
         if (cursorReachedLoopEnd || cursorReachedTheEndOfTheBar)
