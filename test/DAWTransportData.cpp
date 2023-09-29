@@ -101,16 +101,7 @@ TEST_CASE("timeSignatures", "[DAWTransportData]")
     {
         SECTION(timeSignatureTestRecord.testName)
         {
-            // checking the initial time signature
-            double ppq = timeSignatureTestRecord.dawTransportData.getPpqStartLoopPosition();
-            while (ppq < timeSignatureTestRecord.dawTransportData.getPpqEndLoopPosition())
-            {
-                REQUIRE(
-                        timeSignatureTestRecord.dawTransportData.getTimeSignatureChangePosition() ==
-                        timeSignatureTestRecord.dawTransportData.getPpqStartLoopPosition()
-                );
-                ppq += 0.01;
-            }
+            timeSignatureTestRecord.dawTransportData.setLoop(0, 0, 100);
 
             //setting the new time signatures
             for (std::pair<double, TimeSignature> measureChange: timeSignatureTestRecord.timeSignatureChanges)
@@ -143,6 +134,7 @@ TEST_CASE("timeSignatures", "[DAWTransportData]")
 TEST_CASE("barShift", "[DAWTransportData]")
 {
     DAWTransportData dawTransportData{4,4};
+    dawTransportData.setLoop(0, 0, 50);
     dawTransportData.setTimeSignature(30, 4, 4);
     REQUIRE(dawTransportData.getBarShift() == 2.0);
 
