@@ -86,7 +86,14 @@ TEST_CASE("timeSignatures", "[DAWTransportData]")
                 .timeSignatureChanges{},
                 .beats{0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4},
                 .bars{0, 3, 6, 9, 12, 15, 18, 21, 24, 27, 30, 33, 36}
-            }
+            },
+            {
+                .testName{"A test for the initial 6/8 time signature and further change to 4/4"},
+                .dawTransportData{6,8},
+                .timeSignatureChanges{{30, {4,4}}},
+                .beats{2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12},
+                .bars{2, 6, 10, 14, 18, 22, 26, 30, 34, 38}
+            },
 
     };
 
@@ -131,4 +138,12 @@ TEST_CASE("timeSignatures", "[DAWTransportData]")
             }
         }
     }
+}
+
+TEST_CASE("barShift", "[DAWTransportData]")
+{
+    DAWTransportData dawTransportData{4,4};
+    dawTransportData.setTimeSignature(30, 4, 4);
+    REQUIRE(dawTransportData.getBarShift() == 2.0);
+
 }
