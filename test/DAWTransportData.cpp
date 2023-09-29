@@ -80,12 +80,13 @@ TEST_CASE("timeSignatures", "[DAWTransportData]")
                 .beats{0.5, 1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 7.5, 8.5, 9.5, 10.5, 11.5, 12.5, 13.5, 14.5, 15.5, 16.5},
                 .bars{0.5, 3.5, 6.5, 9.5, 12.5, 15.5, 18.5}
             },
-//            {
-//                .dawTransportData{6,8},
-//                .timeSignatureChanges{},
-//                .beats{0, 1, 2, 3, 4, 5, 6},
-//                .bars{0, 6, 12, 18, 24, 30, 36}
-//            }
+            {
+                .testName{"A test for the initial 6/8 time signature"},
+                .dawTransportData{6,8},
+                .timeSignatureChanges{},
+                .beats{0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4},
+                .bars{0, 3, 6, 9, 12, 15, 18, 21, 24, 27, 30, 33, 36}
+            }
 
     };
 
