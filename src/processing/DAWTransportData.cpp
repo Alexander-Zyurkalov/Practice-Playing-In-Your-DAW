@@ -84,3 +84,17 @@ double DAWTransportData::getBarShift() const
     double rest = std::fmod(getTimeSignatureChangePosition(),ppqPerBar);
     return rest;
 }
+
+double DAWTransportData::getBarPosition(double barNumber) const
+{
+    double quarterNotesPerBeat = 4.0 / denominator;
+    double ppqPerBar = quarterNotesPerBeat * numerator;
+    return barNumber * ppqPerBar + getBarShift();
+}
+
+double DAWTransportData::getBeatPosition(double beatNumber) const
+{
+    double quarterNotesPerBeat = 4.0 / denominator;
+    double ppqPerBeat = quarterNotesPerBeat;
+    return beatNumber * ppqPerBeat + getBarShift();
+}

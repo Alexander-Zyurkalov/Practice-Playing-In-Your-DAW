@@ -206,7 +206,7 @@ static void playNotes(DAWTransportData &dawTransportData, MyMPEInstrumentListene
     size_t i = 0;
     do{
         juce::MPENote newNote{};
-        newNote.noteID =noteGenerator(i);
+        newNote.noteID = noteGenerator(i);
 
         dawTransportData.setPpqPositionNotSynced(position + shift());
         dawTransportData.setLoop(position + shift(), 0.0, 2.0);

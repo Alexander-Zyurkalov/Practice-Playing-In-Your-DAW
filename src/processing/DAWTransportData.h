@@ -45,6 +45,9 @@ public:
     void setBpm(double bpm);
 
     double getBarShift() const;
+
+    double getBarPosition(double barNumber) const;
+    double getBeatPosition(double beatNumber) const;
 private:
     int numerator;
     int denominator;

@@ -56,6 +56,7 @@ add_executable(test
         src/processing/MyMPEInstrumentListener.cpp
         src/processing/MPENoteEvent.cpp
         src/processing/DAWTransportData.cpp
+        test/DAWTransportData.cpp
 )
 target_compile_definitions(test
         PRIVATE

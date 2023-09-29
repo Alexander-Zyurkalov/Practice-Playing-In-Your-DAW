@@ -30,10 +30,7 @@ void NoteGrid::paint(juce::Graphics& g)
 
     double totalBarsInSong = dawTransportData.getNumBars();
     totalBarsInSong = totalBarsInSong == 0 ? 1 : totalBarsInSong;
-    double quarterNotesPerBeat = 4.0 / dawTransportData.getDenominator();
-    double beatWidth = quarterNotesPerBeat * pixelsPerQuarterNote;
-    double barWidth = beatWidth * dawTransportData.getNumerator();
-    double noteGridWidth = barWidth * totalBarsInSong;
+    double noteGridWidth = pixelsPerQuarterNote * dawTransportData.getBarPosition(dawTransportData.getNumBars());
     setSize(static_cast<int>(noteGridWidth), getHeight());
     noteBars.setSize(static_cast<int>(noteGridWidth), getHeight());
 
@@ -72,14 +69,15 @@ void NoteGrid::paint(juce::Graphics& g)
 
     auto bounds = getLocalBounds();
 
-    for (int bar = 0; bar < totalBarsInSong; ++bar)
+    for (int barNum = 0; barNum < totalBarsInSong; ++barNum)
     {
-        for (int beat = 0; beat < dawTransportData.getNumerator(); ++beat)
+        for (int beatNum = 0; beatNum < dawTransportData.getNumerator(); ++beatNum)
         {
+            int globalBeatNum = barNum * dawTransportData.getNumerator() + beatNum;
+
             // Calculate the x position for this beat
-            int beatPosition = static_cast<int>(beatWidth * beat + bar * barWidth +
-                    dawTransportData.getBarShift() * pixelsPerQuarterNote);
-            juce::Line<float> line(static_cast<float>(beatPosition), 0, static_cast<float>(beatPosition),
+            int screenBeatPosition = static_cast<int>(dawTransportData.getBeatPosition(globalBeatNum) * pixelsPerQuarterNote);
+            juce::Line<float> line(static_cast<float>(screenBeatPosition), 0, static_cast<float>(screenBeatPosition),
                                    static_cast<float>(bounds.getHeight()));
             if (!visibleArea.intersects(line))
                 continue;
@@ -87,7 +85,7 @@ void NoteGrid::paint(juce::Graphics& g)
             // Draw a line at this x position
             g.drawLine(line, 1.0f);
 
-            if (beat == 0)
+            if (dawTransportData.getBarPosition(barNum) == dawTransportData.getBeatPosition(globalBeatNum))
             {
                 // Draw a thicker line at the start of each bar
                 g.setColour(juce::Colour(180, 180, 180));
