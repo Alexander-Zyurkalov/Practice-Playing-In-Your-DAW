@@ -13,7 +13,9 @@ void DAWTransportData::setTimeSignature(double ppq, int num, int denom)
 {
     this->numerator = num;
     this->denominator = denom;
-    this->timeSignatureChange = ppq;
+    timeSignatureChange = std::ceil(ppq * 4 ) / 4;
+    if (timeSignatureChange >= getPpqEndLoopPosition())
+        timeSignatureChange = 0.0;
 }
 
 bool DAWTransportData::changed(double ppqPos, double ppqStartLoopPos, double ppqEndLoopPos) const
