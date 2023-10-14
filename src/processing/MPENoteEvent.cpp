@@ -112,3 +112,9 @@ float MPENoteEvent::getNoteOnVelocity() const
 {
     return noteOnVelocity;
 }
+
+void MPENoteEvent::addPressure(const float preasure, const double position)
+{
+    pressures.push_back(MPEEvent{preasure, position});
+}
+

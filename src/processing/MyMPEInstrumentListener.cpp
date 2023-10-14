@@ -65,6 +65,17 @@ MPENoteEvent *MyMPEInstrumentListener::findClosestNote(const juce::MPENote &newN
 }
 
 void MyMPEInstrumentListener::notePressureChanged(juce::MPENote changedNote) {
+    std::unordered_map<juce::uint16 , MPENoteEvent>* notes;
+    if (recording)
+        notes = &unfinishedNotes;
+    else
+        notes = &unfinishedPlayedNotes;
+    auto iter = notes->find(changedNote.noteID);
+    if (iter!=notes->end())
+    {
+        MPENoteEvent &note = iter->second;
+        note.addPressure(changedNote.pressure.asUnsignedFloat(), dawTransportData->getPpqPositionNotSynced());
+    }
 }
 
 void MyMPEInstrumentListener::notePitchbendChanged(juce::MPENote changedNote) {
