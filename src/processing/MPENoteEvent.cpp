@@ -83,7 +83,7 @@ bool MPENoteEvent::thereIsPlayedNote() const
 
 const MPENoteEvent MPENoteEvent::getPlayedNote() const
 {
-    return playedNote ? *playedNote : MPENoteEvent(mpeNote, noteIndex, noteOnVelocity);
+    return playedNote ? *playedNote : MPENoteEvent(mpeNote, noteIndex);
 }
 
 void MPENoteEvent::clearPlayedNote()

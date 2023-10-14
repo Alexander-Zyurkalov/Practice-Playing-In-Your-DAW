@@ -13,8 +13,8 @@ class MPENoteEvent
 public:
     static constexpr float MAX_NOTE_SHIFT = 1.0f / 2.0f;
 
-    explicit MPENoteEvent(const juce::MPENote& note, size_t index, float noteOnVelocity) :
-        mpeNote(note), noteIndex{index}, noteOnVelocity{noteOnVelocity} {}
+    explicit MPENoteEvent(const juce::MPENote& note, size_t index) :
+        mpeNote(note), noteIndex{index}, noteOnVelocity{note.noteOnVelocity.asUnsignedFloat()} {}
 
     MPENoteEvent() = delete;
 

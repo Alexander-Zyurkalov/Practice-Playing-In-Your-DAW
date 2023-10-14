@@ -20,7 +20,7 @@ void MyMPEInstrumentListener::noteAdded(juce::MPENote newNote) {
         if (closestNote)
         {
             MPENoteEvent playedNote =
-                    MPENoteEvent{newNote, closestNote->getNoteIndex(), newNote.noteOnVelocity.asSignedFloat()};
+                    MPENoteEvent{newNote, closestNote->getNoteIndex()};
 
             playedNote.setPpqStartPosition(position);
             closestNote->setPlayedNoteEvent(playedNote);
@@ -29,8 +29,7 @@ void MyMPEInstrumentListener::noteAdded(juce::MPENote newNote) {
         }
         return;
     }
-    float noteOnVelocity = newNote.noteOnVelocity.asSignedFloat();
-    MPENoteEvent mpeNoteEvent{newNote, noteEventVector.size(), noteOnVelocity};
+    MPENoteEvent mpeNoteEvent{newNote, noteEventVector.size()};
 
     mpeNoteEvent.setPpqStartPosition(position);
 
