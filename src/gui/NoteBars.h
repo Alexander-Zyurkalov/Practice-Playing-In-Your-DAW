@@ -35,6 +35,9 @@ private:
 
     juce::Rectangle<int> getNoteRectangle(const MPENoteEvent& note);
 
+    void
+    drawVelocityLine(const juce::Graphics &g, const MPENoteEvent &note, const juce::Rectangle<int> &rectangle) const;
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(NoteBars)
 };
 

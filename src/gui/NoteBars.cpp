@@ -35,8 +35,14 @@ void NoteBars::paint(juce::Graphics& g)
         if (maxPitchPosition < rectangle.getPosition().y + rectangle.getHeight())
             maxPitchPosition = rectangle.getPosition().y + rectangle.getHeight();
 
-        if (note.thereIsPlayedNote())
-        {
+        g.setColour(juce::Colours::lightskyblue);
+        g.beginTransparencyLayer(note.getNoteOnVelocity());
+            g.fillRect(rectangle);
+        g.endTransparencyLayer();
+        drawVelocityLine(g, note, rectangle);
+        g.drawRect(rectangle, 1);
+
+        if (note.thereIsPlayedNote()) {
             int dist = static_cast<int>(std::floor(std::abs(note.getPlayedNoteStartPositionShift()) * 4));
             switch (dist)
             {
@@ -46,28 +52,34 @@ void NoteBars::paint(juce::Graphics& g)
                 case 3:
                 default: g.setColour(juce::Colours::red); break;
             }
+            g.beginTransparencyLayer(note.getNoteOnVelocity());
+                const juce::Rectangle<int> &playedNoteRectangle = getNoteRectangle(note.getPlayedNote());
+                g.fillRect(playedNoteRectangle);
+            g.endTransparencyLayer();
+            drawVelocityLine(g, note.getPlayedNote(), playedNoteRectangle);
+            g.drawRect(playedNoteRectangle, 1);
         }
-        else
-            g.setColour(juce::Colours::lightskyblue);
-        g.fillRect(rectangle);
-        g.setColour(juce::Colours::black);
-        g.drawRect(rectangle, 1);
-        const int w = rectangle.getTopRight().y - rectangle.getBottomLeft().y;
-        float y = static_cast<float>(rectangle.getBottomLeft().y) + w * note.getNoteOnVelocity();
-        juce::Point<float> leftPoint{static_cast<float>(rectangle.getBottomLeft().x), y};
-        juce::Point<float> rightPoint{static_cast<float>(rectangle.getBottomRight().x), y};
-        juce::Line<float> originalVelocityLevelLine{leftPoint, rightPoint};
-        g.drawLine(originalVelocityLevelLine);
-        if (note.thereIsPlayedNote())
-            g.drawRect(getNoteRectangle(note.getPlayedNote()), 1);
 
         const juce::Rectangle<int> &widthOfText = rectangle.withWidth(rectangle.getHeight()+10);
 
+        
         g.setColour(juce::Colours::black);
         g.drawText(note.getNoteName(), widthOfText, juce::Justification::left);
     }
     middleYPosition = juce::jlimit<float>(0.0f, getHeight(), (maxPitchPosition - minPitchPosition) / 2.0f + minPitchPosition);
 
+}
+
+void
+NoteBars::drawVelocityLine(const juce::Graphics &g, const MPENoteEvent &note,
+                           const juce::Rectangle<int> &rectangle) const
+{
+    const float w = static_cast<const float>(rectangle.getTopRight().y - rectangle.getBottomLeft().y);
+    float y = static_cast<float>(rectangle.getBottomLeft().y) + w * note.getNoteOnVelocity();
+    juce::Point<float> leftPoint{static_cast<float>(rectangle.getBottomLeft().x), y};
+    juce::Point<float> rightPoint{static_cast<float>(rectangle.getBottomRight().x), y};
+    juce::Line<float> originalVelocityLevelLine{leftPoint, rightPoint};
+    g.drawLine(originalVelocityLevelLine);
 }
 
 
