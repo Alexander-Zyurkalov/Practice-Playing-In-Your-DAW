@@ -41,9 +41,9 @@ void NoteBars::paint(juce::Graphics& g)
             switch (dist)
             {
                 case 0: g.setColour(juce::Colours::green); break;
-                case 1:
+                case 1: g.setColour(juce::Colours::purple); break;
                 case 2:
-                case 3: g.setColour(juce::Colours::yellow); break;
+                case 3:
                 default: g.setColour(juce::Colours::red); break;
             }
         }
