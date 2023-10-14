@@ -44,21 +44,15 @@ void NoteBars::paint(juce::Graphics& g)
         drawVelocityLine(g, note, rectangle);
 
         if (note.thereIsPlayedNote()) {
-            int dist = static_cast<int>(std::floor(std::abs(note.getPlayedNoteStartPositionShift()) * 4));
-            switch (dist)
-            {
-                case 0: g.setColour(juce::Colours::green); break;
-                case 1: g.setColour(juce::Colours::purple); break;
-                case 2:
-                case 3:
-                default: g.setColour(juce::Colours::red); break;
-            }
+            setColourByShift(g, note.getPlayedNoteStartPositionShift());
             g.beginTransparencyLayer(note.getNoteOnVelocity());
                 const juce::Rectangle<int> &playedNoteRectangle = getNoteRectangle(note.getPlayedNote());
                 g.fillRect(playedNoteRectangle);
             g.endTransparencyLayer();
-            drawVelocityLine(g, note.getPlayedNote(), playedNoteRectangle);
             g.drawRect(playedNoteRectangle, 1);
+
+            setColourByShift(g, note.getPlayedNoteVelocityShift());
+            drawVelocityLine(g, note.getPlayedNote(), playedNoteRectangle);
         }
 
         const juce::Rectangle<int> &widthOfText = rectangle.withWidth(rectangle.getHeight()+10);
@@ -70,6 +64,20 @@ void NoteBars::paint(juce::Graphics& g)
     middleYPosition = juce::jlimit<float>(0.0f, getHeight(), (maxPitchPosition - minPitchPosition) / 2.0f + minPitchPosition);
 
 }
+
+void NoteBars::setColourByShift(juce::Graphics &g, float shift) const
+{
+    int dist = static_cast<int>(floor(abs(shift) * 4));
+    switch (dist)
+    {
+        case 0: g.setColour(juce::Colours::green); break;
+        case 1: g.setColour(juce::Colours::purple); break;
+        case 2:
+        case 3:
+        default: g.setColour(juce::Colours::red); break;
+    }
+}
+
 
 void
 NoteBars::drawVelocityLine(const juce::Graphics &g, const MPENoteEvent &note,

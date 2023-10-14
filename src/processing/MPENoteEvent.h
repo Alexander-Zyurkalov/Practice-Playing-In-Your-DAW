@@ -41,6 +41,7 @@ public:
     MPENoteEvent& operator=(const MPENoteEvent& other);
     
     float getPlayedNoteStartPositionShift() const;
+    float getPlayedNoteVelocityShift() const;
 
     bool thereIsPlayedNote() const;
 

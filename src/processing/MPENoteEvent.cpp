@@ -76,6 +76,13 @@ float MPENoteEvent::getPlayedNoteStartPositionShift() const
     return std::clamp(static_cast<float>(std::abs(ppqStartPosition - playedNote->getPpqStartPosition())), 0.0f, MAX_NOTE_SHIFT) * 1 / MAX_NOTE_SHIFT;
 }
 
+
+float MPENoteEvent::getPlayedNoteVelocityShift() const
+{
+    return thereIsPlayedNote() ? std::abs(getNoteOnVelocity() - playedNote->getNoteOnVelocity()): 0;
+}
+
+
 bool MPENoteEvent::thereIsPlayedNote() const
 {
     return playedNote != nullptr;
