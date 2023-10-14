@@ -39,8 +39,9 @@ void NoteBars::paint(juce::Graphics& g)
         g.beginTransparencyLayer(note.getNoteOnVelocity());
             g.fillRect(rectangle);
         g.endTransparencyLayer();
-        drawVelocityLine(g, note, rectangle);
         g.drawRect(rectangle, 1);
+        g.setColour(juce::Colours::grey);
+        drawVelocityLine(g, note, rectangle);
 
         if (note.thereIsPlayedNote()) {
             int dist = static_cast<int>(std::floor(std::abs(note.getPlayedNoteStartPositionShift()) * 4));
@@ -79,7 +80,7 @@ NoteBars::drawVelocityLine(const juce::Graphics &g, const MPENoteEvent &note,
     juce::Point<float> leftPoint{static_cast<float>(rectangle.getBottomLeft().x), y};
     juce::Point<float> rightPoint{static_cast<float>(rectangle.getBottomRight().x), y};
     juce::Line<float> originalVelocityLevelLine{leftPoint, rightPoint};
-    g.drawLine(originalVelocityLevelLine);
+    g.drawLine(originalVelocityLevelLine, 2);
 }
 
 
