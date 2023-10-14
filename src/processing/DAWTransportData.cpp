@@ -37,7 +37,7 @@ double DAWTransportData::getNumBars() const {
     double quarterNotesPerBeat = 4.0 / denominator;
     double ppqPerBar = quarterNotesPerBeat * numerator;
     double numBars = ppqLoopLength / ppqPerBar;
-    return static_cast<int>(numBars);
+    return numBars;
 }
 
 double DAWTransportData::getPpqPosition() const {
