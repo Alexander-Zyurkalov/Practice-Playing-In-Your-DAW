@@ -133,7 +133,7 @@ float NoteBars::getMiddleYPosition() const
 }
 
 void NoteBars::drawMPELine(
-        juce::Graphics &graphics, const std::map<double, float> &pressures,
+        juce::Graphics &g, const std::map<double, float> &pressures,
         const juce::Rectangle<int> &rectangle)
 {
     juce::Point<float> point{static_cast<float>(rectangle.getBottomLeft().x),
@@ -141,10 +141,11 @@ void NoteBars::drawMPELine(
    for (auto &pressure: pressures)
    {
        float x = ppqToPixel(pressure.first);
-       float y = static_cast<float>(rectangle.getHeight()) * pressure.second +
-                 static_cast<float>(rectangle.getBottomLeft().y);
+       float y = static_cast<float>(rectangle.getBottomLeft().y) -
+               static_cast<float>(rectangle.getHeight()) * pressure.second;
+
        juce::Line<float> line{point, juce::Point{x,y}};
-       graphics.drawLine(line, 1);
+       g.drawLine(line, 1);
        point = line.getEnd();
    }
 

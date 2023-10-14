@@ -42,7 +42,7 @@ private:
 
     void setColourByShift(juce::Graphics &g, float shift) const;
 
-    void drawMPELine(juce::Graphics &graphics, const std::map<double, float> &pressures,
+    void drawMPELine(juce::Graphics &g, const std::map<double, float> &pressures,
                      const juce::Rectangle<int> &rectangle);
 
     static float ppqToPixel(double ppqStartPosition) ;
