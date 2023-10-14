@@ -52,6 +52,8 @@ public:
 
     void setIsPlayed(bool isPlayedNote);
 
+    float getNoteOnVelocity() const;
+
 private:
     bool isPlayedNote{false};
     juce::MPENote mpeNote;

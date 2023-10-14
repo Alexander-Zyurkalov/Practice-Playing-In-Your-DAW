@@ -52,6 +52,12 @@ void NoteBars::paint(juce::Graphics& g)
         g.fillRect(rectangle);
         g.setColour(juce::Colours::black);
         g.drawRect(rectangle, 1);
+        const int w = rectangle.getTopRight().y - rectangle.getBottomLeft().y;
+        float y = static_cast<float>(rectangle.getBottomLeft().y) + w * note.getNoteOnVelocity();
+        juce::Point<float> leftPoint{static_cast<float>(rectangle.getBottomLeft().x), y};
+        juce::Point<float> rightPoint{static_cast<float>(rectangle.getBottomRight().x), y};
+        juce::Line<float> originalVelocityLevelLine{leftPoint, rightPoint};
+        g.drawLine(originalVelocityLevelLine);
         if (note.thereIsPlayedNote())
             g.drawRect(getNoteRectangle(note.getPlayedNote()), 1);
 

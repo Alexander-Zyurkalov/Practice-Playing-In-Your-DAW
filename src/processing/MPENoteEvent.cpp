@@ -100,3 +100,8 @@ void MPENoteEvent::setIsPlayed(bool isPlayedNote)
 {
     MPENoteEvent::isPlayedNote = isPlayedNote;
 }
+
+float MPENoteEvent::getNoteOnVelocity() const
+{
+    return noteOnVelocity;
+}
