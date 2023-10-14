@@ -43,6 +43,9 @@ void NoteBars::paint(juce::Graphics& g)
         g.setColour(juce::Colours::grey);
         drawVelocityLine(g, note, rectangle);
 
+        g.setColour(juce::Colours::blue);
+        drawMPELine(g, note.getPressures(), rectangle);
+
         if (note.thereIsPlayedNote()) {
             setColourByShift(g, note.getPlayedNoteStartPositionShift());
             g.beginTransparencyLayer(note.getNoteOnVelocity());
@@ -100,21 +103,49 @@ void NoteBars::resized()
 
 juce::Rectangle<int> NoteBars::getNoteRectangle(const MPENoteEvent &note)
 {
-    int pixelsPerQuarterNote = 100;
     double ppqStartPosition = note.getPpqStartPosition() - dawTransportData.getPpqStartLoopPosition();
     double ppqReleasePosition =  note.getPpqReleasePosition() - dawTransportData.getPpqStartLoopPosition();
     double noteLength = ppqReleasePosition - ppqStartPosition;
     if (noteLength <= 0.0)
         noteLength = 1.0/8;
-    auto noteX = static_cast<float>(ppqStartPosition * pixelsPerQuarterNote);
+    float noteX = ppqToPixel(ppqStartPosition);
     const int numPitches = 128;
     float noteHeight = (float)getHeight() / numPitches;
     float noteY = static_cast<float>(numPitches - note.getMpeNote().initialNote - 1.0) * noteHeight;
-    auto noteWidth = static_cast<float>(noteLength * pixelsPerQuarterNote);
+    auto noteWidth = ppqToPixel(noteLength);
     return juce::Rectangle<int>{static_cast<int>(noteX), static_cast<int>(noteY), static_cast<int>(noteWidth), static_cast<int>(noteHeight)};
+}
+
+float NoteBars::ppqToPixel(double ppqStartPosition)
+{
+    int pixelsPerQuarterNote = 100;
+    return static_cast<float>(ppqStartPosition * pixelsPerQuarterNote);
+}
+
+double NoteBars::pixelToPpq(float pixels)
+{
+    return pixels * 100.0;
 }
 
 float NoteBars::getMiddleYPosition() const
 {
     return middleYPosition;
+}
+
+void NoteBars::drawMPELine(
+        juce::Graphics &graphics, const std::map<double, float> &pressures,
+        const juce::Rectangle<int> &rectangle)
+{
+    juce::Point<float> point{static_cast<float>(rectangle.getBottomLeft().x),
+                             static_cast<float>(rectangle.getBottomLeft().y)};
+   for (auto &pressure: pressures)
+   {
+       float x = ppqToPixel(pressure.first);
+       float y = static_cast<float>(rectangle.getHeight()) * pressure.second +
+                 static_cast<float>(rectangle.getBottomLeft().y);
+       juce::Line<float> line{point, juce::Point{x,y}};
+       graphics.drawLine(line, 1);
+       point = line.getEnd();
+   }
+
 }

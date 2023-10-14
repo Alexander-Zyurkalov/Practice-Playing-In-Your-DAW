@@ -7,7 +7,7 @@
 MPENoteEvent::MPENoteEvent(const MPENoteEvent& other): mpeNote(other.mpeNote), ppqStartPosition(other.ppqStartPosition),
                                                        ppqReleasePosition(other.ppqReleasePosition),
                                                        noteIndex{other.noteIndex}, noteOnVelocity(other.noteOnVelocity),
-                                                       isPlayedNote{other.isPlayedNote}
+                                                       isPlayedNote{other.isPlayedNote}, pressures{other.pressures}
 {
     if (other.playedNote != nullptr)
         playedNote = std::make_unique<MPENoteEvent>(*other.playedNote);
@@ -66,6 +66,7 @@ MPENoteEvent &MPENoteEvent::operator=(const MPENoteEvent &other)
     isPlayedNote = other.isPlayedNote;
     if (other.playedNote != nullptr)
         playedNote = std::make_unique<MPENoteEvent>(*other.playedNote);
+    pressures = other.pressures;
     return *this;
 }
 
@@ -115,6 +116,11 @@ float MPENoteEvent::getNoteOnVelocity() const
 
 void MPENoteEvent::addPressure(const float preasure, const double position)
 {
-    pressures.push_back(MPEEvent{preasure, position});
+    pressures[position] = preasure;
+}
+
+const std::map<double, float> & MPENoteEvent::getPressures() const
+{
+    return pressures;
 }
 

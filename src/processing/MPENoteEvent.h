@@ -7,12 +7,6 @@
 #include <juce_audio_basics/juce_audio_basics.h>
 #include <memory>
 
-struct MPEEvent
-{
-    float value;
-    double ppq;
-};
-
 class MPENoteEvent
 {
 public:
@@ -61,6 +55,7 @@ public:
     float getNoteOnVelocity() const;
 
     void addPressure(const float preasure, const double position);
+    const std::map<double, float>& getPressures() const;
 
 private:
     bool isPlayedNote{false};
@@ -70,7 +65,7 @@ private:
     size_t noteIndex{0};
     float noteOnVelocity;
     std::unique_ptr<MPENoteEvent> playedNote{nullptr};
-    std::vector<MPEEvent> pressures{};
+    std::map<double, float> pressures{};
 };
 
 
