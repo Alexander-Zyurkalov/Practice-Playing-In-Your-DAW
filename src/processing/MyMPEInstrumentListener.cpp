@@ -14,13 +14,14 @@ MyMPEInstrumentListener::MyMPEInstrumentListener(DAWTransportData *transportData
 void MyMPEInstrumentListener::noteAdded(juce::MPENote newNote) {
     double position = dawTransportData->getPpqPositionNotSynced();
     position = roundPpqPosition(position);
-
     if (!recording)
     {
         MPENoteEvent *closestNote = findClosestNote(newNote);
         if (closestNote)
         {
-            MPENoteEvent playedNote = MPENoteEvent{newNote, closestNote->getNoteIndex()};
+            MPENoteEvent playedNote =
+                    MPENoteEvent{newNote, closestNote->getNoteIndex(), newNote.noteOnVelocity.asSignedFloat()};
+
             playedNote.setPpqStartPosition(position);
             closestNote->setPlayedNoteEvent(playedNote);
             closestNote->setIsPlayed(true);
@@ -28,7 +29,8 @@ void MyMPEInstrumentListener::noteAdded(juce::MPENote newNote) {
         }
         return;
     }
-    MPENoteEvent mpeNoteEvent{newNote, noteEventVector.size()};
+    float noteOnVelocity = newNote.noteOnVelocity.asSignedFloat();
+    MPENoteEvent mpeNoteEvent{newNote, noteEventVector.size(), noteOnVelocity};
 
     mpeNoteEvent.setPpqStartPosition(position);
 

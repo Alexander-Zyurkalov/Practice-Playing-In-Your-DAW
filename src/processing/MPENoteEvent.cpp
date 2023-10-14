@@ -6,7 +6,8 @@
 
 MPENoteEvent::MPENoteEvent(const MPENoteEvent& other): mpeNote(other.mpeNote), ppqStartPosition(other.ppqStartPosition),
                                                        ppqReleasePosition(other.ppqReleasePosition),
-                                                       noteIndex{other.noteIndex}, isPlayedNote{other.isPlayedNote}
+                                                       noteIndex{other.noteIndex}, noteOnVelocity(other.noteOnVelocity),
+                                                       isPlayedNote{other.isPlayedNote}
 {
     if (other.playedNote != nullptr)
         playedNote = std::make_unique<MPENoteEvent>(*other.playedNote);
@@ -82,7 +83,7 @@ bool MPENoteEvent::thereIsPlayedNote() const
 
 const MPENoteEvent MPENoteEvent::getPlayedNote() const
 {
-    return playedNote ? *playedNote : MPENoteEvent(mpeNote, noteIndex);
+    return playedNote ? *playedNote : MPENoteEvent(mpeNote, noteIndex, noteOnVelocity);
 }
 
 void MPENoteEvent::clearPlayedNote()
